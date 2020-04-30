@@ -666,7 +666,7 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
     }
 }
 
-dump(){
+void dump(void) {
  int i,j,k;
  char *p;
 #ifdef DEBUG

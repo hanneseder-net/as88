@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define EXTERN extern
 #include "88.h"
 #include "macro.h"
@@ -6,15 +7,22 @@
 #ifdef INPUT
 #include <signal.h>
 #endif
-extern void prut();
 
-interp()
+extern void by();
+extern void wd();
+extern void prut();
+extern void dump();
+extern void meldroutine();
+
+void rep(int op);
+
+void interp()
 {
-register word             t;
-register word             t2;
-register char             c;
-register int              mm, n, k;       /* 1 if dumping on, 0 if off */
-register adr              u, u1, u2;
+    word             t;
+    word             t2;
+    char             c;
+    int              mm, n, k;       /* 1 if dumping on, 0 if off */
+    adr              u, u1, u2;
 
     mask = 0377;
 /* Here is the main loop of the interpreter. */
@@ -35,7 +43,7 @@ next:
 		else dump();}
     if((PC)>codelength) {
       if (traceflag) dump();
-	fprintf(stderr,"Code out of range %d\n",(PC)); exit(1);}
+	  fprintf(stderr,"Code out of rang %ld\n",(PC)); exit(1);}
 bloop:
     /* if (t == 0x90)
         goto next; */
@@ -666,8 +674,7 @@ bloop:
     }
 }
 
-rep(op)
-register int op;
+void rep(int op)
 {
 /* The string instructions (MOVS, CMPS, STOS, LODS, and SCAS are done here. */
   char c;
