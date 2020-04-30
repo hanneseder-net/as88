@@ -164,7 +164,9 @@ EXTERN int clkinterval;
 
 
 
-#define MEMBYTES 1048576L	/* how many bytes does 8088 have? * /
+#if 0
+#define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
+#endif
 #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
 #define HALFMEM 6000		/* 1/2 of MEMBYTES */
 #define MAXLONG 2000000000L
