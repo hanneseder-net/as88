@@ -9,8 +9,10 @@
  */
 #define	THREE_PASS	/* branch and offset optimization */
 #define	LISTING		/* enable listing facilities */
-#define RELOCATION	/* generate relocation info * /
+#define RELOCATION	/* generate relocation info */
+#if 0
 #define DEBUG 0		/* gewijzigd evert */
+#endif
 #define DEBUG 2
 
 #undef valu_t
