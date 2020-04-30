@@ -1,4 +1,7 @@
 #include <errno.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define CALLONLY 1
 #define CALLJUMP 2
@@ -8,7 +11,7 @@
 #define NU 16			/* how many -u flags are allowed */
 #define NY 16			/* how many -y flags are allowed */
 
-long hexin(), atol(), lseek();
+long hexin();
 int quit0(), quit1(), quit2(), quit3(), quit4();
 char *traceptr;			/* ptr to word to be traced */
 char *prevpcx;			/* previous pcx (used for dumping) */
