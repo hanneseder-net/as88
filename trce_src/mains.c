@@ -55,6 +55,11 @@ typedef union {int ii; char cp[140];} sscanfield;
 
 FILE *prog, *L, *CMD, *INP, *LOG;
 
+/* forward decls */
+void nextput(int c);
+void rdcmd(void);
+void symlcorr(int i);
+
 pri(){ /* Test for endianness */
 #ifdef DEBUG
  fprintf(LOG,"eoplo %d eophi %d eop %d pc %d\n",eoplo&255,eophi&255,eop,(PC)-1);
@@ -292,7 +297,7 @@ segmhead[i].align,segmhead[i].align);
 #endif
 }
 
-symlcorr(i) int i;{
+void symlcorr(int i) {
   /* corrigeert line number bug voor symbolen uit de text. Zonder correctie
    wordt niet het line number, maar de eerste code doorgegeven */
   int ln,cd,j,c;
@@ -767,7 +772,7 @@ pdmpadr(){
   }
 }
 
-rdcmd(){
+void rdcmd(void) {
   int c,d,adre;
   wmv(15,0);
   for(c=0;c<20;c++) putchar(' ');
@@ -972,7 +977,7 @@ newgpfield(){
   for(j=0;j<58;j++) outveld[0][j] = ' '; 
 }
 
-nextput(c) int c;{
+void nextput(int c) {
   if(c=='\n') {nextput('\\'); nextput('n'); puthp = -1; return;}
   if(puthp>57) puthp = -1; 
     if(puthp < 0) { newgpfield(); puthp = 0;
