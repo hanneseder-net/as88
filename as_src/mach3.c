@@ -218,7 +218,7 @@
 0,	FNOOP,		FESC+1+(0xFC<<8),	"FRNDINT",
 0,	FNOOP,		FESC+1+(0xFD<<8),	"FSCALE",
 0,	FNOOP,		FESC+1+(0xFA<<8),	"FSQRT",
-0,	FNOOP,		FESC+7+(0xE0<<8),	"FSTSWAX", /* 80287 * /
+0,	FNOOP,		FESC+7+(0xE0<<8),	"FSTSWAX", // 80287
 0,	FNOOP,		FESC+1+(0xE4<<8),	"FTST",
 0,	FNOOP,		FESC+1+(0xE5<<8),	"FXAM",
 0,	FNOOP,		FESC+1+(0xF4<<8),	"FXTRACT",
@@ -302,9 +302,9 @@
 0,	FST_ST2,	FESC+0+(0xE0<<8),	"FSUB",
 0,	FST_ST2,	FESC+2+(0xE0<<8),	"FSUBP",
 0,	FST_ST2,	FESC+0+(0xE8<<8),	"FSUBR",
-0,	FST_ST2,	FESC+2+(0xE8<<8),	"FSUBRP", */
+0,	FST_ST2,	FESC+2+(0xE8<<8),	"FSUBRP",
 
-/* 80286 keywords
+// 80286 keywords
 0,	NOOP_1,		0140,			"PUSHA",
 0,	NOOP_1,		0141,			"POPA",
 0,	NOOP_1,		0154,			"INSB",
