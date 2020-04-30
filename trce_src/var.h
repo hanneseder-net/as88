@@ -1,3 +1,5 @@
+#include <errno.h>
+
 #define CALLONLY 1
 #define CALLJUMP 2
 #define NE 16			/* how many -e flags are allowed */
@@ -6,7 +8,6 @@
 #define NU 16			/* how many -u flags are allowed */
 #define NY 16			/* how many -y flags are allowed */
 
-extern errno;
 long hexin(), atol(), lseek();
 int quit0(), quit1(), quit2(), quit3(), quit4();
 char *traceptr;			/* ptr to word to be traced */
