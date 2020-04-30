@@ -1,6 +1,8 @@
 /*#define DEBUG 1*/
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "88.h"
 #include "macro.h"
 #include "var.h"
@@ -55,13 +57,21 @@ typedef union {int ii; char cp[140];} sscanfield;
 
 FILE *prog, *L, *CMD, *INP, *LOG;
 
-pri(){ /* Test for endianness */
+/* forward decls */
+void bitmapopen(int b, int h, int s);
+void nextput(int c);
+void rdcmd(void);
+void schrijf(void);
+void schrijfmap(int b, int h, int s, char *buf, FILE *uitf);
+void symlcorr(int i);
+
+void pri(void) { /* Test for endianness */
 #ifdef DEBUG
  fprintf(LOG,"eoplo %d eophi %d eop %d pc %d\n",eoplo&255,eophi&255,eop,(PC)-1);
 #endif
 }
 
-getint(f) FILE *f; {
+int getint(FILE *f) {
   int i,j,k;
   lfptr += 4;
   i = getc(f); j = getc(f);
@@ -71,7 +81,7 @@ getint(f) FILE *f; {
   return(k);
 }
 
-getsh(f) FILE *f; {
+int getsh(FILE *f) {
   int i,j,k;
   i = getc(f);
   j = getc(f); k = 0;
@@ -80,8 +90,7 @@ getsh(f) FILE *f; {
   return(k);
 }
 
-main(argc,argv) int argc; char **argv;
-{
+int main(int argc, char **argv) {
   char *p;
   sp=0; ss=0; pcx=m; cs=0;
 #ifdef DEBUG
@@ -94,7 +103,7 @@ main(argc,argv) int argc; char **argv;
   if(load(argc,argv)) exit(1); fclose(prog); interp();
 }
 
-load(argc,argv) int argc; char **argv; {
+int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p,*p1,*p2;
   p=inbuf;  for(i=0;i<1024;i++) *p++ = '\0';
@@ -292,7 +301,7 @@ segmhead[i].align,segmhead[i].align);
 #endif
 }
 
-symlcorr(i) int i;{
+void symlcorr(int i) {
   /* corrigeert line number bug voor symbolen uit de text. Zonder correctie
    wordt niet het line number, maar de eerste code doorgegeven */
   int ln,cd,j,c;
@@ -431,7 +440,7 @@ syscal(){
 			pram[0].cp);erroutine();
 		  returnax(-1);
 		} else {
-		  if(load()) returnax(-1);
+		  if(load(0, NULL)) returnax(-1);
 		  fclose(prog);
 		} break;
    	case 0x13: /*lseek*/
@@ -767,7 +776,7 @@ pdmpadr(){
   }
 }
 
-rdcmd(){
+void rdcmd(void) {
   int c,d,adre;
   wmv(15,0);
   for(c=0;c<20;c++) putchar(' ');
@@ -966,13 +975,13 @@ gtabstr(i,a,f) int i; char *a; FILE *f;{
   
 }
 
-newgpfield(){
+void newgpfield(void) {
   int i,j;
   for(i=3;i>0;i--) for(j=0;j<58;j++) outveld[i][j] = outveld[i-1][j];
   for(j=0;j<58;j++) outveld[0][j] = ' '; 
 }
 
-nextput(c) int c;{
+void nextput(int c) {
   if(c=='\n') {nextput('\\'); nextput('n'); puthp = -1; return;}
   if(puthp>57) puthp = -1; 
     if(puthp < 0) { newgpfield(); puthp = 0;
@@ -1061,7 +1070,7 @@ bitmapdump(b,h,buff) int b,h; char *buff;{
   schrijf();  system("sleep 1");
 }
  
-bitmapopen(b,h,s) int b,h,s; {
+void bitmapopen(int b, int h, int s) {
   /*FAKE SYSTEM CALL TO OPEN A BITMAP FOR OPGAVE 1 */
   int i;
   if(pipe(pfildes)< 0) {fprintf(stderr,"Kan geen pipe creeren\n"); exit(1);}
@@ -1120,7 +1129,7 @@ sprintf(bmbuf,".e configure -background black -foreground white\n"); schrijf();
 }
  
 
-schrijf(){
+void schrijf(void) {
   int j;
   char *p;
   p = bmbuf;
@@ -1130,7 +1139,7 @@ schrijf(){
 }
 
   
-spiegel(m,n) int m,n;{
+int spiegel(int m, int n) {
   int i,j,k,l;
   if(m == 0) {
     i = 1; j = 128; l = 0;
@@ -1146,7 +1155,7 @@ spiegel(m,n) int m,n;{
   return(l);
 } 
 
-schrijfmap(b,h,s,buf,uitf) int b,h,s; char *buf; FILE *uitf; {
+void schrijfmap(int b, int h, int s, char *buf, FILE *uitf) {
   int i,j,k,l,m,c;
   char *p,*q;
   if(b%8!=0){
@@ -1169,7 +1178,7 @@ schrijfmap(b,h,s,buf,uitf) int b,h,s; char *buf; FILE *uitf; {
   }
 }
 
-extern void prut(u,v) char u,v; {
+extern void prut(char u,int v) {
 fprintf(stderr,"ah en al  %d %d     %x %x    %o %o\n",
 	(int)u,(int)v,(int)u,(int)v,(int)u,(int)v);
 }
