@@ -2,7 +2,6 @@
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-#define RCSID5 "$Header: mach5.c,v 3.6 90/11/15 12:10:13 ceriel Exp $"
 
 /*
  * INTEL 8086 special routines

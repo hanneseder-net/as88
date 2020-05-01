@@ -1,9 +1,7 @@
-/* $Header: comm4.c,v 2.17 91/12/17 14:55:13 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm4.c	1.6 */
 /*
  * Micro processor assembler framework written by
  *	Johan Stevenson, Vrije Universiteit, Amsterdam

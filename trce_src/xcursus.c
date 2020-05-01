@@ -1,11 +1,8 @@
-/*#include <termio.h>
-#include <unistd.h>*/
 #include <termios.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <pwd.h>
-/*#include <curses.h>*/
 
 char nwindow[24][81];
 extern char window[24][81];

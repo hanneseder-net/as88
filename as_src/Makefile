@@ -1,4 +1,3 @@
-# $Header: proto.make,v 1.5 91/10/22 14:35:13 Jacobs Exp $
 CC=gcc
 #				# compiler to be used for compiling Assembler Sources
 

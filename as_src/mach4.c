@@ -1,5 +1,3 @@
-#define RCSID4 "$Header: mach4.c,v 3.6 91/01/10 13:57:29 ceriel Exp $"
-
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".

@@ -1,9 +1,7 @@
-/* $Header: keywhash.c,v 2.17 03/08/12 14:55:13 evert Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)keywhash.c	1.6 */
 /*
  * Micro processor assembler framework written by
  *	Johan Stevenson, Vrije Universiteit, Amsterdam

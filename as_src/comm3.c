@@ -1,9 +1,7 @@
-/* $Header: comm3.c,v 2.5 90/07/30 09:43:34 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm3.c	1.1 */
 /*
  * storage allocation for variables
  */

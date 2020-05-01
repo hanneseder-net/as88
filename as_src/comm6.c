@@ -1,9 +1,7 @@
-/* $Header: comm6.c,v 2.20 91/12/17 14:55:19 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm6.c	1.7 */
 /*
  * implement pseudo instructions
  */

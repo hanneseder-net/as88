@@ -2,7 +2,6 @@
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-#define RCSID1 "$Header: mach1.c,v 3.3 89/11/27 16:18:38 ceriel Exp $"
 
 /*
  * INTEL 8086 C declarations

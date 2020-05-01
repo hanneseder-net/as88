@@ -1,9 +1,7 @@
-/* $Header: comm1.h,v 2.15 91/12/18 16:01:44 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm1.h	1.5 */
 /*
  * variable declarations
  */
