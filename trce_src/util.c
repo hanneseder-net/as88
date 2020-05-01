@@ -768,6 +768,55 @@ dmpadr(adre) int adre; {
   datadp++; datadp %= 7;
 }
 
+static void rdstrg(void) {
+  int i,j,stradr,k,syk;
+  char *p,*q,c,cc;
+  i=0; p = cmdline; q = tringfield+90;
+  while(c = *p++) if (c=='!' || c == '/' || c == '+') break;
+		  else {i++; *q++ = c;}
+  if((c=='/') && (*p != '+')) *(--p) = '0';
+  *q = '\0';
+#ifdef DEBUG
+logprint();
+ fprintf(LOG,"gelezen: string |%s|\n",tringfield+90);
+#endif
+  stradr = hashstring(tringfield+90); symp = symhash[stradr];
+  if(i>8) i=8; syk = -1;
+  while(symp != -1) {
+#ifdef DEBUG
+fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+900,symtab[symp].symbol,symp,i);
+#endif
+    /*if(!strncmp(tringfield+90, symtab[symp].symbol,i)) { syk = symp; break;}
+    else {symp = symtab[symp].nextsym;}*/
+    if(!strncmp(tringfield+90, symtab[symp].symbol,i)) { syk = symp;
+      if(i==strlen(symtab[symp].symbol)) break; }
+    symp = symtab[symp].nextsym;
+  }
+  symp = syk;  /*april*/
+  if(symp < 0) {sprintf(errbuf,"No Match"); erroutine(); return(-1);}
+  for(k=0;k<18;k++) tringfield[k+90] = ' '; tringfield[98] = '+';
+  for(k=0;k<8;k++) if((cc = symtab[symp].symbol[k])>32) tringfield[k+90] = cc;
+	else break;
+#ifdef DEBUG
+ fprintf(LOG,"tringfield: |%s|\n",tringfield+90); logprint();
+#endif
+  if(symtab[symp].symsect > 2) stradr = symtab[symp].symvalue;
+  else if(symtab[symp].symsect == 2) stradr = symtab[symp].lnr;
+  j = -1; if(c == '\0' || c=='!') {cmdchar = '!'; j=0; }
+  if(j) {
+    while(*p =='+' || *p == '\t' || *p == ' ') p++;
+    if(*p == '\0' || *p=='!') {cmdchar = '!'; j=0;}
+  }
+  if(j){
+    if(*p<'0'||*p>'9'){sprintf(errbuf,"cmd constant expected.");erroutine();
+	system("sleep 1");sprintf("%-55.55s","  ");return(-1);}
+    sscanf(p,"%d%1s",&j,&cmdchar);
+  }
+  if(symtab[symp].symsect == 2){if(cmdchar == '!') cmdchar = 'g'; sprintf(tringfield+99,"%2d",j);}
+  else  {if(cmdchar == '!')cmdchar = 'd'; sprintf(tringfield+99,"%-4d=%04x:",j,(stradr+j));}
+  return(stradr+j);
+}
+
 static void rdcline(int c) {
   char *p;
   p = cmdline;
@@ -819,56 +868,6 @@ static void rdcmd(void) {
 	default : stopvlag = 255;
     } 
 }
-
-rdstrg(){
-  int i,j,stradr,k,syk;
-  char *p,*q,c,cc;
-  i=0; p = cmdline; q = tringfield+90;
-  while(c = *p++) if (c=='!' || c == '/' || c == '+') break;
-		  else {i++; *q++ = c;}
-  if((c=='/') && (*p != '+')) *(--p) = '0';
-  *q = '\0';
-#ifdef DEBUG
-logprint();
- fprintf(LOG,"gelezen: string |%s|\n",tringfield+90);
-#endif
-  stradr = hashstring(tringfield+90); symp = symhash[stradr];
-  if(i>8) i=8; syk = -1;
-  while(symp != -1) {
-#ifdef DEBUG
-fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+900,symtab[symp].symbol,symp,i);
-#endif
-    /*if(!strncmp(tringfield+90, symtab[symp].symbol,i)) { syk = symp; break;}
-    else {symp = symtab[symp].nextsym;}*/
-    if(!strncmp(tringfield+90, symtab[symp].symbol,i)) { syk = symp;
-      if(i==strlen(symtab[symp].symbol)) break; }
-    symp = symtab[symp].nextsym;
-  }
-  symp = syk;  /*april*/
-  if(symp < 0) {sprintf(errbuf,"No Match"); erroutine(); return(-1);}
-  for(k=0;k<18;k++) tringfield[k+90] = ' '; tringfield[98] = '+';
-  for(k=0;k<8;k++) if((cc = symtab[symp].symbol[k])>32) tringfield[k+90] = cc;
-	else break;
-#ifdef DEBUG
- fprintf(LOG,"tringfield: |%s|\n",tringfield+90); logprint();
-#endif
-  if(symtab[symp].symsect > 2) stradr = symtab[symp].symvalue;
-  else if(symtab[symp].symsect == 2) stradr = symtab[symp].lnr;
-  j = -1; if(c == '\0' || c=='!') {cmdchar = '!'; j=0; }
-  if(j) {
-    while(*p =='+' || *p == '\t' || *p == ' ') p++;
-    if(*p == '\0' || *p=='!') {cmdchar = '!'; j=0;}
-  }
-  if(j){
-    if(*p<'0'||*p>'9'){sprintf(errbuf,"cmd constant expected.");erroutine();
-	system("sleep 1");sprintf("%-55.55s","  ");return(-1);}
-    sscanf(p,"%d%1s",&j,&cmdchar);
-  }
-  if(symtab[symp].symsect == 2){if(cmdchar == '!') cmdchar = 'g'; sprintf(tringfield+99,"%2d",j);}
-  else  {if(cmdchar == '!')cmdchar = 'd'; sprintf(tringfield+99,"%-4d=%04x:",j,(stradr+j));}
-  return(stradr+j);
-}
-
 rdadr(){
   int i;
   sscanf(cmdline,"%d%1s",&i,&cmdchar);
