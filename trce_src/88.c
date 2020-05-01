@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #define EXTERN extern
 #include "88.h"
 #include "macro.h"
