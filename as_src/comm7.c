@@ -139,8 +139,7 @@ valu_t val;
 #endif
 
 #ifdef LISTING
-listline(textline)
-{
+void listline(int textline) {
 	register c;
 
 	if ((listflag & 4) && (c = getc(listfile)) != '\n' && textline) {

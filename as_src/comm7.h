@@ -14,6 +14,8 @@ void emit4(long arg);
 void emitx(valu_t val, int n);
 void emitstr(int zero);
 
+void listline(int textline);
+
 void assert2(char *file, int line);
 void nosect(void);
 void serror(char* s, ...);
@@ -22,5 +24,7 @@ void fatal(char *s, ...);
 void nofit(void);
 void wr_fatal(void);
 void wr_close(void);
+
+void yyerror(char const *s);
 
 #endif /* AS_SRC_COMM7_H */

@@ -13,8 +13,7 @@
 #include "y.tab.h"
 #include "wr.h"
 
-void newequate(item_t *ip, int typ)
-{
+void newequate(item_t *ip, int typ) {
 	typ &= ~S_EXT;
 	if (typ & S_COM)
 		typ = S_UND;
@@ -89,8 +88,7 @@ void newlabel(item_t *ip) {
 #endif
 }
 
-void newsect(item_t *ip)
-{
+void newsect(item_t *ip) {
 	register int typ;
 	register sect_t *sp = NULL;
 
