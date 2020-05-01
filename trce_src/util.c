@@ -768,7 +768,7 @@ dmpadr(adre) int adre; {
   datadp++; datadp %= 7;
 }
 
-static void rdstrg(void) {
+static int rdstrg(void) {
   int i,j,stradr,k,syk;
   char *p,*q,c,cc;
   i=0; p = cmdline; q = tringfield+90;
@@ -815,6 +815,12 @@ fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+90
   if(symtab[symp].symsect == 2){if(cmdchar == '!') cmdchar = 'g'; sprintf(tringfield+99,"%2d",j);}
   else  {if(cmdchar == '!')cmdchar = 'd'; sprintf(tringfield+99,"%-4d=%04x:",j,(stradr+j));}
   return(stradr+j);
+}
+static int rdadr(void) {
+  int i;
+  sscanf(cmdline,"%d%1s",&i,&cmdchar);
+  if((cmdchar == '!') && (symtab[symp].symsect == 2)) cmdchar = 'g';
+  return(i);
 }
 
 static void rdcline(int c) {
@@ -867,12 +873,6 @@ static void rdcmd(void) {
 	case 'x' : case 'X': case '*': instrcount = adre; break;
 	default : stopvlag = 255;
     } 
-}
-rdadr(){
-  int i;
-  sscanf(cmdline,"%d%1s",&i,&cmdchar);
-  if((cmdchar == '!') && (symtab[symp].symsect == 2)) cmdchar = 'g';
-  return(i);
 }
 
 static void winupdate(void) {
