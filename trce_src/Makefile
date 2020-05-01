@@ -1,7 +1,7 @@
 CC=gcc
 CP=cp
 CFLAGS=-O
-TARGET: all
+
 all: s88 t88
  
 88.o: 88.h var.h macro.h 88.c
