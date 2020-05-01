@@ -228,8 +228,7 @@ small(){}
 
 /* ---------- output ---------- */
 
-emit1(arg)
-{
+void emit1(int arg) {
 	static int olddottyp = -1;
 if(pass == PASS_3)
 	if(((int)(DOTSCT-sect) == 0) && ((int)lineno > linmr)){

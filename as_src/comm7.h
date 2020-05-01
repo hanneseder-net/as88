@@ -7,6 +7,8 @@ valu_t load(item_t *ip);
 int store(item_t *ip, valu_t val);
 int combine(int typ1, int typ2, int op);
 
+void emit1(int arg);
+
 void assert2(char *file, int line);
 void nosect(void);
 void serror(char* s, ...);

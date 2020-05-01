@@ -4,6 +4,7 @@
  */
 
 #include "comm6.h"
+#include "comm7.h"
 
 /*
  * INTEL 8086 special routines
