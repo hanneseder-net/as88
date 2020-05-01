@@ -4,6 +4,7 @@
 
 #define EXTERN extern
 #include "88.h"
+#include "adr.h"
 #include "macro.h"
 #include "util.h"
 
