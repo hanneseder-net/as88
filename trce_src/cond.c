@@ -1,5 +1,6 @@
 #define EXTERN extern
 #include "88.h"
+#include "util.h"
 
 #define X (unsigned short)x
 #define Y (unsigned short)y

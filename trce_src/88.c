@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define EXTERN extern
 #include "88.h"
 #include "macro.h"
+#include "util.h"
 
 #ifdef INPUT
 #include <signal.h>
@@ -10,8 +12,13 @@
 /* forward decls */
 static void rep(int op);
 
-void interp(void)
-{
+static void vidsim(void) {}
+static void dumpck(void) {}
+static void checkint(void) {}
+void inio(word a, int b) {}
+void outio(word a, word b, int c) {}
+
+void interp(void) {
 register word             t;
 register word             t2;
 register char             c;
@@ -689,10 +696,3 @@ static void rep(int op)
 		LAZYCC(ax,eop,SUBW); return;
   }
 }
-
-
-vidsim (){}
-dumpck (){}
-checkint (){}
-inio (){}
-outio (){}
