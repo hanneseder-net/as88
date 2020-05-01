@@ -12,4 +12,6 @@ item_t* item_alloc(int typ);
 void item_insert(item_t *ip, int h);
 item_t* item_search(char *p);
 
+int yylex(void);
+
 #endif /* AS_SRC_COMM5_H */
