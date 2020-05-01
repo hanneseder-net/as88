@@ -1,24 +1,28 @@
+#include "doscurs.h"
+
+#include <stdio.h>
+#include <string.h>
+
 char nwindow[24][81];
 extern char window[24][81];
-extern winfirst();
-extern wmv();
-extern immain();
-extern viscursor();
-extern inviscur();
-extern refresh();
 
-curinvis(){} /*printf("[8m");}*/
-curvisible(){} /*printf("[0m");}*/
-clearscreen(){printf("[2J");}
-mvcur(a,b) int a,b;{printf("[%d;%dH",a+1,b+1);}
-
-winfirst(){
- /*setty();*/
- clearscreen();
- curinvis(); /*standend();*/
- wingo();
+void viscursor(void) {
+  /*printf("[8m");}*/
 }
-wingo(){
+
+void inviscur(void) {
+  /*printf("[0m");}*/
+} 
+
+static void clearscreen() {
+  printf("[2J");
+}
+
+void wmv(int a, int b) {
+  printf("[%d;%dH", a + 1, b + 1);
+}
+
+static void wingo(void) {
  int i,j,k,l; char c,*p,*q;
  p = window[0]; for(i=0;i<1944;i++) *p++ = ' ';
 /*234567890123456789012345678901234567890123456789012345678901234567890*/
@@ -35,11 +39,17 @@ wingo(){
  for(i=0;i<20;i++) window[13][i] = '-';
  for(i=0;i<6;i++) window[i+10][20] = '|';
  p = window[0]; q = nwindow[0]; for(i=0;i<1944;i++) *q++ = *p++;
- for(i=0;i<23;i++){ mvcur(i,0); printf("%-80.80s",window[i]);}
- mvcur(23,0); printf("%-79.79s",window[23]);
+ for(i=0;i<23;i++){ wmv(i,0); printf("%-80.80s",window[i]);}
+ wmv(23,0); printf("%-79.79s",window[23]);
 }
 
-immain(){
+void winfirst(void) {
+ clearscreen();
+ viscursor();
+ wingo();
+}
+
+void immain(void) {
  int i,j,b;
  char *p,*q;
  b = 1; p = window[0]-1; q = nwindow[0]-1;
@@ -53,7 +63,7 @@ immain(){
     else b=1;
 }
 
-wmv(a,b) int a,b; {mvcur(a,b);}
-viscursor(){curvisible();}/* {standout();}*/
-inviscur() {curinvis();}/*{standend();}*/
-refresh(){wingo();immain();}
+void refresh(void) {
+  wingo();
+  immain();
+}
