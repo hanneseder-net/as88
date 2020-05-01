@@ -4,9 +4,7 @@
 
 #define	SLOP		(80 * 2)
 
-wstore(x)
-register word	x;
-{
+void wstore(word x) {
     register reg	t;
     register char	*sav_eapc = eapc;
 
@@ -14,7 +12,6 @@ register word	x;
     *eapc++ = x;
     *eapc = x>>8;
 #else
-
     t.w = x;
 
     /*
@@ -37,9 +34,7 @@ register word	x;
 #endif
 }
 
-xstore(x)
-register char	*x;
-{
+void xstore(char *x) {
     register reg t;
 
     register char	*sav_eapc = eapc;
@@ -48,7 +43,6 @@ register char	*x;
     *eapc= *x;
     *(eapc+1)= *(x+1);
 #else
-
     t.w = *(word *)x;
     /*
      * XXX WATCH OUT HERE!!
@@ -69,15 +63,12 @@ register char	*x;
 
 }
 
-rapwstore(w)
-register word	w;
-{
+void rapwstore(word w) {
     register reg	t;
     register char	*ptr = (char *)rapw;
 #ifdef LITTLE_ENDIAN
     *rapw = w;
 #else
-
     t.w = w;
     /*
      * XXX WATCH OUT HERE!!
