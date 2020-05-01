@@ -41,10 +41,10 @@ as88:	$(COBJ) as.$(SUF)
 # 	$(CPP) -P -I$(MDIR) -I$h $(DEF) $(CDIR)/comm2.y >as.y
 # 	-@if test -f $(MDIR)/Expect ; then cat $(MDIR)/Expect ; else echo "expect 1 shift/reduce conflict"; fi
 
-# as.c:	as.y
-# 	yacc $(YFLAGS) as.y && mv y.tab.c as.c
+as.c: as.y comm6.h comm7.h
+	yacc $(YFLAGS) as.y && mv y.tab.c as.c
 
-# y.tab.h:	as.c
+y.tab.h:	as.c
 $(COBJ):	y.tab.h
 $(COBJ):	./comm0.h ./mach0.c
 $(COBJ):	./comm1.h ./mach1.c
