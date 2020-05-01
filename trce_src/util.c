@@ -782,7 +782,7 @@ void breakpt(void) {
   dump();
 }
 
-dmpadr(adre) int adre; {
+static void dmpadr(int adre) {
   datadm[datadp] = m + (ds<<4) + adre; 
   sprintf(datadarr[datadp],"%.19s",tringfield+90);
   datadarr[datadp][19] = ' ';
