@@ -735,7 +735,7 @@ static void clearbp(short textdot) {
   bparr[i].bprt = m[0]; return;
 }
 
-nulbp(ln) int ln; {
+static void nulbp(int ln) {
   char *p;
   int dott;
   p = m + cs16+bparr[0].pcp;
