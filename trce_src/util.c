@@ -368,7 +368,7 @@ static void returnax(int retval) {
   ah=(char)((retval>>8)&0xff);
 }
 
-syscal(){
+void syscal(void) {
   char calnr, *q, *p, c;
   int retval,i,j,ar[9],k,l,kk,ll,fwidth[9];
   paramfield pram[8];
