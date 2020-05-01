@@ -269,10 +269,7 @@ wr_sect(sect, cnt)
 #endif
 }
 
-void
-wr_outsect(s)
-	int		s;	/* section number */
-{
+void wr_outsect(int s /* section number */) {
 	register struct fil *ptr = &__parts[PARTEMIT + getsect(sectionnr)];
 
 	if (s != sectionnr && s >= (SECTCNT-1) && sectionnr >= (SECTCNT-1)) {
