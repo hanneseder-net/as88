@@ -239,12 +239,14 @@ typedef	struct sect_t	sect_t;
  * #endif
  */
 
-/* parts of the a.out file */
-#define	PARTEMIT	0
-#define	PARTRELO	1
-#define	PARTNAME	2
-#define	PARTCHAR	3
-#define	PARTS		4
+// TODO(heder): There is some redefs here, see obj.h.
+// What's the right value?
+//
+// /* parts of the a.out file */
+// #define	PARTEMIT	0
+// #define	PARTRELO	1
+// #define	PARTNAME	2
+// #define	PARTCHAR	3
 
 #ifdef BYTES_REVERSED
 #ifdef WORDS_REVERSED
