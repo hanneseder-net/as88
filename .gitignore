@@ -1,4 +1,7 @@
 *.o
+as_src/as.c
+as_src/as88
+as_src/y.tab.h
 bin/as88
 bin/s88
 bin/t88
