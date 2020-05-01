@@ -15,7 +15,9 @@ typedef unsigned unchr;
 typedef unsigned char unchr;
 #endif
 
+#ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
+#endif /* LITTLE_ENDIAN */
 #undef	BIG_ENDIAN	/* sun and the like */
 
 #ifdef LITTLE_ENDIAN
