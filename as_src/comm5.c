@@ -18,6 +18,8 @@ static int innumber(int c);
 static int induo(int c);
 static int instring(int termc);
 static int getval(int c);
+static int inescape(void);
+static int infbsym(char *p);
 
 int yylex(void)
 {
@@ -79,7 +81,7 @@ int yylex(void)
 void putval(int c)
 {
 	register valu_t v;
-	register n = 0;
+	register int n = 0;
 	register char *p = 0;
 
 	assert(c >= 256 && c < 256+128);
@@ -150,7 +152,7 @@ void putval(int c)
 }
 
 static int getval(int c) {
-	register n = 0;
+	register int n = 0;
 	register valu_t v;
 	register char *p = 0;
 
@@ -327,7 +329,7 @@ register c;
 
 static int innumber(int c) {
 	register char *p;
-	register radix;
+	register int radix;
 	static char num[20+1];
 
 	p = num;
@@ -359,7 +361,7 @@ static int innumber(int c) {
 	if (radix != 16 && (c == 'f' || c == 'b'))
 		return(infbsym(num));
 	yylval.y_valu = 0;
-	while (c = *p++) {
+	while ((c = *p++)) {
 		if (c > '9')
 			c -= ('a' - '9' - 1);
 		c -= '0';
@@ -372,7 +374,7 @@ static int innumber(int c) {
 
 static int instring(int termc) {
 	register char *p;
-	register c;
+	register int c;
 	static int maxstring = 0;
 
 	if (! maxstring) {
@@ -408,9 +410,8 @@ static int instring(int termc) {
 	return(STRING);
 }
 
-inescape()
-{
-	register c, j, r;
+static int inescape(void) {
+	register int c, j, r;
 
 	c = nextchar();
 	if (c >= '0' && c <= '7') {
@@ -438,10 +439,8 @@ inescape()
 	return(c);
 }
 
-infbsym(p)
-register char *p;
-{
-	register lab;
+static int infbsym(char *p) {
+	register int lab;
 	register item_t *ip;
 
 	lab = *p++ - '0';
@@ -501,7 +500,7 @@ void item_insert(item_t *ip, int h) {
 
 item_t* item_alloc(int typ) {
 	register item_t *ip;
-	static nleft = 0;
+	static int nleft = 0;
 	static item_t *next;
 
 	if (--nleft < 0) {
@@ -535,11 +534,12 @@ item_t * fb_shift(int lab) {
 	register item_t *ip;
 
 	ip = fb_ptr[FB_FORW+lab];
-	if (ip == 0)
+	if (ip == 0) {
 		if (pass == PASS_1)
 			ip = fb_alloc(lab);
 		else
 			ip = fb_ptr[FB_HEAD+lab];
+	}
 	fb_ptr[FB_BACK+lab] = ip;
 	fb_ptr[FB_FORW+lab] = ip->i_next;
 	return(ip);

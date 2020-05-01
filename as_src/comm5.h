@@ -3,6 +3,7 @@
 
 #include "comm0.h"
 
+int hash(char *p);
 int nextchar(void);
 void putval(int c);
 item_t* fb_alloc(int lab);
