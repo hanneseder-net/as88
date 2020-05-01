@@ -670,8 +670,9 @@ bloop:
 	    case W07: spare(t);
 	}
 
-    default: panic("Error.  bad opcode %x \n", --*pcx);
-    /*default: printf("Error.  bad opcode %x \n", --*pcx); dump(); abort();*/
+    default: 
+		sprintf(errbuf, "Error.  bad opcode %x \n", --*pcx);
+		panic(errbuf);
     }
 }
 
