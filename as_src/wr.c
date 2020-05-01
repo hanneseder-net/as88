@@ -10,6 +10,8 @@
  *	part. In this case #define OUTSEEK.
  */
 
+#include "wr.h"
+
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -31,10 +33,7 @@ int			__sectionnr;
 #define sectionnr	__sectionnr
 static int		offcnt;
 
-void
-__wr_flush(ptr)
-	register struct fil *ptr;
-{
+void __wr_flush(struct fil *ptr) {
 #ifdef OUTSEEK
 	/* seek to correct position even if we aren't going to write now */
 	if (currpos != ptr->currpos) {

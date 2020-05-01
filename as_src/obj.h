@@ -1,3 +1,6 @@
+#ifndef AS_SRC_OBJ_H
+#define AS_SRC_OBJ_H
+
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
@@ -97,3 +100,5 @@ extern struct fil __parts[];
 #define	NPARTS		(PARTDBUG + 1)
 
 #define getsect(s)      (PARTEMIT+((s)>=(SECTCNT-1)?(SECTCNT-1):(s)))
+
+#endif /* AS_SRC_OBJ_H */
