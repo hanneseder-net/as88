@@ -15,7 +15,9 @@ typedef unsigned unchr;
 typedef unsigned char unchr;
 #endif
 
+#ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
+#endif /* LITTLE_ENDIAN */
 #undef	BIG_ENDIAN	/* sun and the like */
 
 #ifdef LITTLE_ENDIAN
@@ -158,16 +160,8 @@ typedef union {pair b; word w;} reg;
 #define FROM_DISK 0
 #define TO_DISK 1
 
-/* Variables used by I/O. */
-EXTERN int ttystat;
-EXTERN int clkinterval;
-
-
-
-#if 0
 #define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
-#endif
-#define MEMBYTES 32768 		/* how many bytes ew small simulator*/
+// #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
 #define HALFMEM 6000		/* 1/2 of MEMBYTES */
 #define MAXLONG 2000000000L
 #define INTERVAL 50000
@@ -219,6 +213,7 @@ extern char m[MEMBYTES];
 #endif
 typedef	union { unchr rc[16]; word rw[8];} REG;
 extern REG r;
-/* union{unchr rc[16]; word rw[8];}r;	/* AX,BX,CX,DX,SI,DI,BP,SP */
-extern int traceflag, procdepth(), breakpt(), instrcount, codelength;
+extern int traceflag, instrcount, codelength;
 extern char errbuf[];
+
+void interp(void);

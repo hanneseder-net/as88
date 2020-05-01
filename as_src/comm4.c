@@ -1,9 +1,7 @@
-/* $Header: comm4.c,v 2.17 91/12/17 14:55:13 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm4.c	1.6 */
 /*
  * Micro processor assembler framework written by
  *	Johan Stevenson, Vrije Universiteit, Amsterdam
@@ -15,15 +13,18 @@
 #include <unistd.h>
 #include <string.h>
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm4.h"
+#include "comm6.h"
+#include "y.tab.h"
 
 extern YYSTYPE	yylval;
 char projchar[256],filechar[256],filoutnm[80],ffnm[80],filsnm[80],filcapnm[80];
 
-static void commfinish(void);
+/* forward decls */
 static void setupoutput(void);
+static void commfinish(void);
 
 /* ========== Machine independent C routines ========== */
 
@@ -531,7 +532,7 @@ char *s;
 #endif
 }
 
-void setupoutput(void)
+static void setupoutput(void)
 {
 	register sect_t *sp;
 	register long off;
@@ -566,7 +567,7 @@ void setupoutput(void)
 	outhead.oh_nchar = off;	/* see newsymb() */
 }
 
-void commfinish(void)
+static void commfinish(void)
 {
 #ifndef ASLD
 	register int i;

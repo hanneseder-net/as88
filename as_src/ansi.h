@@ -6,8 +6,6 @@
 
 /* T O   A N S I   O R   N O T   T O   A N S I ? */
 
-/* $Id: ansi.h,v 1.3 1994/06/24 11:25:34 ceriel Exp $ */
-
 /* Define the * _PROTOTYPE macro to either expand both of its arguments
    (ANSI prototypes), or only the function name (K&R prototypes).
  */

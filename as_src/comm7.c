@@ -1,9 +1,7 @@
-/* $Header: comm7.c,v 2.20 91/12/17 14:55:25 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm7.c	1.10 */
 /*
  * miscellaneous
  */

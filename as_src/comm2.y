@@ -1,9 +1,7 @@
-/* $Header: comm2.y,v 2.11 91/12/17 14:55:07 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm2.y	1.7 */
 
 /*
  * delay inclusion of machine dependent stuff (see comm0.h)
@@ -11,8 +9,9 @@
 #define	_include	#include
 
 %{
-#include	"comm0.h"
-#include	"comm1.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm6.h"
 
 static item_t	*last_it, *o_it;
 %}

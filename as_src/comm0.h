@@ -1,9 +1,10 @@
-/* $Header: comm0.h,v 2.11 91/12/17 14:54:56 ceriel Exp $ */
+#ifndef AS_SRC_COMM0_H
+#define AS_SRC_COMM0_H
+
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm0.h	1.8 */
 /*
  * All preprocessor based options/constants/functions
  */
@@ -260,3 +261,5 @@ typedef	struct sect_t	sect_t;
 #endif
 
 extern FILE *fopen();   /* some systems don't have this in stdio.h */
+
+#endif /* AS_SRC_COMM0_H */

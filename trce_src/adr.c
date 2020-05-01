@@ -5,7 +5,7 @@
 #define DS xs=ds		/* indicates that ds segment used */
 #define SS xs=ss		/* indicates that ss segment used */
 
-wd()
+void wd(void)
 {
 /* Compute the effective address and put it in 'ea'.
  * Also compute the register and put a pointer to it in 'rapc.'
@@ -335,7 +335,7 @@ wd()
 }
 
 
-by()
+void by(void)
 {
 /* Compute the effective address and put it in 'ea'.
  * Also compute the register and put a pointer to it in 'rapc.'

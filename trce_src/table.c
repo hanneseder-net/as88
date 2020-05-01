@@ -15,5 +15,3 @@ char m[MEMBYTES];
 #endif
 
 REG r;
-
-/* union{unchar rc[16]; word rw[8];}r;      /* AX,BX,CX,DX,SI,DI,BP,SP */

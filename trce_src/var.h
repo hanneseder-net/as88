@@ -1,7 +1,11 @@
+#ifndef TRCE_SRC_VAR_H
+#define TRCE_SRC_VAR_H
+
+// TODO(heder): These could move to .c files.
 #include <errno.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 #define CALLONLY 1
 #define CALLJUMP 2
@@ -57,3 +61,5 @@ word initseg;			/* initial value of all the segment registers */
 long histo[NCLICKS];
 
 int dumphdr;
+
+#endif /* TRCE_SRC_VAR_H */

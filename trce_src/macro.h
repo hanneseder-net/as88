@@ -1,3 +1,5 @@
+#include "store.h"
+
 /* Macros for memory references. */
 #define M m
 

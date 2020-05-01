@@ -1,13 +1,12 @@
-/* $Header: comm5.c,v 2.11 91/02/04 14:25:58 ceriel Exp $ */
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
-/* @(#)comm5.c	1.1 */
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm4.h"   
+#include "y.tab.h"
 
 
 static void putval(int c);

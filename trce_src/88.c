@@ -1,28 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #define EXTERN extern
 #include "88.h"
+#include "adr.h"
+#include "cond.h"
 #include "macro.h"
+#include "util.h"
 
 #ifdef INPUT
 #include <signal.h>
 #endif
 
-extern void by();
-extern void wd();
-extern void prut();
-extern void dump();
-extern void meldroutine();
+/* forward decls */
+static void rep(int op);
 
-void rep(int op);
+static void vidsim(void) {}
+static void dumpck(void) {}
+static void checkint(void) {}
+void inio(word a, int b) {}
+void outio(word a, word b, int c) {}
 
-void interp()
-{
-    word             t;
-    word             t2;
-    char             c;
-    int              mm, n, k;       /* 1 if dumping on, 0 if off */
-    adr              u, u1, u2;
+void interp(void) {
+register word             t;
+register word             t2;
+register char             c;
+register int              mm, n, k;       /* 1 if dumping on, 0 if off */
+register adr              u, u1, u2;
 
     mask = 0377;
 /* Here is the main loop of the interpreter. */
@@ -45,9 +50,6 @@ next:
       if (traceflag) dump();
 	  fprintf(stderr,"Code out of rang %ld\n",(PC)); exit(1);}
 bloop:
-    /* if (t == 0x90)
-        goto next; */
-
     /* Some compilers balk at 256-case switches */
     switch(t) {
 
@@ -67,7 +69,7 @@ bloop:
     case 0x0C: IMMED8; c=al|eoplo; al=c; BSZONLY(c); LOOP;
     case 0x0D: IMMED; t= ax|eop; ax=t; SZONLY(t); LOOP;
     case 0x0E: PUSH(cs); LOOP;
-    case 0x0F: syscal(); LOOP; /* spare(0x0F);*/
+    case 0x0F: syscal(); LOOP;
 
     case 0x10: by(); CC; c=eoplo+roplo+cf; BSTORE(c);
 		BLAZYCC3(eoplo,roplo,cf,ADCB); LOOP;
@@ -307,7 +309,7 @@ bloop:
     case 0x96: t= ax; ax= si; si=t; LOOP;
     case 0x97: t= ax; ax= di; di=t; LOOP;
     /*case 0x98: ah = (al < 0 ? 0xFF : 0); LOOP;*/
-    case 0x98: /*prut(ah,al);*/ ah = ( (al & 0X80) ? 0xFF : 0); LOOP;
+    case 0x98: ah = ( (al & 0X80) ? 0xFF : 0); LOOP;
     case 0x99: dx = (ax < 0 ? 0xFFFF : 0); LOOP;
     case 0x9A: IMMED; RMCONST; PUSH(cs); PUSH(PC); CS(rop);
 		    CSMEM(pcx,eop); if(traceflag) procdepth(1); LOOP;
@@ -497,41 +499,16 @@ bloop:
     case 0xF2: t = *pcx++ & mask;
 	switch(t) {
 	    case 0xA4:
-	/*	if (timer > (unsigned) cx) {
-		    /* No interrupt during this instruction * /
-		    timer -= cx;
-	*/	    STRING; t=1-dirf-dirf; n= cx;
+		    /* No interrupt during this instruction */
+	        STRING; t=1-dirf-dirf; n= cx;
 		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
 		    si += n*t;  di += n*t;
-	/*	} else {
-		    /* Interrupt this instruction. * /
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=1-dirf-dirf; n= cx;
-		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA5:
-	/*	if (timer > (unsigned) cx) {
-		    timer -= cx;
-	*/	    STRING; t=2*(1-dirf-dirf); n= cx;
-		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
-		    si += n*t;  di += n*t;
-	/*       } else {
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
 		    STRING; t=2*(1-dirf-dirf); n= cx;
 		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
 		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA6:
 	    case 0xA7:
 	    case 0xAE: while(cx) {rep(t); CC; (cx)--; if (zerof != 0) LOOP;}
@@ -547,41 +524,15 @@ bloop:
     case 0xF3: t = *pcx++ & mask;
 	switch(t) {
 	    case 0xA4:
-	/*	if (timer > (unsigned) cx) {
-		    /* No interrupt during this instruction * /
-		    timer -= cx;
-	*/	    STRING; t=1-dirf-dirf; n= cx;
+	        STRING; t=1-dirf-dirf; n= cx;
 		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
 		    si += n*t;  di += n*t;
-	/*	} else {
-		    /* Interrupt this instruction. * /
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=1-dirf-dirf; n= cx;
-		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA5:
-	/*	if (timer > (unsigned) cx) {
-		    timer -= cx;
-	*/	    STRING; t=2*(1-dirf-dirf); n= cx;
+            STRING; t=2*(1-dirf-dirf); n= cx;
 		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
 		    si += n*t;  di += n*t;
-	/*       } else {
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=2*(1-dirf-dirf); n= cx;
-		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA6:
 	    case 0xA7:
 	    case 0xAE:
@@ -595,7 +546,7 @@ bloop:
 	}
 
     case 0xF4: printf("Halt instruction executed.  End of run.\n"); 
-	    write(2,"Normal exit\n",12); stat(); exit(0);
+	    write(2,"Normal exit\n",12); exit(0);
     case 0xF5: CC; cf=cf^1; LOOP;
     case 0xF6: by();
 	switch(ra) {		/* this opcode splits on reg field (in ra) */
@@ -606,7 +557,6 @@ bloop:
 	    case B04: u1=(unchr)al; u2=(unchr)eoplo; u=u1*u2;ax=u;
 		    cf=(u<256 ? 0 : 1); ovf=cf; ccvalid=1; LOOP;
 	    case B05: t=(short)al; n=(short)eoplo; ax=t*n;
-		    /*cf=((al>=0&&ah==0)||(al<0&&ah==0xFF)?0:1);*/
 		    cf=(((!(al&0X80))&&ah==0)||((al&0X80)&&ah==0xFF)?0:1);
 			 ovf=cf; ccvalid=1;LOOP;
 	    case B06: u1=(adr)ax; u2=(adr)eoplo; u=u1/u2; al=(char)u;
@@ -669,12 +619,13 @@ bloop:
 	    case W07: spare(t);
 	}
 
-    default: panic("Error.  bad opcode %x \n", --*pcx);
-    /*default: printf("Error.  bad opcode %x \n", --*pcx); dump(); abort();*/
+    default: 
+		sprintf(errbuf, "Error.  bad opcode %x \n", --*pcx);
+		panic(errbuf);
     }
 }
 
-void rep(int op)
+static void rep(int op)
 {
 /* The string instructions (MOVS, CMPS, STOS, LODS, and SCAS are done here. */
   char c;
@@ -695,10 +646,3 @@ void rep(int op)
 		LAZYCC(ax,eop,SUBW); return;
   }
 }
-
-
-vidsim (){}
-dumpck (){}
-checkint (){}
-inio (){}
-outio (){}
