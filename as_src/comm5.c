@@ -2,17 +2,26 @@
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
+#include "comm5.h"
 
 #include "comm0.h"
 #include "comm1.h"
-#include "comm5.h"   
+#include "comm7.h"
 #include "y.tab.h"
 
 extern YYSTYPE	yylval;
 
-yylex()
+/* forward decls */
+static int inident(int c);
+static void readcode(int n);
+static int innumber(int c);
+static int induo(int c);
+static int instring(int termc);
+static int getval(int c);
+
+int yylex(void)
 {
-	register c;
+	register int c;
 	int i;
 
 	if (pass == PASS_1) {
@@ -140,8 +149,7 @@ void putval(int c)
 		putc(*p++, tempfile);
 }
 
-getval(c)
-{
+static int getval(int c) {
 	register n = 0;
 	register valu_t v;
 	register char *p = 0;
@@ -205,9 +213,9 @@ getval(c)
 
 /* ---------- lexical scan in pass 1 ---------- */
 
-nextchar()
+int nextchar(void)
 {
-	register c;
+	register int c;
 
 	if (peekc != -1) {
 		c = peekc;
@@ -229,9 +237,8 @@ nextchar()
 	return(c);
 }
 
-readcode(n)
-{
-	register c;
+static void readcode(int n) {
+	register int c;
 
 	yylval.y_valu = 0;
 	do {
@@ -248,9 +255,7 @@ readcode(n)
 	} while (--n);
 }
 
-induo(c)
-register c;
-{
+static int induo(int c) {
 	static short duo[] = {
 		('='<<8) | '=', OP_EQ,
 		('<'<<8) | '>', OP_NE,
@@ -273,12 +278,10 @@ register c;
 
 static char name[NAMEMAX+1];
 
-inident(c)
-register  c;
-{
+static int inident(int c) {
 	register char *p = name;
 	register item_t *ip;
-	register n = NAMEMAX;
+	register int n = NAMEMAX;
 
 	do {
 		if (--n >= 0)
@@ -322,9 +325,7 @@ register c;
 }
 #endif
 
-innumber(c)
-register c;
-{
+static int innumber(int c) {
 	register char *p;
 	register radix;
 	static char num[20+1];
@@ -369,8 +370,7 @@ register c;
 	return(NUMBER);
 }
 
-instring(termc)
-{
+static int instring(int termc) {
 	register char *p;
 	register c;
 	static int maxstring = 0;
@@ -465,25 +465,20 @@ ok:
 	return(FBSYM);
 }
 
-hash(p)
-register char *p;
-{
+int hash(char *p) {
 	register unsigned short h;
-	register c;
+	register int c;
 
 	h = 0;
-	while (c = *p++) {
+	while ((c = *p++)) {
 		h <<= 2;
 		h += c;
 	}
 	return(h % H_SIZE);
 }
 
-item_t *
-item_search(p)
-char *p;
-{
-	register h;
+item_t* item_search(char *p) {
+	register int h;
 	register item_t *ip;
 
 	for (h = hash(p); h < H_TOTAL; h += H_SIZE) {
@@ -499,16 +494,12 @@ done:
 	return(ip);
 }
 
-item_insert(ip, h)
-item_t *ip;
-{
+void item_insert(item_t *ip, int h) {
 	ip->i_next = hashtab[h];
 	hashtab[h] = ip;
 }
 
-item_t *
-item_alloc(typ)
-{
+item_t* item_alloc(int typ) {
 	register item_t *ip;
 	static nleft = 0;
 	static item_t *next;
@@ -527,10 +518,7 @@ item_alloc(typ)
 	return(ip);
 }
 
-item_t *
-fb_alloc(lab)
-register lab;
-{
+item_t* fb_alloc(int lab) {
 	register item_t *ip, *p;
 
 	ip = item_alloc(S_UND);
@@ -543,10 +531,7 @@ register lab;
 	return(ip);
 }
 
-item_t *
-fb_shift(lab)
-register lab;
-{
+item_t * fb_shift(int lab) {
 	register item_t *ip;
 
 	ip = fb_ptr[FB_FORW+lab];

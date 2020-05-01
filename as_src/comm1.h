@@ -6,6 +6,8 @@
  * variable declarations
  */
 
+#include <stdio.h>
+
 #ifdef extern
 #define	INIT(x)		= x
 #else
@@ -107,14 +109,6 @@ extern struct outhead	outhead;
 #ifdef ASLD
 extern char	*readident();
 #endif
-extern char	*remember();
-extern item_t	*fb_shift();
-extern item_t	*fb_alloc();
-extern item_t	*item_alloc();
-extern item_t	*item_search();
-extern valu_t	load();
-extern FILE	*ffcreat();
-extern FILE	*fftemp();
 
 /* comm 4 */
 extern void pass_1(int argc, char** argv);

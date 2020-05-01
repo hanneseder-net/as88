@@ -7,6 +7,7 @@
 
 #include "comm0.h"
 #include "comm6.h"
+#include "comm5.h"
 #include "comm7.h"
 #include "mach5.h"
 
@@ -82,14 +83,6 @@ extern char	listpath[50];
 
 extern item_t		keytab[];
 extern struct outhead	outhead;
-
-extern char	*remember();
-extern item_t	*fb_shift();
-extern item_t	*fb_alloc();
-extern item_t	*item_alloc();
-extern item_t	*item_search();
-extern FILE	*ffcreat();
-extern FILE	*fftemp();
 
 extern int	mrg_1,mrg_2;
 extern expr_t	exp_1,exp_2;

@@ -13,7 +13,9 @@
 
 #include "comm0.h"
 #include "comm1.h"
+#include "comm4.h"
 #include "y.tab.h"
+#include "wr.h"
 #include "wr_putc.h"
 
 int linmr=0;
@@ -121,7 +123,7 @@ int combine(int typ1, int typ2, int op) {
 int printx(int ndig, valu_t val) {
 	static char buf[8];
 	register char *p;
-	register c, n;
+	register int c, n;
 
 	p = buf; n = ndig;
 	do {
@@ -138,7 +140,7 @@ int printx(int ndig, valu_t val) {
 
 #ifdef LISTING
 void listline(int textline) {
-	register c;
+	register int c;
 
 	if ((listflag & 4) && (c = getc(listfile)) != '\n' && textline) {
 		if (listcolm >= 24)
@@ -170,7 +172,7 @@ void listline(int textline) {
 static char *pbittab[PBITTABSZ];
 
 int small(int fitsmall, int gain) {
-	register bit;
+	register int bit;
 	register char *p;
 
 	if (DOTSCT == NULL)
@@ -326,18 +328,12 @@ void emitstr(int zero) {
 
 /* ---------- Error checked file I/O  ---------- */
 
-ffreopen(s, f)
-char *s;
-FILE *f;
-{
+void ffreopen(char *s, FILE *f) {
 	if (freopen(s, "r", f) == NULL)
 		fatal("can't reopen %s", s);
 }
 
-FILE *
-ffcreat(s)
-char *s;
-{
+FILE* ffcreat(char *s) {
 	FILE *f;
 
 	if ((f = fopen(s, "w")) == NULL)
@@ -350,10 +346,7 @@ char *s;
 #endif
 char *tmp_dir = TMPDIR;
 
-FILE *
-fftemp(path, tail)
-char *path, *tail;
-{
+FILE* fftemp(char *path, char *tail) {
 	register char *dir;
 
 	if ((dir = getenv("TMPDIR")) == NULL)
@@ -382,7 +375,7 @@ static void diag_va(char *tail, char *s, va_list argp) {
   else
     fprintf(stderr, "%s: ", progname);
   vfprintf(stderr, s, argp);
-  fprintf(stderr, tail);
+  fprintf(stderr, "%s", tail);
 }
 
 void fatal(char *s, ...) {
@@ -391,7 +384,7 @@ void fatal(char *s, ...) {
 	nerrors++;
 	diag_va(" (fatal)\n", s, argp);
 	va_end(argp);
-	stop();
+	stop(0);
 }
 
 #if DEBUG == 2

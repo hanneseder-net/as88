@@ -1,6 +1,8 @@
 #ifndef AS_SRC_COMM7_H
 #define AS_SRC_COMM7_H
 
+#include <stdio.h>
+
 #include "comm0.h"
 
 valu_t load(item_t *ip);
@@ -25,6 +27,10 @@ void fatal(char *s, ...);
 void nofit(void);
 void wr_fatal(void);
 void wr_close(void);
+
+void ffreopen(char *s, FILE *f);
+FILE * ffcreat(char *s);
+FILE* fftemp(char *path, char *tail);
 
 void yyerror(char const *s);
 
