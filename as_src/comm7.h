@@ -8,6 +8,10 @@ int store(item_t *ip, valu_t val);
 int combine(int typ1, int typ2, int op);
 
 void emit1(int arg);
+void emit2(int arg);
+void emit4(long arg);
+void emitx(valu_t val, int n);
+void emitstr(int zero);
 
 void assert2(char *file, int line);
 void nosect(void);

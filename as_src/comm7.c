@@ -273,9 +273,7 @@ if(pass == PASS_3)
 	DOTVAL++;
 }
 
-emit2(arg)
-int arg;
-{
+void emit2(int arg) {
 #ifdef BYTES_REVERSED
 	emit1((arg>>8)); emit1(arg);
 #else
@@ -283,9 +281,7 @@ int arg;
 #endif
 }
 
-emit4(arg)
-long arg;
-{
+void emit4(long arg) {
 #ifdef WORDS_REVERSED
 	emit2((int)(arg>>16)); emit2((int)(arg));
 #else
@@ -293,10 +289,7 @@ long arg;
 #endif
 }
 
-emitx(val, n)
-valu_t val;
-int n;
-{
+void emitx(valu_t val, int n) {
 	switch (n) {
 	case 1:
 		emit1((int)val); break;
@@ -319,8 +312,7 @@ int n;
 	}
 }
 
-emitstr(zero)
-{
+void emitstr(int zero) {
 	register i;
 	register char *p;
 
