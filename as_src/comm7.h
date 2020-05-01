@@ -1,6 +1,8 @@
 #ifndef AS_SRC_COMM7_H
 #define AS_SRC_COMM7_H
 
+int combine(int typ1, int typ2, int op);
+
 void assert2(char *file, int line);
 void nosect(void);
 void serror(char* s, ...);

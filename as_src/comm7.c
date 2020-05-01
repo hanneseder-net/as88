@@ -87,9 +87,7 @@ register char *s;
 	return(s);
 }
 
-combine(typ1, typ2, op)
-register typ1, typ2;
-{
+int combine(int typ1, int typ2, int op) {
 	switch (op) {
 	case '+':
 		if (typ1 == S_ABS)
