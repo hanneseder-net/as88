@@ -380,7 +380,7 @@ char *path, *tail;
 
 /* ---------- Error handling ---------- */
 
-yyerror(){}		/* we will do our own error printing */
+void yyerror(char const *s) { }		/* we will do our own error printing */
 
 void nosect(void) {
 	fatal("no sections");
