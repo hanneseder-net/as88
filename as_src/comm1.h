@@ -116,10 +116,6 @@ extern valu_t	load();
 extern FILE	*ffcreat();
 extern FILE	*fftemp();
 
-extern void fatal(char *s, ...);
-extern void wr_fatal(void);
-extern void wr_close(void);
-
 /* comm 4 */
 extern void pass_1(int argc, char** argv);
 extern void pass_23(int n);

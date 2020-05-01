@@ -6,9 +6,13 @@
  * miscellaneous
  */
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm7.h"
+
+#include <stdarg.h>
+
+#include "comm0.h"
+#include "comm1.h"
+#include "y.tab.h"
 
 int linmr=0;
 valu_t
@@ -377,31 +381,37 @@ char *path, *tail;
 
 /* ---------- Error handling ---------- */
 
-/*VARARGS*/
 yyerror(){}		/* we will do our own error printing */
 
-nosect()
-{
+void nosect(void) {
 	fatal("no sections");
 }
 
-void wr_fatal(void)
-{
+void wr_fatal(void) {
 	fatal("write error");
 }
 
-/* VARARGS1 */
-void fatal(char *s, a1, a2, a3, a4)
-{
+static void diag_va(char *tail, char *s, va_list argp) {
+  fflush(stdout);
+  if (modulename)
+    fprintf(stderr, "\"%s\", line %ld: ", modulename, lineno);
+  else
+    fprintf(stderr, "%s: ", progname);
+  vfprintf(stderr, s, argp);
+  fprintf(stderr, tail);
+}
+
+void fatal(char *s, ...) {
+	va_list argp;
+	va_start(argp, s);
 	nerrors++;
-	diag(" (fatal)\n", s, a1, a2, a3, a4);
+	diag_va(" (fatal)\n", s, argp);
+	va_end(argp);
 	stop();
 }
 
 #if DEBUG == 2
-assert2(file, line)
-char *file;
-{
+void assert2(char *file, int line) {
 	fatal("assertion failed (%s, %d)", file, line);
 }
 #endif
@@ -414,36 +424,22 @@ assert1()
 }
 #endif
 
-/* VARARGS1 */
-serror(s, a1, a2, a3, a4)
-char *s;
-{
+void serror(char* s, ...) {
+	va_list argp;
+	va_start(argp, s);
 	nerrors++;
-	diag("\n", s, a1, a2, a3, a4);
+	diag_va("\n", s, argp);
+	va_end(argp);
 }
 
-/* VARARGS1 */
-warning(s, a1, a2, a3, a4)
-char *s;
-{
-	diag(" (warning)\n", s, a1, a2, a3, a4);
+void warning(char *s, ...) {
+	va_list argp;
+	va_start(argp, s);	
+	diag_va(" (warning)\n", s, argp);
+	va_end(argp);
 }
 
-/* VARARGS1 */
-diag(tail, s, a1, a2, a3, a4)
-char *tail, *s;
-{
-	fflush(stdout);
-	if (modulename)
-		fprintf(stderr, "\"%s\", line %ld: ", modulename, lineno);
-	else
-		fprintf(stderr, "%s: ", progname);
-	fprintf(stderr, s, a1, a2, a3, a4);
-	fprintf(stderr, tail);
-}
-
-nofit()
-{
+void nofit(void) {
 	if (pass == PASS_3)
 		warning("too big");
 }

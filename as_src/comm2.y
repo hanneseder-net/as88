@@ -12,6 +12,7 @@
 #include "comm0.h"
 #include "comm1.h"
 #include "comm6.h"
+#include "comm7.h"
 
 static item_t	*last_it, *o_it;
 %}
