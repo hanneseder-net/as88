@@ -1,3 +1,11 @@
+#ifndef TRCE_SRC_VAR_H
+#define TRCE_SRC_VAR_H
+
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+
 #define CALLONLY 1
 #define CALLJUMP 2
 #define NE 16			/* how many -e flags are allowed */
@@ -6,8 +14,7 @@
 #define NU 16			/* how many -u flags are allowed */
 #define NY 16			/* how many -y flags are allowed */
 
-extern errno;
-long hexin(), atol(), lseek();
+long hexin();
 int quit0(), quit1(), quit2(), quit3(), quit4();
 char *traceptr;			/* ptr to word to be traced */
 char *prevpcx;			/* previous pcx (used for dumping) */
@@ -53,3 +60,5 @@ word initseg;			/* initial value of all the segment registers */
 long histo[NCLICKS];
 
 int dumphdr;
+
+#endif /* TRCE_SRC_VAR_H */
