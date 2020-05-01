@@ -172,8 +172,7 @@ listline(textline)
 #define PBITTABSZ	128
 static char *pbittab[PBITTABSZ];
 
-small(fitsmall, gain)
-{
+int small(int fitsmall, int gain) {
 	register bit;
 	register char *p;
 
@@ -224,7 +223,10 @@ small(fitsmall, gain)
 	/*NOTREACHED*/
 }
 #else 
-small(){}
+int small(int fitsmall, int gain) {
+	// TODO(heder): Not sure about the return value here.
+	return 0;
+}
 #endif
 
 /* ---------- output ---------- */
