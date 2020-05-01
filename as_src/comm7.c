@@ -56,13 +56,10 @@ int store(item_t *ip, valu_t val) {
 	return(1);
 }
 
-char *
-remember(s)
-register char *s;
-{
+char* remember(char *s) {
 	register char *p;
-	register n;
-	static nleft = 0;
+	register int n;
+	static int nleft = 0;
 	static char *next;
 
 	p = s;
@@ -78,7 +75,7 @@ register char *s;
 		assert(nleft >= 0);
 	}
 	p = next;
-	while (*p++ = *s++)
+	while ((*p++ = *s++))
 		;
 	s = next;
 	next = p;
@@ -220,6 +217,7 @@ int small(int fitsmall, int gain) {
 		return(*p & bit);
 	}
 	/*NOTREACHED*/
+	return 0;
 }
 #else 
 int small(int fitsmall, int gain) {
@@ -315,7 +313,7 @@ void emitx(valu_t val, int n) {
 }
 
 void emitstr(int zero) {
-	register i;
+	register int i;
 	register char *p;
 
 	p = stringbuf;

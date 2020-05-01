@@ -10,6 +10,7 @@ int store(item_t *ip, valu_t val);
 int combine(int typ1, int typ2, int op);
 int small(int fitsmall, int gain);
 int printx(int ndig, valu_t val);
+char* remember(char *s);
 
 void emit1(int arg);
 void emit2(int arg);
