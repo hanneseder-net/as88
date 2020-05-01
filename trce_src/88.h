@@ -220,3 +220,5 @@ extern REG r;
 /* union{unchr rc[16]; word rw[8];}r;	/* AX,BX,CX,DX,SI,DI,BP,SP */
 extern int traceflag, procdepth(), breakpt(), instrcount, codelength;
 extern char errbuf[];
+
+void interp(void);

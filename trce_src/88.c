@@ -10,7 +10,7 @@
 /* forward decls */
 static void rep(int op);
 
-interp()
+void interp(void)
 {
 register word             t;
 register word             t2;
