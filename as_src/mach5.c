@@ -61,8 +61,7 @@ reverse() {
 #endif
 }
 
-badsyntax() {
-
+static void badsyntax(void) {
 	serror("bad operands");
 }
 
