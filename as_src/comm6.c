@@ -11,9 +11,6 @@
 #include "comm6.h"
 #include "y.tab.h"
 
-static void newident(item_t *ip, int typ);
-static void newequate(item_t *ip, int typ);
-static void switchsect(int newtyp);
 
 static void newequate(item_t *ip, int typ)
 {
@@ -35,8 +32,7 @@ static void newequate(item_t *ip, int typ)
 	newident(ip, typ);
 }
 
-static void newident(item_t *ip, int typ)
-{
+void newident(item_t *ip, short typ) {
 	register flag;
 #ifdef GENLAB
 	static char genlab[] = GENLAB;
@@ -74,8 +70,7 @@ static void newident(item_t *ip, int typ)
 		);
 }
 
-static void newlabel(item_t *ip)
-{
+void newlabel(item_t *ip) {
 #if DEBUG != 0
 #ifdef THREE_PASS
 	register ADDR_T oldval = ip->i_valu;
@@ -181,8 +176,7 @@ valu_t val;
 	}
 }
 
-static void switchsect(int newtyp)
-{
+void switchsect(int newtyp) {
 	register sect_t *sp;
 	
 	if (sp = DOTSCT)
@@ -199,8 +193,7 @@ static void switchsect(int newtyp)
 	DOTTYP = newtyp;
 }
 
-static void align(valu_t bytes)
-{
+static void align(valu_t bytes) {
 	register valu_t gap;
 	register sect_t *sp;
 
@@ -238,8 +231,7 @@ static void align(valu_t bytes)
 }
 
 #ifdef RELOCATION
-static void newrelo(int s, int n)
-{
+void newrelo(int s, int n) {
 	int	iscomm;
 	struct outrelo	outrelo;
 
@@ -305,10 +297,7 @@ static void newrelo(int s, int n)
 }
 #endif
 
-long
-new_string(s)
-	char	*s;
-{
+long new_string(char *s) {
 	long	r = 0;
 
 	if (s) {
@@ -321,8 +310,7 @@ new_string(s)
 	return r;
 }
 
-void newsymb(char *name, int type, int desc, valu_t valu)
-{
+void newsymb(char* name, unsigned short type, unsigned short desc, valu_t valu) {
 	struct outname outname;
 
 	if (name && *name == 0)
