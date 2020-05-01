@@ -43,15 +43,14 @@ ea_1(param) {
 	}
 }
 
-ea_2(param) {
-
+void ea_2(int param) {
 	mrg_1 = mrg_2;
 	exp_1 = exp_2;
 	RELOMOVE(rel_1, rel_2);
 	ea_1(param);
 }
 
-reverse() {
+static void reverse(void) {
 	register m, r; expr_t e;
 
 	m = mrg_1; mrg_1 = mrg_2; mrg_2 = m;
