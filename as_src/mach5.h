@@ -2,5 +2,6 @@
 #define AS_SRC_MACH5_H
 
 void indexed(void);
+void regsize(register sz);
 
 #endif /* AS_SRC_MACH5_H */

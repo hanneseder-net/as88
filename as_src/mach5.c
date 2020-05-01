@@ -66,7 +66,7 @@ badsyntax() {
 	serror("bad operands");
 }
 
-regsize(sz) register sz; {
+void regsize(register sz) {
 	register bit;
 
 	sz <<= 3;
