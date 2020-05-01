@@ -3,6 +3,8 @@
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
 
+#include "comm6.h"
+
 /*
  * INTEL 8086 special routines
  */

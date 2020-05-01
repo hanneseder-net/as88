@@ -10,12 +10,18 @@
  *		Philips S&I, T&M, PMDS, Eindhoven
  */
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm4.h"
+#include "comm6.h"
+#include "y.tab.h"
 
 extern YYSTYPE	yylval;
 char projchar[256],filechar[256],filoutnm[80],ffnm[80],filsnm[80],filcapnm[80];
+
+/* forward decls */
+static void setupoutput(void);
+static void commfinish(void);
 
 /* ========== Machine independent C routines ========== */
 
@@ -532,7 +538,7 @@ char *s;
 #endif
 }
 
-setupoutput()
+static void setupoutput(void)
 {
 	register sect_t *sp;
 	register long off;
@@ -567,7 +573,7 @@ setupoutput()
 	outhead.oh_nchar = off;	/* see newsymb() */
 }
 
-commfinish()
+static void commfinish(void)
 {
 #ifndef ASLD
 	register int i;

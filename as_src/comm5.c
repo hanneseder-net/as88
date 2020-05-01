@@ -3,9 +3,10 @@
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm4.h"   
+#include "y.tab.h"
 
 
 extern YYSTYPE	yylval;
@@ -67,7 +68,7 @@ yylex()
 	return(c);
 }
 
-putval(c)
+void putval(int c)
 {
 	register valu_t v;
 	register n = 0;

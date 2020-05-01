@@ -6,9 +6,10 @@
  * implement pseudo instructions
  */
 
-#include	"comm0.h"
-#include	"comm1.h"
-#include	"y.tab.h"
+#include "comm0.h"
+#include "comm1.h"
+#include "comm6.h"
+#include "y.tab.h"
 
 newequate(ip, typ)
 register item_t *ip;
@@ -32,8 +33,7 @@ register int typ;
 	newident(ip, typ);
 }
 
-newident(ip, typ)
-register item_t *ip;
+void newident(item_t *ip, short typ)
 {
 	register flag;
 #ifdef GENLAB
@@ -72,8 +72,7 @@ register item_t *ip;
 		);
 }
 
-newlabel(ip)
-register item_t *ip;
+void newlabel(item_t *ip)
 {
 #if DEBUG != 0
 #ifdef THREE_PASS
@@ -181,8 +180,7 @@ valu_t val;
 	}
 }
 
-switchsect(newtyp)
-int newtyp;
+void switchsect(int newtyp)
 {
 	register sect_t *sp;
 	
@@ -240,7 +238,7 @@ valu_t bytes;
 }
 
 #ifdef RELOCATION
-newrelo(s, n)
+void newrelo(int s, int n)
 {
 	int	iscomm;
 	struct outrelo	outrelo;
@@ -323,9 +321,7 @@ new_string(s)
 	return r;
 }
 
-newsymb(name, type, desc, valu)
-register char *name;
-valu_t valu;
+void newsymb(char* name, unsigned short type, unsigned short desc, valu_t valu)
 {
 	struct outname outname;
 
