@@ -14,6 +14,7 @@
 #include "comm0.h"
 #include "comm1.h"
 #include "y.tab.h"
+#include "wr_putc.h"
 
 int linmr=0;
 valu_t load(item_t *ip) {
