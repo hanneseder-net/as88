@@ -3,11 +3,12 @@
  * See the copyright notice in the ACK home directory, in the file "Copyright".
  */
 #include "obj.h"
+#include "wr.h"
 
 extern int __sectionnr;
 
 void wr_putc(int ch) {
-	register struct fil *ptr = &__parts[PARTEMIT+getsect(__sectionnr)];
+	struct fil *ptr = &__parts[PARTEMIT+getsect(__sectionnr)];
 
 	if (ptr->cnt == 0) __wr_flush(ptr);
 	ptr->cnt--; *ptr->pnow++ = ch;
