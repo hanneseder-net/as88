@@ -923,7 +923,7 @@ fprintf(LOG,"Tot hier dotlinarr %d PC %d\n",dotlnarr[(PC)-1],(PC)-1);
 #endif
   i = dotlnarr[(PC)-1]; j = lnsymarr[i];
   if(j>nsymtab-3) {
-	fprintf(stderr,"\nNo BSS or no head label?\n",j,nsymtab-3,i);
+	fprintf(stderr,"\nNo BSS or no head label?\n");
 #ifdef DEBUG
 	fprintf(LOG,"Warning lnsymarr %d nsymtab %d entry %d\nNo BSS or no head label?\n",j,nsymtab-3,i);
 #endif
