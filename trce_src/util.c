@@ -368,6 +368,25 @@ static void returnax(int retval) {
   ah=(char)((retval>>8)&0xff);
 }
 
+static int getchbp(void) { 
+  int i;
+  char *p;
+  if(inbpl==inbpu) {wmv(11,24);inbpl = inbpu = inbuf;
+    if(traceflag && !(inpfl)){sprintf(errbuf,"Input expected"); erroutine();
+	p = inbuf; *p++ = '\n'; *p++ = '\0';
+	winupdate();wmv(11,24);}
+    while((i= getc(INP)) !=EOF) { if(i=='\r') continue;
+	*inbpl++ =i; if(i=='\n') break;}
+    if(i==EOF) {
+	if(inpfl>0) {fclose(INP); inpfl = 0; INP=stdin; return(getchbp());}
+	else if(inpfl) {sprintf(errbuf,"Second time end of input so exit");
+		erroutine(); exit(0);}
+	else {fclose(stdin); fopen("/dev/tty","rb"); inpfl--; return(i);}
+    }
+  }
+  return((int)*inbpu++);
+}
+
 void syscal(void) {
   char calnr, *q, *p, c;
   int retval,i,j,ar[9],k,l,kk,ll,fwidth[9];
@@ -999,25 +1018,6 @@ static int getchcmd(void) {
     return (i);
   else
     return (getchcmd());
-}
-
-getchbp(){ 
-  int i;
-  char *p;
-  if(inbpl==inbpu) {wmv(11,24);inbpl = inbpu = inbuf;
-    if(traceflag && !(inpfl)){sprintf(errbuf,"Input expected"); erroutine();
-	p = inbuf; *p++ = '\n'; *p++ = '\0';
-	winupdate();wmv(11,24);}
-    while((i= getc(INP)) !=EOF) { if(i=='\r') continue;
-	*inbpl++ =i; if(i=='\n') break;}
-    if(i==EOF) {
-	if(inpfl>0) {fclose(INP); inpfl = 0; INP=stdin; return(getchbp());}
-	else if(inpfl) {sprintf(errbuf,"Second time end of input so exit");
-		erroutine(); exit(0);}
-	else {fclose(stdin); fopen("/dev/tty","rb"); inpfl--; return(i);}
-    }
-  }
-  return((int)*inbpu++);
 }
 
 void meldroutine(void) {
