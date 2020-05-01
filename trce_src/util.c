@@ -147,7 +147,7 @@ fflush(LOG);
     for(i=0;i<7;i++) datadm[i] = NULL; puthp = 0;
   }
   pcx = p = m; ss = ds = es = 0; CS(0);
-  for(i=0;i<7;i++) {for(j=0;j<80;j++) datadarr[i][j] = ' '; datadarr[i][81] = '\0';}
+  for(i=0;i<7;i++) {for(j=0;j<80;j++) datadarr[i][j] = ' '; datadarr[i][80] = '\0';}
   datadp = 0; lfptr = 0;
   if((i=getsh(prog)) != MAGIC) {fprintf(stderr,"wrong magic load file\n"); return(1);}
   i = getsh(prog); /*stamps unimportant */
