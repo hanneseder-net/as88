@@ -1,1 +1,12 @@
 *.o
+bin/as88
+bin/s88
+bin/t88
+examples/as88
+examples/s88
+examples/t88
+exercise/as88
+exercise/s88
+exercise/t88
+trce_src/s88
+trce_src/t88
