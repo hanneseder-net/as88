@@ -8,6 +8,9 @@
 #endif
 extern void prut();
 
+/* forward decls */
+static void rep(int op);
+
 interp()
 {
 register word             t;
@@ -666,8 +669,7 @@ bloop:
     }
 }
 
-rep(op)
-register int op;
+static void rep(int op)
 {
 /* The string instructions (MOVS, CMPS, STOS, LODS, and SCAS are done here. */
   char c;

@@ -1,10 +1,8 @@
-/*#define DEBUG 1*/
 #include <stdio.h>
 #include <string.h>
 #include "88.h"
 #include "macro.h"
 #include "var.h"
-/*#include <sys/types.h>*/
 #include <sys/stat.h>
 #include <errno.h>
 #include <time.h> /* NIEUW15-4-2003 */
@@ -54,6 +52,11 @@ typedef union {int ii; char *cp;} paramfield;
 typedef union {int ii; char cp[140];} sscanfield;
 
 FILE *prog, *L, *CMD, *INP, *LOG;
+
+/* forward decls */
+static void nextput(int c);
+static void rdcmd(void);
+static void symlcorr(int i);
 
 pri(){ /* Test for endianness */
 #ifdef DEBUG
@@ -292,7 +295,7 @@ segmhead[i].align,segmhead[i].align);
 #endif
 }
 
-symlcorr(i) int i;{
+static void symlcorr(int i) {
   /* corrigeert line number bug voor symbolen uit de text. Zonder correctie
    wordt niet het line number, maar de eerste code doorgegeven */
   int ln,cd,j,c;
@@ -767,7 +770,7 @@ pdmpadr(){
   }
 }
 
-rdcmd(){
+static void rdcmd(void) {
   int c,d,adre;
   wmv(15,0);
   for(c=0;c<20;c++) putchar(' ');
@@ -972,7 +975,7 @@ newgpfield(){
   for(j=0;j<58;j++) outveld[0][j] = ' '; 
 }
 
-nextput(c) int c;{
+static void nextput(int c) {
   if(c=='\n') {nextput('\\'); nextput('n'); puthp = -1; return;}
   if(puthp>57) puthp = -1; 
     if(puthp < 0) { newgpfield(); puthp = 0;

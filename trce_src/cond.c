@@ -4,7 +4,7 @@
 #define X (unsigned short)x
 #define Y (unsigned short)y
 
-cc()
+void cc(void)
 {
 /* Compute the condition codes. Rewriting this routine in assembly code will 
  * improve overall performance considerably.
