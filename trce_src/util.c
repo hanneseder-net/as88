@@ -99,6 +99,12 @@ int getsh(FILE *f) {
   return(k);
 }
 
+static int hashstring(char *p) {
+  int h;
+  h = *p - 'A'; h &= 31;
+  return(h);
+}
+
 int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p,*p1,*p2;
@@ -743,12 +749,6 @@ static void nulbp(int ln) {
   dott = lndotarr[ln]; p = m+cs16+dott;
   bparr[0].pcp = dott; bparr[0].bprt = *p;
   *p = 0XF0;
-}
-
-hashstring(p) char *p; {
-  int h;
-  h = *p - 'A'; h &= 31;
-  return(h);
 }
 
 void breakpt(void) {
