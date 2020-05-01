@@ -125,10 +125,7 @@ void newsect(item_t *ip)
 		switchsect(typ);
 }
 
-/*ARGSUSED*/
-newbase(base)
-valu_t base;
-{
+void newbase(valu_t base) {
 #ifdef ASLD
 	register sect_t *sp;
 	
