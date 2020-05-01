@@ -40,10 +40,7 @@ register item_t *ip;
 #endif
 }
 
-store(ip, val)
-register item_t *ip;
-valu_t val;
-{
+int store(item_t *ip, valu_t val) {
 #ifdef ASLD
 	register typ;
 
