@@ -86,7 +86,6 @@ extern item_t	*fb_shift();
 extern item_t	*fb_alloc();
 extern item_t	*item_alloc();
 extern item_t	*item_search();
-extern long	load();
 extern FILE	*ffcreat();
 extern FILE	*fftemp();
 

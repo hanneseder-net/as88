@@ -16,10 +16,7 @@
 #include "y.tab.h"
 
 int linmr=0;
-valu_t
-load(ip)
-register item_t *ip;
-{
+valu_t load(item_t *ip) {
 #ifdef ASLD
 	register typ;
 

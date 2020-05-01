@@ -3,8 +3,9 @@
 
 #include "comm0.h"
 
-int combine(int typ1, int typ2, int op);
+valu_t load(item_t *ip);
 int store(item_t *ip, valu_t val);
+int combine(int typ1, int typ2, int op);
 
 void assert2(char *file, int line);
 void nosect(void);
