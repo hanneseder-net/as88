@@ -12,12 +12,18 @@
  *		Philips S&I, T&M, PMDS, Eindhoven
  */
 
+#include <unistd.h>
+#include <string.h>
+
 #include	"comm0.h"
 #include	"comm1.h"
 #include	"y.tab.h"
 
 extern YYSTYPE	yylval;
 char projchar[256],filechar[256],filoutnm[80],ffnm[80],filsnm[80],filcapnm[80];
+
+static void commfinish(void);
+static void setupoutput(void);
 
 /* ========== Machine independent C routines ========== */
 
@@ -35,11 +41,10 @@ void stop(int dummy) {
 	exit(nerrors != 0);
 }
 
-main(argc, argv)
-char **argv;
+int main(int argc, char** argv)
 {
-	register char *p;
-	register i;
+	char *p;
+	int i;
 	static char sigs[] = {
 		SIGHUP, SIGINT, SIGQUIT, SIGTERM, 0
 	};
@@ -51,7 +56,7 @@ char **argv;
 
 	projname = projchar;
 	firstsrc = -1; projseen=0;
-	strcpy(projname,"a_out");
+	strcpy(projname, "a_out");
 	switch(0) {
 	case 1:	break;
 	case (S_ETC|S_COM|S_VAR|S_DOT) != S_ETC : break;
@@ -59,7 +64,7 @@ char **argv;
 
 
 	progname = *argv++; argc--;
-	for (p = sigs; i = *p++; )
+	for (p = sigs; (i = *p++); )
 		if (signal(i, SIG_IGN) != SIG_IGN)
 			signal(i, stop);
 	for (i = 0; i < argc; i++) {
@@ -183,13 +188,6 @@ char **argv;
 		sflag |= SYM_SCT;
 #endif /* RELOCATION */
 	pass_1(argc,argv);
-/*#ifdef THREE_PASS*/
-
-/*#ifdef RELOCATION
-	if (rflag)
-		sflag |= SYM_SCT;
-#endif /* RELOCATION
-	pass_1(argc,argv); */
 #ifdef THREE_PASS
 	pass_23(PASS_2);
 #endif
@@ -200,15 +198,14 @@ char **argv;
 
 /* ---------- pass 1: arguments, modules, archives ---------- */
 
-pass_1(argc, argv)
-char **argv;
+void pass_1(int argc, char** argv)
 {
-	register char *p;
-	register item_t *ip;
+	char *p;
+	item_t *ip;
 #ifdef ASLD
 	char armagic[2];
 #else
-	register nfile = 0;
+	int nfile = 0;
 #endif
 
 #ifdef THREE_PASS
@@ -446,9 +443,9 @@ char *s;
 	}
 }
 
-pass_23(n)
+void pass_23(int n)
 {
-	register i;
+	int i;
 #ifdef ASLD
 	register ADDR_T base = 0;
 #endif
@@ -534,7 +531,7 @@ char *s;
 #endif
 }
 
-setupoutput()
+void setupoutput(void)
 {
 	register sect_t *sp;
 	register long off;
@@ -569,7 +566,7 @@ setupoutput()
 	outhead.oh_nchar = off;	/* see newsymb() */
 }
 
-commfinish()
+void commfinish(void)
 {
 #ifndef ASLD
 	register int i;

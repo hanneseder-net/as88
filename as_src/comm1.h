@@ -118,13 +118,19 @@ extern valu_t	load();
 extern FILE	*ffcreat();
 extern FILE	*fftemp();
 
+extern void fatal(char *s, ...);
+extern void wr_fatal(void);
+extern void wr_close(void);
+
+/* comm 4 */
+extern void pass_1(int argc, char** argv);
+extern void pass_23(int n);
+
+/* TODO(heder): Move this to a better place */
+#include <stdlib.h>
+#include <string.h>
+
 /* some library functions used */
-extern char	*mktemp();
-extern char	*malloc();
-extern char	*realloc();
-extern char	*calloc();
-extern char	*getenv();
-extern char	*strncpy();
 extern void	hashh();
 
 /* ========== Machine dependent C declarations ========== */

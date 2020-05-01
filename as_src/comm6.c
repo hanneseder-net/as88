@@ -12,9 +12,12 @@
 #include	"comm1.h"
 #include	"y.tab.h"
 
-newequate(ip, typ)
-register item_t *ip;
-register int typ;
+static void newident(item_t *ip, int typ);
+static void newequate(item_t *ip, int typ);
+static void switchsect(int newtyp);
+static void newsymb(char *name, int type, int desc, valu_t valu);
+
+static void newequate(item_t *ip, int typ)
 {
 	typ &= ~S_EXT;
 	if (typ & S_COM)
@@ -34,8 +37,7 @@ register int typ;
 	newident(ip, typ);
 }
 
-newident(ip, typ)
-register item_t *ip;
+static void newident(item_t *ip, int typ)
 {
 	register flag;
 #ifdef GENLAB
@@ -74,8 +76,7 @@ register item_t *ip;
 		);
 }
 
-newlabel(ip)
-register item_t *ip;
+static void newlabel(item_t *ip)
 {
 #if DEBUG != 0
 #ifdef THREE_PASS
@@ -94,8 +95,7 @@ register item_t *ip;
 #endif
 }
 
-newsect(ip)
-register item_t *ip;
+static void newsect(item_t *ip)
 {
 	register int typ;
 	register sect_t *sp = NULL;
@@ -183,8 +183,7 @@ valu_t val;
 	}
 }
 
-switchsect(newtyp)
-int newtyp;
+static void switchsect(int newtyp)
 {
 	register sect_t *sp;
 	
@@ -202,8 +201,7 @@ int newtyp;
 	DOTTYP = newtyp;
 }
 
-align(bytes)
-valu_t bytes;
+static void align(valu_t bytes)
 {
 	register valu_t gap;
 	register sect_t *sp;
@@ -242,7 +240,7 @@ valu_t bytes;
 }
 
 #ifdef RELOCATION
-newrelo(s, n)
+static void newrelo(int s, int n)
 {
 	int	iscomm;
 	struct outrelo	outrelo;
@@ -325,9 +323,7 @@ new_string(s)
 	return r;
 }
 
-newsymb(name, type, desc, valu)
-register char *name;
-valu_t valu;
+static void newsymb(char *name, int type, int desc, valu_t valu)
 {
 	struct outname outname;
 

@@ -10,6 +10,8 @@
 #include	"y.tab.h"
 
 
+static void putval(int c);
+
 extern YYSTYPE	yylval;
 
 yylex()
@@ -69,7 +71,7 @@ yylex()
 	return(c);
 }
 
-putval(c)
+static void putval(int c)
 {
 	register valu_t v;
 	register n = 0;

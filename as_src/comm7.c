@@ -387,14 +387,13 @@ nosect()
 	fatal("no sections");
 }
 
-wr_fatal()
+void wr_fatal(void)
 {
 	fatal("write error");
 }
 
 /* VARARGS1 */
-fatal(s, a1, a2, a3, a4)
-char *s;
+void fatal(char *s, a1, a2, a3, a4)
 {
 	nerrors++;
 	diag(" (fatal)\n", s, a1, a2, a3, a4);
