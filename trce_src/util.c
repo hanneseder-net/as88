@@ -700,7 +700,7 @@ static void pdmpadr(void) {
 	datadarr[i][44+j] = c;}
     for(j=0;j<4;j++){r = datadarr[i]; r += 55+6*j;
 	ii = *o++ & 255;  if(*o&128) ii |= 0Xffff0000; ii |= (*o++ & 255)<<8;
-	sprintf(r,"%6d",ii);}
+	sprintf(r,"%6lu",ii);}
    }
   }
 }
@@ -917,7 +917,7 @@ static void winupdate(void) {
  sprintf(window[6]+4,"%04x",bp&0Xffff);
  sprintf(window[7]+4,"%04x",si&0Xffff);
  sprintf(window[8]+4,"%04x",di&0Xffff);
- sprintf(window[7]+13,"%04x:PC",(PC)-1);
+ sprintf(window[7]+13,"%04lx:PC",(PC)-1);
 /* Note: (PC)-1. The next instruction initial byte is fetched before the dump*/
  sprintf(window[8]+10,"           ");
 #ifdef DEBUG
