@@ -4,4 +4,4 @@
 void wd(void);
 void by(void);
 
-#ifndef /* TRCE_SRC_ADR_H */
+#endif /* TRCE_SRC_ADR_H */
