@@ -1,4 +1,4 @@
-#ifndef AS_SRC_MACC5_H
+#ifndef AS_SRC_MACH5_H
 #define AS_SRC_MACH5_H
 
 #include "comm0.h"
