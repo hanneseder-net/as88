@@ -79,7 +79,7 @@ regsize(sz) register sz; {
 	mrg_2 &= ~bit;
 }
 
-indexed() {
+void indexed(void) {
         int sm1, sm2;
 
 	if (mrg_2 & ~7)

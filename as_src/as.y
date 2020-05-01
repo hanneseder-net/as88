@@ -7,6 +7,8 @@
 
 #include "comm0.h"
 #include "comm6.h"
+#include "comm7.h"
+#include "mach5.h"
 
 extern FILE *fopen();   
 
