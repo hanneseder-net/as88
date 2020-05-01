@@ -1,3 +1,6 @@
+#ifndef AS_SRC_COMM0_H
+#define AS_SRC_COMM0_H
+
 /*
  * (c) copyright 1987 by the Vrije Universiteit, Amsterdam, The Netherlands.
  * See the copyright notice in the ACK home directory, in the file "Copyright".
@@ -258,3 +261,5 @@ typedef	struct sect_t	sect_t;
 #endif
 
 extern FILE *fopen();   /* some systems don't have this in stdio.h */
+
+#endif /* AS_SRC_COMM0_H */
