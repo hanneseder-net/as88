@@ -6,7 +6,6 @@
 #ifdef INPUT
 #include <signal.h>
 #endif
-extern void prut();
 
 /* forward decls */
 static void rep(int op);
@@ -302,7 +301,7 @@ bloop:
     case 0x96: t= ax; ax= si; si=t; LOOP;
     case 0x97: t= ax; ax= di; di=t; LOOP;
     /*case 0x98: ah = (al < 0 ? 0xFF : 0); LOOP;*/
-    case 0x98: /*prut(ah,al);*/ ah = ( (al & 0X80) ? 0xFF : 0); LOOP;
+    case 0x98: ah = ( (al & 0X80) ? 0xFF : 0); LOOP;
     case 0x99: dx = (ax < 0 ? 0xFFFF : 0); LOOP;
     case 0x9A: IMMED; RMCONST; PUSH(cs); PUSH(PC); CS(rop);
 		    CSMEM(pcx,eop); if(traceflag) procdepth(1); LOOP;
