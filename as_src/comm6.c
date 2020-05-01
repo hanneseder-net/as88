@@ -14,7 +14,6 @@
 static void newident(item_t *ip, int typ);
 static void newequate(item_t *ip, int typ);
 static void switchsect(int newtyp);
-static void newsymb(char *name, int type, int desc, valu_t valu);
 
 static void newequate(item_t *ip, int typ)
 {
@@ -322,7 +321,7 @@ new_string(s)
 	return r;
 }
 
-static void newsymb(char *name, int type, int desc, valu_t valu)
+void newsymb(char *name, int type, int desc, valu_t valu)
 {
 	struct outname outname;
 
