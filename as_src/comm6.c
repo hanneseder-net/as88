@@ -151,6 +151,24 @@ void newbase(valu_t base) {
  *   -	maximum length of .comm is recorded in i_valu during PASS_1
  *   -	i_valu is used for relocation info during PASS_3
  */
+static void new_common(item_t *ip) {
+	register struct common_t *cp;
+	static nleft = 0;
+	static struct common_t *next;
+
+	if (--nleft < 0) {
+		next = (struct common_t *) malloc(MEMINCR);
+		if (next == 0) {
+			fatal("out of memory");
+		}
+		nleft += (MEMINCR / sizeof (struct common_t));
+	}
+	cp = next++;
+	cp->c_next = commons;
+	cp->c_it = ip;
+	commons = cp;
+}
+
 void newcomm(item_t *ip, valu_t val) {
 	if (pass == PASS_1) {
 		if (DOTSCT == NULL)
@@ -174,7 +192,7 @@ void newcomm(item_t *ip, valu_t val) {
 void switchsect(int newtyp) {
 	register sect_t *sp;
 	
-	if (sp = DOTSCT)
+	if ((sp = DOTSCT))
 		sp->s_size = DOTVAL - sp->s_base;
 	if (newtyp == S_UND) {
 		DOTSCT = NULL;
@@ -324,24 +342,4 @@ void newsymb(char* name, unsigned short type, unsigned short desc, valu_t valu) 
 	if (sizeof(valu) != sizeof(long))
 		outname.on_valu &= ~(((0xFFFFFFFF)<<(4*sizeof(valu_t)))<<(4*sizeof(valu_t)));
 	wr_name(&outname, 1);
-}
-
-new_common(ip)
-	item_t *ip;
-{
-	register struct common_t *cp;
-	static nleft = 0;
-	static struct common_t *next;
-
-	if (--nleft < 0) {
-		next = (struct common_t *) malloc(MEMINCR);
-		if (next == 0) {
-			fatal("out of memory");
-		}
-		nleft += (MEMINCR / sizeof (struct common_t));
-	}
-	cp = next++;
-	cp->c_next = commons;
-	cp->c_it = ip;
-	commons = cp;
 }
