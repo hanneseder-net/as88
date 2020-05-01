@@ -158,12 +158,6 @@ typedef union {pair b; word w;} reg;
 #define FROM_DISK 0
 #define TO_DISK 1
 
-/* Variables used by I/O. */
-EXTERN int ttystat;
-EXTERN int clkinterval;
-
-
-
 #define MEMBYTES 1048576L	/* how many bytes does 8088 have? * /
 #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
 #define HALFMEM 6000		/* 1/2 of MEMBYTES */
@@ -217,7 +211,6 @@ extern char m[MEMBYTES];
 #endif
 typedef	union { unchr rc[16]; word rw[8];} REG;
 extern REG r;
-/* union{unchr rc[16]; word rw[8];}r;	/* AX,BX,CX,DX,SI,DI,BP,SP */
 extern int traceflag, procdepth(), breakpt(), instrcount, codelength;
 extern char errbuf[];
 
