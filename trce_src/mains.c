@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <time.h> /* NIEUW15-4-2003 */
 
+#include "doscurs.h"
 #include "util.h"
 
 #define CBUF 180
@@ -19,13 +20,8 @@ char fnameL[CBUF], fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
 char nulsymbol[]="NULLSYMBOL";
 time_t t1,t2;
 struct stat astat[2], *bf;
-FILE *bituit;
  
-int pfildes[2], pnr, termbitsize;
-char bmbuf[9000];
-/*file descriptor and procedure number to create a pipe for the bitmap*/
-
-char window[24][81], cmdchar, cmdline[30],outveld[4][59];
+char cmdchar, cmdline[30],outveld[4][59];
 unchr prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
 int stckprdepth[20], prstckpos[20], codelength, instrcount, nsymtab, maxsp;
 int puthp; /*horizontale en verticale putpositie*/
@@ -38,7 +34,7 @@ relocveld relocarr[1024]; /* relocation variables field */
 short lndotarr[0X2000],lnsymarr[0X2000],dotlnarr[0X6000],bssreloc;
 int lnfilarr[0X6000], maxln, symp;/*fileptr in source, max source, last symbol*/
 
-int lfptr,cmdfl,inpfl,errflag; /*load file pointer, command or input from file*/
+int cmdfl,inpfl; /*command or input from file*/
 char *syssp;	/*pointer in stack for conversion in system calls*/
 
 typedef struct {int symvalue; char *symbol; int nextsym; int lnr; char symsect;}
@@ -61,44 +57,17 @@ FILE *prog, *L, *CMD, *INP, *LOG;
 static void nextput(int c);
 static void rdcmd(void);
 static void symlcorr(int i);
+void schrijf(void);
 
-pri(){ /* Test for endianness */
-#ifdef DEBUG
- fprintf(LOG,"eoplo %d eophi %d eop %d pc %d\n",eoplo&255,eophi&255,eop,(PC)-1);
-#endif
-}
-
-getint(f) FILE *f; {
-  int i,j,k;
-  lfptr += 4;
-  i = getc(f); j = getc(f);
-  k = 0; k |= (i&255); k |= ((j&255)<<8);
-  i = getc(f); j = getc(f);
-  k |= ((i&255)<<16); k |= ((j&255)<<24);
-  return(k);
-}
-
-getsh(f) FILE *f; {
-  int i,j,k;
-  i = getc(f);
-  j = getc(f); k = 0;
-  lfptr += 2;
-  k |= (i&255); k |= ((j&255)<<8);
-  return(k);
-}
-
-main(argc,argv) int argc; char **argv;
-{
+int main(int argc, char **argv) {
   char *p;
   sp=0; ss=0; pcx=m; cs=0;
-#ifdef DEBUG
- LOG=fopen("LoGfIlE","wb"); eoplo=3;pri();eophi=1;pri();/*BIG-LITTLE-ENDIAN? */
-#endif
   if(argc<2){fprintf(stderr, "No .88 load file? Usage s88 loadfile\n"); exit(1);}
   stopvlag = traceflag = 0;
   sp=0; ss=0; pcx=m; cs=0; argc--; argv++;
   if(!argc){fprintf(stderr,"No load file? argc %d %s\n",argc,argv[0]); exit(1);}
   if(load(argc,argv)) exit(1); fclose(prog); interp();
+  return 0;
 }
 
 load(argc,argv) int argc; char **argv; {
@@ -1013,148 +982,4 @@ getchbp(){
     }
   }
   return((int)*inbpu++);
-}
-
-meldroutine(){
-  char *p; 
-  int i,aa;
-  if(traceflag){
-   errbuf[11] = ' '; errbuf[12] = ' '; errbuf[13] = ' ';
-   wmv(10,24); printf("%s",errbuf); system("sleep 1");
-   wmv(10,78);printf("\n");fprintf(stderr,"\n");
-   sprintf(window[10]+22,"M %-55.55s",errbuf); winupdate();}
-  else fprintf(stderr,"%s\n",errbuf);
-}
-
-erroutine(){
-  char *p; 
-  int i,aa;
-  if(traceflag){
-   p = errbuf;aa = 0;for(i=0;i<55;i++) if (*p++ <= '\n'){p--;*p++ = ' ';}
-   else if(*p ==  '\0' || *p == '\n') aa++;
-   else if (aa) *p++ = ' ';
-  *p = '\0';
-  if (errflag) system("sleep 1");
-   wmv(10,24);viscursor(); printf("%s",errbuf);inviscur();
-   wmv(10,78);printf("\n");fprintf(stderr,"");
-   sprintf(window[10]+22,"E %-55.55s",errbuf); winupdate();errflag = 1;}
-  else fprintf(stderr,"%s\n",errbuf);
-}
-
-spare(t) word t; {
- sprintf(errbuf,"8086 undefined instruction %0X",t & 0xff); erroutine();}
-notim(t) word t; {
- sprintf(errbuf,"Instruction %0X not implemented",t & 0xff); erroutine();}
-interrupt(t) int t; {
- sprintf(errbuf,"Interrupt %0X. Bad division?",t & 0xff); erroutine();}
-panic(s) char *s; {
- sprintf(errbuf,"%s",s); erroutine(); system ("sleep 5"); exit(1);}
-
-
-
-bitmapdump(b,h,buff) int b,h; char *buff;{
-  if(termbitsize == 2) { if ((bituit=fopen("tERMbITMAP","wb")) == NULL) {
-	fprintf(stderr,"Kan tERMbITMAP niet openen\n"); exit(1);}
-  } else { if ((bituit=fopen("tERMbITmAP","wb")) == NULL) {
-	fprintf(stderr,"Kan tERMbITmAP niet openen\n"); exit(1);}
-  }
-  schrijfmap(b,h,termbitsize,buff,bituit);
-  fclose(bituit);
-  if(termbitsize == 2) sprintf(bmbuf,".c configure -bitmap @lEEGbITMAP\n");
-  else sprintf(bmbuf,".c configure -bitmap @lEEGbITmAP\n");
-  schrijf(); system("sleep 1");
-  if(termbitsize == 2) sprintf(bmbuf,".c configure -bitmap @tERMbITMAP\n");
-  else sprintf(bmbuf,".c configure -bitmap @tERMbITmAP\n");
-  schrijf();  system("sleep 1");
-}
- 
-bitmapopen(b,h,s) int b,h,s; {
-  /*FAKE SYSTEM CALL TO OPEN A BITMAP FOR OPGAVE 1 */
-  int i;
-  if(pipe(pfildes)< 0) {fprintf(stderr,"Kan geen pipe creeren\n"); exit(1);}
-  if((pnr = fork()) < 0) {fprintf(stderr,"Kan niet vorken\n"); exit(1);}
-  if(pnr == 0){dup2(pfildes[0],0); system("exec /usr/local/bin/wish"); exit(0);}
-  termbitsize = 1; if(s==2) termbitsize = 2;
-
-  if(termbitsize == 2) {
-    if ((bituit=fopen("lEEGbITMAP","wb")) == NULL) {
-	fprintf(stderr,"Kan lEEGbITMAP niet openen\n"); exit(1);}
-  } else {
-    if ((bituit=fopen("lEEGbITmAP","wb")) == NULL) {
-	fprintf(stderr,"Kan lEEGbITmAP niet openen\n"); exit(1);}
-  }
-  schrijfmap(b,h,termbitsize,bmbuf+800,bituit);
-  fclose(bituit);
-
-  sprintf(bmbuf,"#!/usr/local/bin/wish -f\n. configure -background gray\n");
-  schrijf();
-  if (termbitsize == 2) {
-sprintf(bmbuf,". configure -width 591\n. configure -height 509\n"); schrijf();
-sprintf(bmbuf,"button .b -text %cexit window %c",'"','"'); schrijf();
-sprintf(bmbuf,"  -font *-helvetica-bold-r-normal--*-180-* "); schrijf();
-sprintf(bmbuf," -command %cdestroy .%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .b -x 4 -y 4 -relwidth 0.32 -height 1.1c\n"); schrijf();
-sprintf(bmbuf,"label .c -bitmap @lEEGbITMAP\nplace .c -x 4 -y 1.4c\n");schrijf();
-sprintf(bmbuf,"button .d -text %cdisplay new%c ",'"','"'); schrijf();
-sprintf(bmbuf,"-font *-helvetica-bold-r-normal--*-180-* -command"); schrijf();
-sprintf(bmbuf," %c.c configure -bitmap @tERMbITMAP%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .d -x 200 -y 4 -relwidth 0.32 -height 1.1c\n"); schrijf();
-sprintf(bmbuf,"button .e -text %cclear window %c ",'"','"'); schrijf();
-sprintf(bmbuf,"-font *-helvetica-bold-r-normal--*-180-* -command"); schrijf();
-sprintf(bmbuf," %c.c configure -bitmap @lEEGbITMAP%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .e -x 396 -y 4 -relwidth 0.32 -height 1.1c\n"); schrijf();
-  } else {
-sprintf(bmbuf,". configure -width 302\n. configure -height 266\n"); schrijf();
-sprintf(bmbuf,"button .b -text %cexit window %c",'"','"'); schrijf();
-sprintf(bmbuf,"  -font *-helvetica-bold-r-normal--*-120-* "); schrijf();
-sprintf(bmbuf," -command %cdestroy .%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .b -x 2 -y 3 -relwidth 0.32 -height 0.7c\n"); schrijf();
-sprintf(bmbuf,"label .c -bitmap @lEEGbITmAP\nplace .c -x 3 -y 0.9c\n");schrijf();
-sprintf(bmbuf,"button .d -text %cdisplay new%c ",'"','"'); schrijf();
-sprintf(bmbuf,"-font *-helvetica-bold-r-normal--*-120-* -command"); schrijf();
-sprintf(bmbuf," %c.c configure -bitmap @tERMbITmAP%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .d -x 101 -y 3 -relwidth 0.32 -height 0.7c\n"); schrijf();
-sprintf(bmbuf,"button .e -text %cclear window %c ",'"','"'); schrijf();
-sprintf(bmbuf,"-font *-helvetica-bold-r-normal--*-120-* -command"); schrijf();
-sprintf(bmbuf," %c.c configure -bitmap @lEEGbITmAP%c\n",'"','"'); schrijf();
-sprintf(bmbuf,"place .e -x 200 -y 3 -relwidth 0.32 -height 0.7c\n"); schrijf();
-  }
-sprintf(bmbuf,".c configure -background black -foreground white\n"); schrijf();
-sprintf(bmbuf,".b configure -background black -foreground white\n"); schrijf();
-sprintf(bmbuf,".d configure -background black -foreground white\n"); schrijf();
-sprintf(bmbuf,".e configure -background black -foreground white\n"); schrijf();
-  /* system("sleep 1");*/
-}
- 
-
-schrijf(){
-  int j;
-  char *p;
-  p = bmbuf;
-  j = 0;
-  while(*p++ > '\0') j++;
-  write(pfildes[1],bmbuf,j);
-}
-
-schrijfmap(b,h,s,buf,uitf) int b,h,s; char *buf; FILE *uitf; {
-  int i,j,k,l,m,c;
-  char *p,*q;
-  if(b%8!=0){
-	fprintf(stderr,"Bitmap breedte hoort een heel aantal bytes te zijn\n");
-	exit(1);}
-  fprintf(uitf,"#define noname_width %d\n",b*s);
-  fprintf(uitf,"#define noname_height %d\n",h*s);
-  fprintf(uitf,"static char noname_bits[] = {\n ");
-  p = buf; b >>= 3; k = b*h*s*s-1; m = 1;
-  for(i=0;i<h;i++) { q = bmbuf; for(j=0;j<b;j++)
-    if(termbitsize == 2){ c = *p++; *q++ = spiegel(1,c); *q++ = spiegel(2,c);
-    } else { c = *p++; *q++ = (255 & spiegel(0,c));
-    }
-    for(l=0;l<s;l++) {
-      q = bmbuf; for(j=0;j<b*s;j++) {
-	fprintf(uitf,"0x%02x",(255 & *q++)); if(k==0) fprintf(uitf,"};\n");
-	else {putc(',',uitf); if((m % 15) == 0) fprintf(uitf,"\n "); k--; m++;}
-      }
-    }
-  }
 }

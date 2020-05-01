@@ -4,15 +4,7 @@
 #include <string.h>
 
 char nwindow[24][81];
-extern char window[24][81];
-
-void viscursor(void) {
-  /*printf("[8m");}*/
-}
-
-void inviscur(void) {
-  /*printf("[0m");}*/
-} 
+char window[24][81];
 
 static void clearscreen() {
   printf("[2J");
@@ -45,7 +37,6 @@ static void wingo(void) {
 
 void winfirst(void) {
  clearscreen();
- viscursor();
  wingo();
 }
 

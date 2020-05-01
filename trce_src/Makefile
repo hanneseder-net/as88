@@ -31,8 +31,8 @@ doscurs.o: doscurs.c
 util.o: util.c
 	$(CC) -c $(CFLAGS) util.c
 
-t88: 88.o table.o adr.o cond.o store.o main.o doscurs.o Makefile 
-	$(CC) $(CFLAGS) -o t88 88.o table.o adr.o cond.o store.o main.o doscurs.o; \
+t88: 88.o table.o adr.o cond.o store.o main.o doscurs.o util.o Makefile 
+	$(CC) $(CFLAGS) -o t88 88.o table.o adr.o cond.o store.o main.o doscurs.o util.o; \
 	$(CP) t88 ../exercise/t88; $(CP) t88 ../examples/t88; $(CP) t88 ../bin/t88;
  
 s88: 88.o table.o adr.o cond.o store.o mains.o doscurs.o util.o Makefile 
