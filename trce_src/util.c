@@ -68,6 +68,8 @@ FILE *prog, *L, *CMD, *INP, *LOG;
 static int lcs(char *p, int s);
 static void symlcorr(int i);
 static void erroutine(void);
+static int getchcmd(void);
+static void gtabstr(int i, char *a, FILE *f);
 static void nextput(int c);
 static void rdcmd(void);
 static void relocate(int n);
@@ -76,6 +78,7 @@ static void bitmapopen(int b, int h, int s);
 static int spiegel(int m, int n);
 static void schrijf(void);
 static void schrijfmap(int b, int h, int s, char *buf, FILE *uitf);
+static void winupdate(void);
 
 int getint(FILE *f) {
   int i,j,k;
@@ -657,19 +660,43 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
     }
 }
 
-dump(){
- int i,j,k;
- char *p;
+static void pdmpadr(void) {
+  char *o, *p,*q,*r,c;
+  unsigned long ii, i,j;
+  for(i=0;i<7;i++){ 
+    o = q = p = datadm[i]; 
+   if(p!=NULL){
+    for(j=0;j<8;j++){r = datadarr[i]; r += 19+3*j;sprintf(r,"%3x",*p++ & 0xff);}
+    datadarr[i][43] = ' ';
+    for(j=0;j<12;j++){ c = *q++; if(c<32||c>126) c = '.';
+	datadarr[i][44+j] = c;}
+    for(j=0;j<4;j++){r = datadarr[i]; r += 55+6*j;
+	ii = *o++ & 255;  if(*o&128) ii |= 0Xffff0000; ii |= (*o++ & 255)<<8;
+	sprintf(r,"%6d",ii);}
+   }
+  }
+}
+
+static void cnulbp(void) {
+  char *p;
+  if(bparr[0].pcp != -1){
+    p = m + cs16+bparr[0].pcp;
+    if(*p == '\360') *p = bparr[0].bprt;
+    bparr[0].pcp = 0Xffff;
+  }
+}
+
+void dump(void) {
+  int i,j,k;
+  char *p;
 #ifdef DEBUG
 fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m));
  p = m; for(i=0;i<256;i++) {j=(*p++ & 255); if(i%16==0) fprintf(LOG,
 	"\n%6o\t",i); fprintf(LOG," %03o",(m[i]&255));} fprintf(LOG,"\n"); fflush(LOG);
 #endif
- cnulbp();
-    pdmpadr(); 
-/*    for(i=prdepth;i>=0;i--) {if(i==prdepth-3) break; j=stckprdepth[i];
-      k = lnsymarr[j];
-  } */
+  cnulbp();
+  pdmpadr(); 
+
   if (errflag) system("sleep 1");rdcmd();
   if (errflag) { sprintf(window[10]+22,"E Last message: %-37.37s",errbuf);
   errflag = 0;}
@@ -678,7 +705,7 @@ fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m
   p = errbuf; for(i=0;i<56;i++) *p++ = ' ';
 }
 
-procdepth(s) int s; {
+void procdepth(int s) {
   if(s>0){prdepth++;stckprdepth[prdepth] = dotlnarr[(((int)(PC)) & 0Xffff) -s];
 	prstckpos[prdepth] = sp-2;}
   if(s==-1) { checkret(); prdepth --;}
@@ -692,29 +719,20 @@ checkret(){
   }
 }
 
-zetbp(textdot) short textdot; {
+static void zetbp(short textdot) {
   int i;
   for (i=1;i<32;i++) if(!bparr[i].pcp) break;
-	if(i==32) {sprintf(errbuf,"break point table full");erroutine(); return(0);}
+	if(i==32) {sprintf(errbuf,"break point table full");erroutine(); return;}
   bparr[i].pcp = textdot; bparr[i].bprt = m[cs16+textdot];
-  m[cs16+textdot] = 0xF0; return(0);
+  m[cs16+textdot] = 0xF0; return;
 }
 
-clearbp(textdot) short textdot; {
+static void clearbp(short textdot) {
   int i;
   for (i=1;i<32;i++) if(bparr[i].pcp == textdot) break;
-	if(i==32) {sprintf(errbuf,"break point not found");erroutine(); return(0);}
+	if(i==32) {sprintf(errbuf,"break point not found");erroutine(); return;}
   bparr[i].pcp = 0; m[cs16+textdot] = bparr[i].bprt;
-  bparr[i].bprt = m[0]; return(0);
-}
-
-cnulbp(){
-  char *p;
-  if(bparr[0].pcp != -1){
-    p = m + cs16+bparr[0].pcp;
-    if(*p == '\360') *p = bparr[0].bprt;
-    bparr[0].pcp = 0Xffff;
-  }
+  bparr[i].bprt = m[0]; return;
 }
 
 nulbp(ln) int ln; {
@@ -733,7 +751,7 @@ hashstring(p) char *p; {
   return(h);
 }
 
-breakpt(){
+void breakpt(void) {
   int i,j;
   i = ((int)(PC))&0xffff; i--;
   for(j=0;j<32;j++) if(bparr[j].pcp == i) break;
@@ -750,21 +768,13 @@ dmpadr(adre) int adre; {
   datadp++; datadp %= 7;
 }
 
-pdmpadr(){
-  char *o, *p,*q,*r,c;
-  unsigned long ii, i,j;
-  for(i=0;i<7;i++){ 
-    o = q = p = datadm[i]; 
-   if(p!=NULL){
-    for(j=0;j<8;j++){r = datadarr[i]; r += 19+3*j;sprintf(r,"%3x",*p++ & 0xff);}
-    datadarr[i][43] = ' ';
-    for(j=0;j<12;j++){ c = *q++; if(c<32||c>126) c = '.';
-	datadarr[i][44+j] = c;}
-    for(j=0;j<4;j++){r = datadarr[i]; r += 55+6*j;
-	ii = *o++ & 255;  if(*o&128) ii |= 0Xffff0000; ii |= (*o++ & 255)<<8;
-	sprintf(r,"%6d",ii);}
-   }
-  }
+static void rdcline(int c) {
+  char *p;
+  p = cmdline;
+  while(c != '\n') {if (c==EOF) break; *p++ = c; c = getchcmd();}
+  *p++ = '\0'; *p = '\0';
+  sprintf(window[14],"%-18.18s",cmdline);
+  p--; *p = '!';
 }
 
 static void rdcmd(void) {
@@ -866,16 +876,7 @@ rdadr(){
   return(i);
 }
 
-rdcline(c){
-  char *p;
-  p = cmdline;
-  while(c != '\n') {if (c==EOF) break; *p++ = c; c = getchcmd();}
-  *p++ = '\0'; *p = '\0';
-  sprintf(window[14],"%-18.18s",cmdline);
-  p--; *p = '!';
-}
-
-winupdate(){
+static void winupdate(void) {
  int i,j,k,l; char *p,*q;
  sprintf(window[0]+4,"%02x",cs&0Xffff);
  sprintf(window[0]+18,"%03x",ds&0Xffff);
@@ -957,7 +958,7 @@ fprintf(LOG,"Tot hier dotlinarr %d PC %d\n",dotlnarr[(PC)-1],(PC)-1);
  immain(); wmv(15,0);
 }
 
-gtabstr(i,a,f) int i; char *a; FILE *f;{
+static void gtabstr(int i, char *a, FILE *f) {
   int j,c;
   j = 0; while(j<i){c = getc(f); if(c==EOF || c == '\r' || c == '\n') break;
     if(c=='\t') { if (j%8 != 7) ungetc(c,f); c=' ';}
@@ -966,7 +967,7 @@ gtabstr(i,a,f) int i; char *a; FILE *f;{
   
 }
 
-newgpfield(){
+static void newgpfield(void) {
   int i,j;
   for(i=3;i>0;i--) for(j=0;j<58;j++) outveld[i][j] = outveld[i-1][j];
   for(j=0;j<58;j++) outveld[0][j] = ' '; 
@@ -981,12 +982,24 @@ static void nextput(int c) {
   if(c!='\n') outveld[0][puthp++] = c;
 }
 
-getchcmd(){ 
+static int getchcmd(void) {
   int i;
-    if((i= getc(CMD)) !=EOF) {if(i!='\r') return(i); else return(getchcmd());}
-    if(cmdfl) {fclose(CMD); 
-	CMD = stdin; cmdfl = 0;  i = getchcmd();} 
-    if(i!='\r') return(i); else return(getchcmd());
+  if ((i = getc(CMD)) != EOF) {
+    if (i != '\r')
+      return (i);
+    else
+      return (getchcmd());
+  }
+  if (cmdfl) {
+    fclose(CMD);
+    CMD = stdin;
+    cmdfl = 0;
+    i = getchcmd();
+  }
+  if (i != '\r')
+    return (i);
+  else
+    return (getchcmd());
 }
 
 getchbp(){ 
