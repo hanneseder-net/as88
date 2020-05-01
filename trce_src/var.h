@@ -1,6 +1,7 @@
 #ifndef TRCE_SRC_VAR_H
 #define TRCE_SRC_VAR_H
 
+// TODO(heder): These could move to .c files.
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
