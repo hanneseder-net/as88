@@ -327,7 +327,7 @@ static int lcs(char *p, int s) {
 fprintf(LOG, "lcs symbool %d buffer %.15s\n",s,p); fflush(LOG);
 #endif
   while ((*p <= ' ') || (*p == ':')) if(*p==0) return(-1); else p++;
-  j = 0; q = p; while(c = *p++) {j++;
+  j = 0; q = p; while((c = *p++)) {j++;
 	if(c=='\n' || c == '!'|| c < '\t' || c > 126) return(-1);
 	if(c<= ' ') return(lcs(q+j,s));
 	if(c==':') {k=j; p -= 2;
@@ -491,7 +491,7 @@ void syscal(void) {
 		p = pram[1].cp = spadr(); j = 2;
 /*fprintf(stderr,"%x %d %d pram\n",pram[0].ii,pram[0].ii,0);*/
 /*fprintf(stderr,"%x %d %d pram\n",pram[1].ii,pram[1].ii,1);*/
-		while(c=*p++) {
+		while((c = *p++)) {
 		    /* fprintf(stderr,"`%c ",c);*/
 		    if(c == '%') {
 		    i = 1;
@@ -539,7 +539,7 @@ void syscal(void) {
 		for(i=0;i<9;i++) for(j=0;j<140;j++) s[i].cp[j] = '\0';
 		pram[0].cp = spadr();
 		p = pram[1].cp = spadr(); j = 2;
-		while(c=*p++) {
+		while((c = *p++)) {
 		    if(c == '%') {
 		    i = 2;
 		    while (i && (c = *p++)) {
@@ -600,7 +600,7 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
 
    	case 0x7f: /*printf*/
 		p = pram[0].cp = spadr(); j = 1;
-		while(c=*p++) {
+		while((c = *p++)) {
 		    /* fprintf(stderr,"`%c ",c);*/
 		    if(c == '%') {
 		    i = 1;
@@ -632,7 +632,7 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
 	/*sprintf(errbuf,"pram %x in printf\n",pram[0].cp-m); erroutine();*/
 	if(traceflag) {retval = j; sprintf(tringfield+200,pram[0].cp,pram[1].ii,
 	    pram[2].ii,pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii);
-	  p = tringfield+200; while(j = *p++) nextput(j); /*winupdate();*/}
+	  p = tringfield+200; while((j = *p++)) nextput(j); /*winupdate();*/}
 	else {retval = printf(pram[0].cp,pram[1].ii,pram[2].ii,
 	    pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii);
 	  fflush(stdout);}
@@ -792,7 +792,7 @@ static int rdstrg(void) {
   int i,j,stradr,k,syk;
   char *p,*q,c,cc;
   i=0; p = cmdline; q = tringfield+90;
-  while(c = *p++) if (c=='!' || c == '/' || c == '+') break;
+  while((c = *p++)) if (c=='!' || c == '/' || c == '+') break;
 		  else {i++; *q++ = c;}
   if((c=='/') && (*p != '+')) *(--p) = '0';
   *q = '\0';
