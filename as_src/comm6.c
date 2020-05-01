@@ -13,7 +13,7 @@
 #include "y.tab.h"
 
 
-static void newequate(item_t *ip, int typ)
+void newequate(item_t *ip, int typ)
 {
 	typ &= ~S_EXT;
 	if (typ & S_COM)
@@ -89,7 +89,7 @@ void newlabel(item_t *ip) {
 #endif
 }
 
-static void newsect(item_t *ip)
+void newsect(item_t *ip)
 {
 	register int typ;
 	register sect_t *sp = NULL;
@@ -194,7 +194,7 @@ void switchsect(int newtyp) {
 	DOTTYP = newtyp;
 }
 
-static void align(valu_t bytes) {
+void align(valu_t bytes) {
 	register valu_t gap;
 	register sect_t *sp;
 
