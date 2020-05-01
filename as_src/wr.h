@@ -11,6 +11,7 @@ void wr_close(void);
 void wr_ohead(struct outhead *head);
 void wr_relo(struct outrelo	*relo, unsigned int cnt);
 void wr_sect(struct outsect	*sect, unsigned int	cnt);
+void wr_string(char *addr, long len);
 void __wr_flush(struct fil *ptr);
 
 #endif /* AS_SRC_WR_H */

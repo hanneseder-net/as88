@@ -361,22 +361,13 @@ void wr_name(struct outname	*name, unsigned int cnt) {
 
 }
 
-void
-wr_string(addr, len)
-	char *addr;
-	long len;
-{
-	
+void wr_string(char *addr, long len) {
 	OUTWRITE(PARTCHAR, addr, len);
 }
 
 #ifdef SYMDBUG
 
-void
-wr_dbug(buf, size)
-	char		*buf;
-	long		size;
-{
+void wr_dbug(char *buf, long size) {
 	OUTWRITE(PARTDBUG, buf, size);
 }
 
