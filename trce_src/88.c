@@ -46,11 +46,8 @@ next:
 		else dump();}
     if((PC)>codelength) {
       if (traceflag) dump();
-	fprintf(stderr,"Code out of range %d\n",(PC)); exit(1);}
+	fprintf(stderr,"Code out of range %ld\n",(PC)); exit(1);}
 bloop:
-    /* if (t == 0x90)
-        goto next; */
-
     /* Some compilers balk at 256-case switches */
     switch(t) {
 
@@ -70,7 +67,7 @@ bloop:
     case 0x0C: IMMED8; c=al|eoplo; al=c; BSZONLY(c); LOOP;
     case 0x0D: IMMED; t= ax|eop; ax=t; SZONLY(t); LOOP;
     case 0x0E: PUSH(cs); LOOP;
-    case 0x0F: syscal(); LOOP; /* spare(0x0F);*/
+    case 0x0F: syscal(); LOOP;
 
     case 0x10: by(); CC; c=eoplo+roplo+cf; BSTORE(c);
 		BLAZYCC3(eoplo,roplo,cf,ADCB); LOOP;
@@ -500,41 +497,16 @@ bloop:
     case 0xF2: t = *pcx++ & mask;
 	switch(t) {
 	    case 0xA4:
-	/*	if (timer > (unsigned) cx) {
-		    /* No interrupt during this instruction * /
-		    timer -= cx;
-	*/	    STRING; t=1-dirf-dirf; n= cx;
+		    /* No interrupt during this instruction */
+	        STRING; t=1-dirf-dirf; n= cx;
 		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
 		    si += n*t;  di += n*t;
-	/*	} else {
-		    /* Interrupt this instruction. * /
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=1-dirf-dirf; n= cx;
-		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA5:
-	/*	if (timer > (unsigned) cx) {
-		    timer -= cx;
-	*/	    STRING; t=2*(1-dirf-dirf); n= cx;
-		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
-		    si += n*t;  di += n*t;
-	/*       } else {
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
 		    STRING; t=2*(1-dirf-dirf); n= cx;
 		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
 		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA6:
 	    case 0xA7:
 	    case 0xAE: while(cx) {rep(t); CC; (cx)--; if (zerof != 0) LOOP;}
@@ -550,41 +522,15 @@ bloop:
     case 0xF3: t = *pcx++ & mask;
 	switch(t) {
 	    case 0xA4:
-	/*	if (timer > (unsigned) cx) {
-		    /* No interrupt during this instruction * /
-		    timer -= cx;
-	*/	    STRING; t=1-dirf-dirf; n= cx;
+	        STRING; t=1-dirf-dirf; n= cx;
 		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
 		    si += n*t;  di += n*t;
-	/*	} else {
-		    /* Interrupt this instruction. * /
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=1-dirf-dirf; n= cx;
-		    while(cx) {BSTORE(*xapc); eapc+=t; xapc+=t; (cx)--;} 
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA5:
-	/*	if (timer > (unsigned) cx) {
-		    timer -= cx;
-	*/	    STRING; t=2*(1-dirf-dirf); n= cx;
+            STRING; t=2*(1-dirf-dirf); n= cx;
 		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
 		    si += n*t;  di += n*t;
-	/*       } else {
-		    k = cx - (timer - 1);
-		    cx = timer - 1;
-		    STRING; t=2*(1-dirf-dirf); n= cx;
-		    while(cx) {XSTORE(xapc); eapc+=t; xapc+=t; (cx)--; }
-		    si += n*t;  di += n*t;
-		    cx = k;
-		    pcx -= 2;
-		    timer = 1;
-	       }
-	*/       LOOP;
+            LOOP;
 	    case 0xA6:
 	    case 0xA7:
 	    case 0xAE:
@@ -598,7 +544,7 @@ bloop:
 	}
 
     case 0xF4: printf("Halt instruction executed.  End of run.\n"); 
-	    write(2,"Normal exit\n",12); stat(); exit(0);
+	    write(2,"Normal exit\n",12); exit(0);
     case 0xF5: CC; cf=cf^1; LOOP;
     case 0xF6: by();
 	switch(ra) {		/* this opcode splits on reg field (in ra) */
@@ -609,7 +555,6 @@ bloop:
 	    case B04: u1=(unchr)al; u2=(unchr)eoplo; u=u1*u2;ax=u;
 		    cf=(u<256 ? 0 : 1); ovf=cf; ccvalid=1; LOOP;
 	    case B05: t=(short)al; n=(short)eoplo; ax=t*n;
-		    /*cf=((al>=0&&ah==0)||(al<0&&ah==0xFF)?0:1);*/
 		    cf=(((!(al&0X80))&&ah==0)||((al&0X80)&&ah==0xFF)?0:1);
 			 ovf=cf; ccvalid=1;LOOP;
 	    case B06: u1=(adr)ax; u2=(adr)eoplo; u=u1/u2; al=(char)u;
