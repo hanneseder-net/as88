@@ -13,9 +13,6 @@
 #include	"comm0.h"
 #include	"comm1.h"
 
-/* #include <stdio.h>
- FILE *inptr, *uitptr;  */
-
 char includfil[] = "#include", namar[2049], includnam[100];
 int inclutel = 0, includarr[65], includlen[65];
 char *bigdarr[] = { "align", "ascii", "asciz", "assert", "base", "byte", "bss",
@@ -43,7 +40,7 @@ int teld, tela, ltaba[200], ltabd[25], tabnr, nxtabd[25], nxtaba[200];
 int htabd[33], htaba[33];
 char chdarr[128],chaarr[1024],tokenc[10],regel[256],*tptr,aord,*sptr;
 
-int maaktoken(m,n) int m,n; {
+void maaktoken(int m, int n) {
   int len,hsh,i,j;
   char *p,c,t;
   len = hsh = 0;
@@ -75,7 +72,7 @@ int zoektoken(){
     if(t=='.' && *tptr>='a' && *tptr <= 'z') { /* search the d-tables */
       sptr = dptr = tptr; t= *dptr++; len++; hsh = t; *tt++ = t; t = *dptr++;
       while((t >='a') && (t<= 'z')) {len++; hsh += t; *tt++ = t; t = *dptr++;}
-      if((t<='Z')&&(t>='A') || (t=='_') || (t<='9')&&(t>='0')) return(0);
+      if(((t<='Z')&&(t>='A')) || (t=='_') || ((t<='9')&&(t>='0'))) return(0);
       hsh &= 0x17; n = htabd[hsh];
       while(n>=0){
 	if((len == ltabd[n]) && (!strncmp(bigdarr[n],tokenc,len))) return(len);
@@ -84,13 +81,13 @@ int zoektoken(){
       return(0);
     }
 /* fprintf(stderr,"start token %c %c %s %s\n",bk,t,tptr-1,tptr); */
-    if((bk<='Z')&&(bk>='A') || (bk=='_') || (bk<='9')&&(bk>='0')) return(0);
+    if(((bk<='Z')&&(bk>='A')) || (bk=='_') || ((bk<='9')&&(bk>='0'))) return(0);
 /*fprintf(stderr,"START token %c %s %s\n",bk,tptr-1,tptr); */
     if(t>='a' && t<='z') { /* search the a-tables */
 /*fprintf(stderr,"Erdoor   %c %s %s\n",bk,tptr-1,tptr); */
       dptr = sptr = tptr; sptr--; len++; hsh = t; *tt++ = t; t = *dptr++;
       while((t >='a') && (t<= 'z')) {len++; hsh += t; *tt++ = t; t = *dptr++;}
-      if((t<='Z')&&(t>='A') || (t=='_') || (t<='9')&&(t>='0')) return(0);
+      if(((t<='Z')&&(t>='A')) || (t=='_') || ((t<='9')&&(t>='0'))) return(0);
       hsh &= 0x17; n = htaba[hsh];
       while(n>=0){
 	if((len == ltaba[n]) && (!strncmp(bigaarr[n],tokenc,len))) return(len);
@@ -102,22 +99,7 @@ int zoektoken(){
   return(-1);
 }
 
-void hashh(){
-  int i,j,k,l;
-  for(i=0;i<65;i++) includarr[i] = includlen[i] = 0;
-  for(i=0;i<33;i++) htaba[i] = htabd[i] = -1;
-  i=0; while(bigdarr[i][0]){maaktoken(0,i); i++;} teld = i;
-  /*for(i=0;i<32;i++){fprintf(stderr,"i %d\t",i); j = htabd[i];
-	while(j>=0) {fprintf(stderr,"%3d j %6s  ",j,bigdarr[j]); j=nxtabd[j];}
-	putc('\n',stderr);} putc('\n',stderr);*/
-  i=0; while(bigaarr[i][0]){maaktoken(1,i); i++;} tela = i;
-  /*for(i=0;i<32;i++){fprintf(stderr,"i %d\t",i); j = htaba[i];
-	while(j>=0) {fprintf(stderr,"%3d j %6s  ",j,bigaarr[j]); j=nxtaba[j];}
-	putc('\n',stderr);} putc('\n',stderr);*/
-  hphash();
-}
-
-hphash(){
+static void hphash(void) {
   int i,j,rlen,flen;
   char *p,*q;
   FILE *inputsafe;
@@ -145,4 +127,17 @@ hphash(){
   }
 }
 
-/* main(){ inptr = stdin; uitptr = stdout; hashh();} */
+void hashh(){
+  int i,j,k,l;
+  for(i=0;i<65;i++) includarr[i] = includlen[i] = 0;
+  for(i=0;i<33;i++) htaba[i] = htabd[i] = -1;
+  i=0; while(bigdarr[i][0]){maaktoken(0,i); i++;} teld = i;
+  /*for(i=0;i<32;i++){fprintf(stderr,"i %d\t",i); j = htabd[i];
+	while(j>=0) {fprintf(stderr,"%3d j %6s  ",j,bigdarr[j]); j=nxtabd[j];}
+	putc('\n',stderr);} putc('\n',stderr);*/
+  i=0; while(bigaarr[i][0]){maaktoken(1,i); i++;} tela = i;
+  /*for(i=0;i<32;i++){fprintf(stderr,"i %d\t",i); j = htaba[i];
+	while(j>=0) {fprintf(stderr,"%3d j %6s  ",j,bigaarr[j]); j=nxtaba[j];}
+	putc('\n',stderr);} putc('\n',stderr);*/
+  hphash();
+}
