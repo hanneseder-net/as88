@@ -34,7 +34,7 @@ void newequate(item_t *ip, int typ)
 }
 
 void newident(item_t *ip, short typ) {
-	register flag;
+	register int flag;
 #ifdef GENLAB
 	static char genlab[] = GENLAB;
 #endif /* GENLAB */
@@ -151,10 +151,7 @@ void newbase(valu_t base) {
  *   -	maximum length of .comm is recorded in i_valu during PASS_1
  *   -	i_valu is used for relocation info during PASS_3
  */
-newcomm(ip, val)
-register item_t *ip;
-valu_t val;
-{
+void newcomm(item_t *ip, valu_t val) {
 	if (pass == PASS_1) {
 		if (DOTSCT == NULL)
 			nosect();

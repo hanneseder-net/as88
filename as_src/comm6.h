@@ -3,6 +3,7 @@
 
 #include "comm0.h"
 
+void newcomm(item_t *ip, valu_t val);
 void newbase(valu_t base);
 void newident(item_t *ip, short typ);
 void newlabel(item_t *ip);
