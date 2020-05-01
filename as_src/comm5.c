@@ -5,11 +5,8 @@
 
 #include "comm0.h"
 #include "comm1.h"
-#include "comm4.h"   
+#include "comm5.h"   
 #include "y.tab.h"
-
-
-static void putval(int c);
 
 extern YYSTYPE	yylval;
 
@@ -70,7 +67,7 @@ yylex()
 	return(c);
 }
 
-static void putval(int c)
+void putval(int c)
 {
 	register valu_t v;
 	register n = 0;
