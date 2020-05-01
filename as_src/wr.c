@@ -145,10 +145,7 @@ BEGINSEEK(p, o)
 /*
  * Open the output file according to the chosen strategy.
  */
-int
-wr_open(f)
-	char *f;
-{
+int wr_open(char *f) {
 	register struct fil	*fdp;
 
 	close(creat(f, 0666));
@@ -165,9 +162,7 @@ wr_open(f)
 	return 1;
 }
 
-void
-wr_close()
-{
+void wr_close(void) {
 	register struct fil *ptr;
 
 	for (ptr = &__parts[PARTEMIT]; ptr < &__parts[NPARTS]; ptr++) {
@@ -183,10 +178,7 @@ wr_close()
 #endif /* OUTSEEK */
 }
 
-void
-wr_ohead(head)
-	register struct outhead	*head;
-{
+void wr_ohead(struct outhead *head) {
 	{
 		register long off = OFF_RELO(*head);
 
@@ -220,11 +212,7 @@ wr_ohead(head)
 	else OUTWRITE(PARTEMIT, (char *)head, (long)SZ_HEAD);
 }
 
-void
-wr_sect(sect, cnt)
-	register struct outsect	*sect;
-	register unsigned int	cnt;
-{
+void wr_sect(struct outsect	*sect, unsigned int	cnt) {
 	{	register unsigned int i = cnt;
 
 		while (i--) {
