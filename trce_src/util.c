@@ -363,7 +363,7 @@ static int spint(void) {
   return(i & 0xffff);
 }
 
-returnax(retval) int retval; {
+static void returnax(int retval) {
   al=(char)(retval&0xff);
   ah=(char)((retval>>8)&0xff);
 }
