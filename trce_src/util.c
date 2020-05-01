@@ -80,7 +80,7 @@ static void schrijf(void);
 static void schrijfmap(int b, int h, int s, char *buf, FILE *uitf);
 static void winupdate(void);
 
-int getint(FILE *f) {
+static int getint(FILE *f) {
   int i,j,k;
   lfptr += 4;
   i = getc(f); j = getc(f);
@@ -90,7 +90,7 @@ int getint(FILE *f) {
   return(k);
 }
 
-int getsh(FILE *f) {
+static int getsh(FILE *f) {
   int i,j,k;
   i = getc(f);
   j = getc(f); k = 0;
