@@ -118,9 +118,7 @@ int combine(int typ1, int typ2, int op) {
 }
 
 #ifdef LISTING
-printx(ndig, val)
-valu_t val;
-{
+int printx(int ndig, valu_t val) {
 	static char buf[8];
 	register char *p;
 	register c, n;
