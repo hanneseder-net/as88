@@ -151,7 +151,7 @@ void newbase(valu_t base) {
  */
 static void new_common(item_t *ip) {
 	register struct common_t *cp;
-	static nleft = 0;
+	static int nleft = 0;
 	static struct common_t *next;
 
 	if (--nleft < 0) {
@@ -212,11 +212,12 @@ void align(valu_t bytes) {
 		nosect();
 	if (bytes == 0)
 		bytes = ALIGNWORD;
-	if (sp->s_lign % bytes)
+	if (sp->s_lign % bytes) {
 		if (bytes % sp->s_lign)
 			serror("illegal alignment");
 		else
 			sp->s_lign = bytes;
+	}
 	if (pass == PASS_1)
 		/*
 		 * be pessimistic: biggest gap possible
