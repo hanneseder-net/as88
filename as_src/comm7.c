@@ -9,6 +9,7 @@
 #include "comm7.h"
 
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "comm0.h"
 #include "comm1.h"
