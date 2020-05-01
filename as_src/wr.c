@@ -309,11 +309,7 @@ wr_emit(emit, cnt)
 	OUTWRITE(PARTEMIT + getsect(sectionnr) , emit, cnt);
 }
 
-void
-wr_relo(relo, cnt)
-	register struct outrelo	*relo;
-	unsigned int cnt;
-{
+void wr_relo(struct outrelo	*relo, unsigned int cnt) {
 
 #if BYTE_ORDER == 0x0123
 	if (sizeof(struct outrelo) != SZ_RELO)
