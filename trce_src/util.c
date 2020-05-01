@@ -705,18 +705,18 @@ fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m
   p = errbuf; for(i=0;i<56;i++) *p++ = ' ';
 }
 
+static void checkret(void) {
+  if(sp != prstckpos[prdepth]) {
+    sprintf(errbuf,"Return on suspicious stack pointer prdepth %d",
+		prdepth);erroutine(); if(traceflag) dump(); exit(1);
+  }
+}
+
 void procdepth(int s) {
   if(s>0){prdepth++;stckprdepth[prdepth] = dotlnarr[(((int)(PC)) & 0Xffff) -s];
 	prstckpos[prdepth] = sp-2;}
   if(s==-1) { checkret(); prdepth --;}
   if(prdepth == bprdepth) stopvlag |= 1; else stopvlag &= 254;
-}
-
-checkret(){
-  if(sp != prstckpos[prdepth]) {
-    sprintf(errbuf,"Return on suspicious stack pointer prdepth %d",
-		prdepth);erroutine(); if(traceflag) dump(); exit(1);
-  }
 }
 
 static void zetbp(short textdot) {
