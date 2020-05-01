@@ -19,14 +19,19 @@
 #include "comm1.h"
 #include "comm5.h"
 #include "comm6.h"
+#include "comm7.h"
 #include "y.tab.h"
+#include "wr.h"
 
 extern YYSTYPE	yylval;
 char projchar[256],filechar[256],filoutnm[80],ffnm[80],filsnm[80],filcapnm[80];
 
 /* forward decls */
-static void setupoutput(void);
 static void commfinish(void);
+static void parse(char *s);
+static void setupoutput(void);
+
+extern int yyparse(void);
 
 /* ========== Machine independent C routines ========== */
 
@@ -379,10 +384,8 @@ needed()
 }
 #endif /* ASLD */
 
-parse(s)
-char *s;
-{
-	register i;
+static void parse(char *s) {
+	register int i;
 	register item_t *ip;
 	register char *p;
 
@@ -504,9 +507,7 @@ void pass_23(int n)
 	machfinish(n);
 }
 
-newmodule(s)
-char *s;
-{
+void newmodule(char *s) {
 	static char nmbuf[STRINGMAX];
 
 	switchsect(S_UND);
