@@ -10,6 +10,8 @@
  *	part. In this case #define OUTSEEK.
  */
 
+#include <unistd.h>
+
 #include "obj.h"
 
 extern long		lseek();
@@ -346,11 +348,7 @@ wr_relo(relo, cnt)
 #endif
 }
 
-void
-wr_name(name, cnt)
-	register struct outname	*name;
-	unsigned int cnt;
-{
+void wr_name(struct outname	*name, unsigned int cnt) {
 #if BYTE_ORDER == 0x0123
 	if (sizeof(struct outname) != SZ_NAME)
 #endif

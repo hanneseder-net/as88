@@ -11,7 +11,7 @@
 #include "comm6.h"
 #include "comm7.h"
 #include "y.tab.h"
-
+#include "wr.h"
 
 void newequate(item_t *ip, int typ)
 {
