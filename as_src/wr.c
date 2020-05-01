@@ -10,11 +10,10 @@
  *	part. In this case #define OUTSEEK.
  */
 
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "obj.h"
-
-extern long		lseek();
 
 /*
  * Parts of the output file.
