@@ -6,6 +6,21 @@
 #include "comm6.h"
 #include "comm7.h"
 
+// TODO(heder): Where are these defined?
+extern int mrg_1;
+extern int mrg_2;
+extern long	relonami;
+extern int rel_1;
+extern int rel_2;
+extern expr_t exp_1;
+extern expr_t exp_2;
+
+extern sect_t *DOTSCT;
+extern unsigned short DOTVAL;
+extern short DOTTYP;
+
+extern short pass;
+
 /*
  * INTEL 8086 special routines
  */
@@ -103,10 +118,7 @@ void branch(int opc, expr_t exp) {
 
 	dist = exp.val - (DOTVAL + 2);
 	if (pass == PASS_2 && dist > 0 && !(exp.typ & S_DOT))
-
-
 		dist -= DOTGAIN;
-
 
 	sm = dist > 0 ? fitb(dist-saving) : fitb(dist);
 	if ((exp.typ & ~S_DOT) != DOTTYP)
