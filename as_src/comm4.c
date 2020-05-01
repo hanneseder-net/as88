@@ -10,6 +10,8 @@
  *		Philips S&I, T&M, PMDS, Eindhoven
  */
 
+#include "comm4.h"
+
 #include <unistd.h>
 #include <string.h>
 
@@ -27,8 +29,6 @@ static void setupoutput(void);
 static void commfinish(void);
 
 /* ========== Machine independent C routines ========== */
-
-void stop(int);
 
 void stop(int dummy) {
 	unlink(temppath);
