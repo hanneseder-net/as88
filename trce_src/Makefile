@@ -1,6 +1,6 @@
 CC=gcc
 CP=cp
-CFLAGS=-O
+CFLAGS=-O -Wall
 
 all: s88 t88
  

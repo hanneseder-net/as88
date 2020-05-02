@@ -271,7 +271,7 @@ logprint(){
 
 static void relocate(int n) {
   int tp,sc,st,sa,ss,i,j,k;
-  char *p,*q,*r, octs[4];
+  char *p, octs[4];
 #ifdef DEBUG
 for(i=0;i<3;i++)
    fprintf(LOG,"%6d %4x startad | %6d %4x lengte | %6d %4x fstart | %6d %4x flen | %6d %4x align\n",
@@ -309,8 +309,7 @@ segmhead[i].align,segmhead[i].align);
 static void symlcorr(int i) {
   /* corrigeert line number bug voor symbolen uit de text. Zonder correctie
    wordt niet het line number, maar de eerste code doorgegeven */
-  int ln,cd,j,c;
-  char *p;
+  int ln,cd,j;
   ln = symtab[i].lnr;
   cd = symtab[i].symvalue;
   while(ln>0 && lndotarr[ln] == cd) {
@@ -392,14 +391,12 @@ static int getchbp(void) {
 
 void syscal(void) {
   char calnr, *q, *p, c;
-  int retval,i,j,ar[9],k,l,kk,ll,fwidth[9];
+  int retval,i,j,ar[9],k,l,fwidth[9];
   paramfield pram[8];
   sscanfield s[9];
-  /*adrfield adrf;*/
   syssp = (sp&0xffff) + (ss<<4) + m;
   calnr = *syssp;
   syssp += 2;
-/*sprintf(errbuf,"system call %3d, %x",calnr,calnr); meldroutine(); winupdate();*/
   switch (calnr) {
    	case 0x01: /*exit*/
 		if(traceflag) {winupdate(); wmv(24,0); winupdate(); wmv(24,0);
@@ -491,10 +488,7 @@ void syscal(void) {
    	case 0x79: /*sprintf* / sprintf(buf,"%s\n",spadr());break; */
 		pram[0].cp = spadr();
 		p = pram[1].cp = spadr(); j = 2;
-/*fprintf(stderr,"%x %d %d pram\n",pram[0].ii,pram[0].ii,0);*/
-/*fprintf(stderr,"%x %d %d pram\n",pram[1].ii,pram[1].ii,1);*/
 		while((c = *p++)) {
-		    /* fprintf(stderr,"`%c ",c);*/
 		    if(c == '%') {
 		    i = 1;
 		    while (i && (c = *p++)) {
@@ -519,12 +513,10 @@ void syscal(void) {
 			default: i = 0; break;
 			}
 		      }
-/*fprintf(stderr,"%x %d %d pram\n",pram[j].ii,pram[j].ii,j);*/
 		    }
 
 		}
  if(j>8) { sprintf(errbuf,"not more than 6 conversions in printf");erroutine();}
-	/*sprintf(errbuf,"pram %x in sprintf\n",pram[0].cp-m); erroutine();*/
 	retval = (int) (sprintf(pram[0].cp,pram[1].cp,pram[2].ii,
 	    pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii));
 		returnax(retval); break;
@@ -715,7 +707,10 @@ static void cnulbp(void) {
 }
 
 void dump(void) {
-  int i,j,k;
+  int i;
+#ifdef DEBUG
+  int j;
+#endif
   char *p;
 #ifdef DEBUG
 fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m));
@@ -846,8 +841,7 @@ static int rdadr(void) {
 }
 
 static void rdcline(int c) {
-  char *p;
-  p = cmdline;
+  char *p = cmdline;
   while(c != '\n') {if (c==EOF) break; *p++ = c; c = getchcmd();}
   *p++ = '\0'; *p = '\0';
   sprintf(window[14],"%-18.18s",cmdline);
@@ -1024,8 +1018,6 @@ static int getchcmd(void) {
 }
 
 void meldroutine(void) {
-  char *p; 
-  int i,aa;
   if(traceflag){
    errbuf[11] = ' '; errbuf[12] = ' '; errbuf[13] = ' ';
    wmv(10,24); printf("%s",errbuf); system("sleep 1");
@@ -1103,7 +1095,6 @@ static void bitmapdump(int b, int h, char *buff) {
  
 static void bitmapopen(int b, int h, int s) {
   /*FAKE SYSTEM CALL TO OPEN A BITMAP FOR OPGAVE 1 */
-  int i;
   if(pipe(pfildes)< 0) {fprintf(stderr,"Kan geen pipe creeren\n"); exit(1);}
   if((pnr = fork()) < 0) {fprintf(stderr,"Kan niet vorken\n"); exit(1);}
   if(pnr == 0){dup2(pfildes[0],0); system("exec /usr/local/bin/wish"); exit(0);}
