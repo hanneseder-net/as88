@@ -8,26 +8,37 @@ char window[24][81];
 
 static void clearscreen() { printf("\e[2J"); }
 
-void wmv(int a, int b) { printf("\e[%d;%dH", a + 1, b + 1); }
+void wmv(int y, int x) { printf("\e[%d;%dH", y + 1, x + 1); }
+
+void wprint(int y, int x, char* s) {
+  strncpy(&window[y][x], s, strlen(s));
+}
+
+void wfill(int y, int x, int h, int w, char c) {
+  for (int j = y; j < y + h; ++j) {
+    for (int i = x; i < x + w; ++i) {
+      window[j][i] = c;
+    }
+  }
+}
 
 static void wingo(void) {
-  int i;
   memset(window, ' ', sizeof(window));
   /*234567890123456789012345678901234567890123456789012345678901234567890*/
-  strncpy(window[0], "CS: 00  DS=SS=ES: 000 |=>---- | ", 32);
-  strncpy(window[1], "AH:00 AL:00 AX:...... |  ---- | ", 32);
-  strncpy(window[2], "BH:00 BL:00 BX:...... |  ---- | ", 32);
-  strncpy(window[3], "CH:00 CL:00 CX:...... |  ---- | ", 32);
-  strncpy(window[4], "DH:00 DL:00 DX:...... |  ---- | ", 32);
-  strncpy(window[5], "SP: 0000 SF O D S Z C |  ---- | ", 32);
-  strncpy(window[6], "BP: 0000 CC - - - - - |  ---- =>", 32);
-  strncpy(window[7], "SI: 0000  IP:0000:PC  |  ---- | ", 32);
-  strncpy(window[8], "DI: 0000  ........+0  |  ---- | ", 32);
-  for (i = 0; i < 80; i++) window[16][i] = window[9][i] = '-';
-  for (i = 0; i < 20; i++) window[13][i] = '-';
-  for (i = 0; i < 6; i++) window[i + 10][20] = '|';
+  wprint(0, 0, "CS: 00  DS=SS=ES: 000 |=>---- | ");
+  wprint(1, 0, "AH:00 AL:00 AX:...... |  ---- | ");
+  wprint(2, 0, "BH:00 BL:00 BX:...... |  ---- | ");
+  wprint(3, 0, "CH:00 CL:00 CX:...... |  ---- | ");
+  wprint(4, 0, "DH:00 DL:00 DX:...... |  ---- | ");
+  wprint(5, 0, "SP: 0000 SF O D S Z C |  ---- | ");
+  wprint(6, 0, "BP: 0000 CC - - - - - |  ---- =>");
+  wprint(7, 0, "SI: 0000  IP:0000:PC  |  ---- | ");
+  wprint(8, 0, "DI: 0000  ........+0  |  ---- | ");
+  wfill(9, 0, 1, 80, '-');
+  wfill(16, 0, 1, 80, '-');
+  wfill(10, 20, 6, 1, '|');
   memcpy(nwindow, window, sizeof(nwindow));
-  for (i = 0; i < 23; i++) {
+  for (int i = 0; i < 23; i++) {
     wmv(i, 0);
     printf("%-80.80s", window[i]);
   }
