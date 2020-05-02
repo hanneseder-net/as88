@@ -127,7 +127,7 @@ int printx(int ndig, valu_t val) {
 		val >>= 4;
 	} while (--n);
 	do {
-		c = "0123456789ABCDEF"[*--p];
+		c = "0123456789ABCDEF"[(int)*--p];
 		putchar(c);
 	} while (p > buf);
 	return(ndig);

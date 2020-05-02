@@ -24,7 +24,6 @@ static int infbsym(char *p);
 int yylex(void)
 {
 	register int c;
-	int i;
 
 	if (pass == PASS_1) {
 		/* scan the input file */
