@@ -1202,9 +1202,18 @@ static void schrijfmap(int b, int h, int s, char *buf, FILE *uitf) {
 }
 
 int main_lib(int argc, char **argv) {
-  if(argc<2){ fprintf(stderr,"No .88 load file? Usage t88 loadfile\n"); exit(1);}
-  sp=0; ss=0; pcx=m; cs=0; argc--; argv++;
-  if(!argc){fprintf(stderr,"No load file? argc %d %s\n",argc,argv[0]); exit(1);}
-  if(load(argc,argv)) exit(1); fclose(prog); interp();
+  if (argc < 2) {
+    fprintf(stderr, "No .88 load file? Usage t88 loadfile\n");
+    exit(1);
+  }
+  sp = 0; ss = 0; pcx = m; cs = 0;
+  argc--; argv++;
+  if (!argc) {
+    fprintf(stderr, "No load file? argc %d %s\n", argc, argv[0]);
+    exit(1);
+  }
+  if (load(argc, argv)) exit(1);
+  fclose(prog);
+  interp();
   return 0;
 }
