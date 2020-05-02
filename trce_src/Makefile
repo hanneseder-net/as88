@@ -4,25 +4,25 @@ CFLAGS=-O -Wall -Wextra -Wpedantic -pedantic
 
 all: s88 t88
 
-88.o: 88.h var.h macro.h 88.c
+88.o: 88.h macro.h 88.c
 	$(CC) -c $(CFLAGS) 88.c 
  
-table.o: 88.h var.h macro.h  table.c
+table.o: 88.h macro.h  table.c
 	$(CC) -c $(CFLAGS) table.c 
  
-adr.o: 88.h var.h macro.h  adr.c
+adr.o: 88.h macro.h  adr.c
 	$(CC) -c $(CFLAGS) adr.c 
  
-cond.o: 88.h var.h macro.h cond.c
+cond.o: 88.h macro.h cond.c
 	$(CC) -c $(CFLAGS) cond.c 
  
-store.o: 88.h var.h macro.h  store.c
+store.o: 88.h macro.h  store.c
 	$(CC) -c $(CFLAGS) store.c 
  
-main.o: 88.h var.h macro.h main.c
+main.o: 88.h macro.h main.c
 	$(CC) -c $(CFLAGS) main.c 
  
-mains.o: 88.h var.h macro.h mains.c
+mains.o: 88.h macro.h mains.c
 	$(CC) -c $(CFLAGS) mains.c 
  
 doscurs.o: doscurs.c 

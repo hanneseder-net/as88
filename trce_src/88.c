@@ -7,7 +7,7 @@
 #include "adr.h"
 #include "cond.h"
 #include "macro.h"
-#include "util.h"
+#include "main_lib.h"
 
 #ifdef INPUT
 #include <signal.h>
