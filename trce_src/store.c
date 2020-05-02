@@ -5,7 +5,9 @@
 #define	SLOP		(80 * 2)
 
 void wstore(word x) {
+#ifndef LITTLE_ENDIAN
     register reg	t;
+#endif
     register char	*sav_eapc = eapc;
 
 #ifdef LITTLE_ENDIAN

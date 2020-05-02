@@ -16,8 +16,6 @@
 /* forward decls */
 static void rep(int op);
 
-static void vidsim(void) {}
-static void dumpck(void) {}
 static void checkint(void) {}
 void inio(word a, int b) {}
 void outio(word a, word b, int c) {}
@@ -26,20 +24,12 @@ void interp(void) {
 register word             t;
 register word             t2;
 register char             c;
-register int              mm, n, k;       /* 1 if dumping on, 0 if off */
+register int              mm, n;       /* 1 if dumping on, 0 if off */
 register adr              u, u1, u2;
 
     mask = 0377;
 /* Here is the main loop of the interpreter. */
 loop:
-/* dump();
-    if (anything)
-        dumpck();
-
-    if (--timer == 0)
-        checkint(); */
-
-next:
     t = *pcx++ & mask;
     if(stopvlag) dump();
     else if(traceflag && !(--instrcount & 0x3fff)){
@@ -494,7 +484,6 @@ bloop:
     case 0xEF: outio(dx,ax,2); LOOP;
 
     case 0xF0: breakpt(); t = dumpt; goto bloop; /* ew break point trap */
-	 /* vidsim(); LOOP;	dirty trick to trap video ram access */
     case 0xF1: spare(t);
     case 0xF2: t = *pcx++ & mask;
 	switch(t) {
