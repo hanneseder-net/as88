@@ -14,17 +14,6 @@
 #endif
 #include "ansi.h"
 
-#ifndef __OBJECT_INCLUDED__
-#define __OBJECT_INCLUDED__
-
-_PROTOTYPE(int wr_open, (char *f));
-_PROTOTYPE(void wr_close, (void));
-_PROTOTYPE(void wr_ohead, (struct outhead *h));
-_PROTOTYPE(void wr_sect, (struct outsect *s, unsigned int c));
-_PROTOTYPE(void wr_outsect, (int sectno));
-
-#endif /* __OBJECT_INCLUDED__ */
-
 #if ! defined(CHAR_UNSIGNED)
 #define CHAR_UNSIGNED 0
 #endif

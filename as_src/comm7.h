@@ -27,7 +27,6 @@ void warning(char *s, ...);
 void fatal(char *s, ...);
 void nofit(void);
 void wr_fatal(void);
-void wr_close(void);
 
 void ffreopen(char *s, FILE *f);
 FILE * ffcreat(char *s);

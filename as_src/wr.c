@@ -39,7 +39,7 @@ static int maxchunk = 16384;
 /*
  * Just write "cnt" bytes to file-descriptor "fd".
  */
-staatic void wr_bytes(int fd, char *string, long cnt) {
+static void wr_bytes(int fd, char *string, long cnt) {
 	while (cnt) {
 		int n = cnt >= maxchunk ? maxchunk : cnt;
 

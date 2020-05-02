@@ -13,13 +13,11 @@
 #if __STDC__
 #include <stddef.h>
 
-#define	_PROTOTYPE(function, params)	function params
 #define _SIZET		size_t
 #define _CONST		const
 
 #else
 
-#define	_PROTOTYPE(function, params)	function()
 #define _SIZET		unsigned int
 #define _CONST
 
