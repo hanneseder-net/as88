@@ -113,8 +113,10 @@ static int hashstring(char *p) {
 static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p,*p1,*p2;
+
   memset(inbuf, '\0', sizeof(inbuf));
-  p = m; for(i=0;i<MEMBYTES;i++) if(i && i==sp) break; else *p++ = '\0';
+  memset(m, '\0', sizeof(m));
+
   p = argv[0]; for(i=0;i<100;i++)if ((j = *p++)=='.'||j=='\0') break; *(--p)=0;
      strcpy(basename,argv[0]);
      sprintf(fnameS,"%s.s",basename); sprintf(fname88,"%s.88",basename);
