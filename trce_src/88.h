@@ -9,11 +9,7 @@
 typedef short word;		/* type word must be 16 bits */
 typedef unsigned short adr;	/* unsigned 16-bit quantity */
 
-#ifdef pdp
-typedef unsigned unchr;
-#else
 typedef unsigned char unchr;
-#endif
 
 #ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
@@ -162,7 +158,6 @@ typedef union {pair b; word w;} reg;
 
 #define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
 // #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
-#define HALFMEM 6000		/* 1/2 of MEMBYTES */
 #define MAXLONG 2000000000L
 #define INTERVAL 50000
 
@@ -202,15 +197,8 @@ EXTERN long xx;			/* scratch variable used for mem checking */
 EXTERN unchr stopvlag, dumpt;	/* ew dumping vlag and saved t */
 
 
-/* The 8088 memory array is declared below.  The definition is as it is to get
- * around a defect in the PDP-11 cc compiler.  That compiler will not accept
- * character arrays with > 32K elements.
- */
-#ifdef pdp
-extern char m[HALFMEM];
-#else
+/* The 8088 memory array is declared below. */
 extern char m[MEMBYTES];
-#endif
 typedef	union { unchr rc[16]; word rw[8];} REG;
 extern REG r;
 extern int traceflag, instrcount, codelength;
