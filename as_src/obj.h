@@ -8,11 +8,6 @@
 
 #include <stdio.h>
 #include "out.h"
-#if 0
-#include <ranlib.h>
-#include <arch.h>
-#endif
-#include "ansi.h"
 
 #if ! defined(CHAR_UNSIGNED)
 #define CHAR_UNSIGNED 0
