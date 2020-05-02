@@ -82,7 +82,7 @@ int yylex(void)
 void putval(int c)
 {
 	valu_t v;
-	size_t n = 0;
+	int n = 0;
 	char *p = 0;
 
 	assert(c >= 256 && c < 256+128);
@@ -327,7 +327,7 @@ char * readident(int c) {
 
 static int innumber(int c) {
 	char *p;
-	unsigned int radix;
+	int radix;
 	static char num[20+1];
 
 	p = num;
