@@ -42,7 +42,7 @@ void stop(int dummy) {
 	unlink(listpath);
 #endif
 #endif
-	fclose(input);
+	if (input) fclose(input);
 	/* sprintf(filechar,"%s.$S$",projname); unlink(filechar); */
 	exit(nerrors != 0);
 }
@@ -56,18 +56,9 @@ int main(int argc, char** argv)
 	};
 	int projseen,firstsrc;
 
-	/* the next test should be performed by the
-	 * preprocessor, but it cannot, so it is performed by the compiler.
-	 */
-
 	projname = projchar;
 	firstsrc = -1; projseen=0;
 	strcpy(projname, "a_out");
-	switch(0) {
-	case 1:	break;
-	case (S_ETC|S_COM|S_VAR|S_DOT) != S_ETC : break;
-	}
-
 
 	progname = *argv++; argc--;
 	for (p = sigs; (i = *p++); )
@@ -199,7 +190,8 @@ int main(int argc, char** argv)
 #endif
 	pass_23(PASS_3);
 	wr_close();
-	return 0;
+
+	stop(0);
 }
 
 /* ---------- pass 1: arguments, modules, archives ---------- */
@@ -255,12 +247,14 @@ void pass_1(int argc, char** argv)
 		) {
 			archive();
 			fclose(input);
+			input = NULL;
 			/* continue;*/
 		}
 		rewind(input);
 #endif
 		parse(p);
 		fclose(input);
+		input = NULL;
 		/*break;*/
 	}
 #ifndef ASLD
