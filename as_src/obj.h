@@ -24,11 +24,6 @@ _PROTOTYPE(void wr_sect, (struct outsect *s, unsigned int c));
 _PROTOTYPE(void wr_outsect, (int sectno));
 _PROTOTYPE(void wr_putc, (int c));
 _PROTOTYPE(void wr_relo, (struct outrelo *r, unsigned int c));
-_PROTOTYPE(void wr_name, (struct outname *n, unsigned int c));
-_PROTOTYPE(void wr_string, (char *s, long c));
-_PROTOTYPE(void wr_int2, (int fd, int i));
-_PROTOTYPE(void wr_long, (int fd, long l));
-_PROTOTYPE(void wr_bytes, (int fd, char *buf, long l));
 
 #endif /* __OBJECT_INCLUDED__ */
 

@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "obj.h"
+#include "comm7.h"
 
 /*
  * Parts of the output file.
@@ -32,6 +33,22 @@ static long		currpos;
 int			__sectionnr;
 #define sectionnr	__sectionnr
 static int		offcnt;
+
+static int maxchunk = 16384;
+
+/*
+ * Just write "cnt" bytes to file-descriptor "fd".
+ */
+staatic void wr_bytes(int fd, char *string, long cnt) {
+	while (cnt) {
+		int n = cnt >= maxchunk ? maxchunk : cnt;
+
+		if (write(fd, string, n) != n)
+			wr_fatal();
+		string += n;
+		cnt -= n;
+	}
+}
 
 void __wr_flush(struct fil *ptr) {
 #ifdef OUTSEEK
