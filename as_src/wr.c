@@ -284,17 +284,6 @@ void wr_outsect(int s /* section number */) {
 	sectionnr = s;
 }
 
-/*
- * We don't have to worry about byte order here.
- */
-void
-wr_emit(emit, cnt)
-	char		*emit;
-	long		cnt;
-{
-	OUTWRITE(PARTEMIT + getsect(sectionnr) , emit, cnt);
-}
-
 void wr_relo(struct outrelo	*relo, unsigned int cnt) {
 
 #if BYTE_ORDER == 0x0123
