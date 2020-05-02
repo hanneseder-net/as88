@@ -15,7 +15,7 @@
 #undef extern
 
 struct outhead outhead = {
-  O_MAGIC, O_STAMP, 0
+  O_MAGIC, O_STAMP, 0, 0, 0, 0, 0, 0
 };
 
 #include "y.tab.h"

@@ -36,6 +36,7 @@ extern int yyparse(void);
 /* ========== Machine independent C routines ========== */
 
 void stop(int dummy) {
+	UNUSED(dummy);
 	unlink(temppath);
 #if DEBUG < 2
 #ifdef LISTING
@@ -184,7 +185,7 @@ int main(int argc, char** argv)
 	if (rflag)
 		sflag |= SYM_SCT;
 #endif /* RELOCATION */
-	pass_1(argc,argv);
+	pass_1();
 #ifdef THREE_PASS
 	pass_23(PASS_2);
 #endif
@@ -196,8 +197,7 @@ int main(int argc, char** argv)
 
 /* ---------- pass 1: arguments, modules, archives ---------- */
 
-void pass_1(int argc, char** argv)
-{
+void pass_1() {
 	char *p;
 	item_t *ip;
 #ifdef ASLD

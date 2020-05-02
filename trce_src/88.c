@@ -17,8 +17,17 @@
 static void rep(int op);
 
 static void checkint(void) {}
-void inio(word a, int b) {}
-void outio(word a, word b, int c) {}
+
+void inio(word a, int b) {
+  UNUSED(a);
+  UNUSED(b);
+}
+
+void outio(word a, word b, int c) {
+  UNUSED(a);
+  UNUSED(b);
+  UNUSED(c);
+}
 
 void interp(void) {
   word             t;

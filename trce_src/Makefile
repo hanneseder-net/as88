@@ -1,9 +1,9 @@
 CC=gcc
 CP=cp
-CFLAGS=-O -Wall
+CFLAGS=-O -Wall -Wextra
 
 all: s88 t88
- 
+
 88.o: 88.h var.h macro.h 88.c
 	$(CC) -c $(CFLAGS) 88.c 
  

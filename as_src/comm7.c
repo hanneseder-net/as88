@@ -364,7 +364,10 @@ FILE* fftemp(char *path, char *tail) {
 
 /* ---------- Error handling ---------- */
 
-void yyerror(char const *s) { }		/* we will do our own error printing */
+void yyerror(char const *s) {
+  UNUSED(s);
+  /* we will do our own error printing */
+}		
 
 void nosect(void) {
 	fatal("no sections");

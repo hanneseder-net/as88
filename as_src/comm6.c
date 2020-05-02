@@ -135,6 +135,7 @@ void newbase(valu_t base) {
 	sp->s_flag |= BASED;
 	DOTVAL += base;
 #else
+    UNUSED(base);
 	warning(".base ignored");
 #endif
 }

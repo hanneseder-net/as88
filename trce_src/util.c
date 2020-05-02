@@ -1,6 +1,7 @@
 #include "util.h"
 
 #include <fcntl.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -323,7 +324,8 @@ static void symlcorr(int i) {
 
 static int lcs(char *p, int s) {
   char c, *q;
-  int j,k,add;
+  size_t j;
+  int k,add;
 #ifdef DEBUG
 fprintf(LOG, "lcs symbool %d buffer %.15s\n",s,p); fflush(LOG);
 #endif
@@ -786,7 +788,8 @@ static void dmpadr(int adre) {
 }
 
 static int rdstrg(void) {
-  int i,j,stradr,k,syk;
+  size_t i;
+  int j,stradr,k,syk;
   char *p,*q,c,cc;
   i=0; p = cmdline; q = tringfield+90;
   while((c = *p++)) if (c=='!' || c == '/' || c == '+') break;

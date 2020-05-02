@@ -111,7 +111,7 @@ extern char	*readident();
 #endif
 
 /* comm 4 */
-extern void pass_1(int argc, char** argv);
+extern void pass_1(void);
 extern void pass_23(int n);
 
 /* TODO(heder): Move this to a better place */

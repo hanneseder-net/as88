@@ -262,6 +262,6 @@ typedef	struct sect_t	sect_t;
 #endif
 #endif
 
-extern FILE *fopen();   /* some systems don't have this in stdio.h */
+#define UNUSED(x) (void)(x)
 
 #endif /* AS_SRC_COMM0_H */

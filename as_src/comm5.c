@@ -4,6 +4,8 @@
  */
 #include "comm5.h"
 
+#include <stddef.h>
+
 #include "comm0.h"
 #include "comm1.h"
 #include "comm7.h"
@@ -80,7 +82,7 @@ int yylex(void)
 void putval(int c)
 {
 	valu_t v;
-	int n = 0;
+	size_t n = 0;
 	char *p = 0;
 
 	assert(c >= 256 && c < 256+128);
@@ -325,7 +327,7 @@ char * readident(int c) {
 
 static int innumber(int c) {
 	char *p;
-	int radix;
+	unsigned int radix;
 	static char num[20+1];
 
 	p = num;

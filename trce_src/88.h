@@ -205,3 +205,5 @@ extern int traceflag, instrcount, codelength;
 extern char errbuf[];
 
 void interp(void);
+
+#define UNUSED(x) (void)(x)
