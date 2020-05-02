@@ -4,7 +4,7 @@ CC=gcc
 # Paths:
 SRC_HOME  = .
 
-COPTIONS=-O -Wall -Wextra
+COPTIONS=-O -Wall -Wextra -Wpedantic -pedantic
 
 LDOPTIONS=#			# always passed to $(CC) when linking (none here)
 

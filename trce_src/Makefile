@@ -1,6 +1,6 @@
 CC=gcc
 CP=cp
-CFLAGS=-O -Wall -Wextra
+CFLAGS=-O -Wall -Wextra -Wpedantic -pedantic
 
 all: s88 t88
 
