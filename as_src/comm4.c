@@ -199,7 +199,7 @@ int main(int argc, char** argv)
 #endif
 	pass_23(PASS_3);
 	wr_close();
-	stop(0);
+	return 0;
 }
 
 /* ---------- pass 1: arguments, modules, archives ---------- */
