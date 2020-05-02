@@ -30,7 +30,7 @@
 #if (BYTE_ORDER == 0x3210 || BYTE_ORDER == 0x1032)
 #define uget2(c)	(Xchar((c)[0]) | ((unsigned) Xchar((c)[1]) << 8))
 #define Xput2(i, c)	(((c)[0] = (i)), ((c)[1] = (i) >> 8))
-#define put2(i, c)	{ register int j = (i); Xput2(j, c); }
+#define put2(i, c)	{ int j = (i); Xput2(j, c); }
 #else
 #define uget2(c)	(* ((unsigned short *) (c)))
 #define Xput2(i, c)	(* ((short *) (c)) = (i))
@@ -41,7 +41,7 @@
 
 #if BYTE_ORDER != 0x0123
 #define get4(c)		(uget2(c) | ((long) uget2((c)+2) << 16))
-#define put4(l, c)	{ register long x=(l); \
+#define put4(l, c)	{ long x=(l); \
 			  Xput2((int)x,c); \
 			  Xput2((int)(x>>16),(c)+2); \
 			}

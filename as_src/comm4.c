@@ -267,7 +267,7 @@ void pass_1(int argc, char** argv)
 	machfinish(PASS_1);
 #ifdef ASLD
 	if (unresolved) {
-		register int i;
+		int i;
 
 		nerrors++;
 		fflush(stdout);
@@ -292,9 +292,8 @@ void pass_1(int argc, char** argv)
 }
 
 #ifdef ASLD
-
-archive() {
-	register long offset;
+void archive(void) {
+	long offset;
 	struct ar_hdr header;
 	char getsize[AR_TOTAL];
 
@@ -326,14 +325,13 @@ archive() {
 	archmode = 0;
 }
 
-needed()
-{
-	register c, first;
-	register item_t *ip;
-	register need;
+void needed(void) {
+	int c, first;
+	item_t *ip;
+	int need;
 
 #ifdef LISTING
-	register save;
+	int save;
 
 	save = listflag; listflag = 0;
 #endif
@@ -379,9 +377,9 @@ needed()
 #endif /* ASLD */
 
 static void parse(char *s) {
-	register int i;
-	register item_t *ip;
-	register char *p;
+	int i;
+	item_t *ip;
+	char *p;
 
 	for (p = s; *p; )
 		if (*p++ == '/')
@@ -445,9 +443,9 @@ void pass_23(int n)
 {
 	int i;
 #ifdef ASLD
-	register ADDR_T base = 0;
+	ADDR_T base = 0;
 #endif
-	register sect_t *sp;
+	sect_t *sp;
 
 	if (nerrors & 0xff){
 		fprintf(stderr,"nerrors unequal zero %d\n",nerrors);
@@ -529,10 +527,10 @@ void newmodule(char *s) {
 
 static void setupoutput(void)
 {
-	register sect_t *sp;
-	register long off;
+	sect_t *sp;
+	long off;
 	struct outsect outsect;
-	register struct outsect *pos = &outsect;
+	struct outsect *pos = &outsect;
 
 	if (! wr_open(aoutpath)) {
 		fatal("can't create %s", aoutpath);
@@ -565,12 +563,12 @@ static void setupoutput(void)
 static void commfinish(void)
 {
 #ifndef ASLD
-	register int i;
+	int i;
 #endif
-	register struct common_t *cp;
-	register item_t *ip;
-	register sect_t *sp;
-	register valu_t addr;
+	struct common_t *cp;
+	item_t *ip;
+	sect_t *sp;
+	valu_t addr;
 
 	switchsect(S_UND);
 	/*

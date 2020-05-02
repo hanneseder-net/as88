@@ -7,14 +7,11 @@
 
 void wd(void)
 {
-/* Compute the effective address and put it in 'ea'.
- * Also compute the register and put a pointer to it in 'rapc.'
- * This routine only called for word operands.
- */
-
-    register	word	t;
-
-    t = *pcx++ & mask;
+    /* Compute the effective address and put it in 'ea'. Also compute the
+     * register and put a pointer to it in 'rapc.' This routine only called for
+     * word operands.
+     */
+    word t = *pcx++ & mask;
 
     switch (t)
     {
@@ -307,44 +304,38 @@ void wd(void)
 	case 0xFF: ea = DI; ra = DI; break;
     }
 
-    if (t <= 0xBF)
-    {
-	register reg	t;
+    if (t <= 0xBF) {
+      reg t;
 
-	MEM(eapc, xs, ea);
+      MEM(eapc, xs, ea);
 
-	eoplo = *eapc;		/* XXX */
-	eophi = *(eapc + 1);	/* XXX */
+      eoplo = *eapc;       /* XXX */
+      eophi = *(eapc + 1); /* XXX */
 
-	t.w = r.rw[ra];
-	roplo = t.b.lo;
-	rophi = t.b.hi;
-	rapw = &r.rw[ra];
-    }
-    else {
-	register reg	t;
+      t.w = r.rw[ra];
+      roplo = t.b.lo;
+      rophi = t.b.hi;
+      rapw = &r.rw[ra];
+    } else {
+      reg t;
 
-	eapc = (char *) &r.rw[ea];
+      eapc = (char *)&r.rw[ea];
 
-	t.w = r.rw[ea];
-	eoplo = t.b.lo;
-	eophi = t.b.hi;
-	rapw = &r.rw[ra];
-	rop = *rapw;
+      t.w = r.rw[ea];
+      eoplo = t.b.lo;
+      eophi = t.b.hi;
+      rapw = &r.rw[ra];
+      rop = *rapw;
     }
 }
 
+void by(void) {
+    /* Compute the effective address and put it in 'ea'. Also compute the
+     * register and put a pointer to it in 'rapc.' This routine only called for
+     * byte operands.
+     */
 
-void by(void)
-{
-/* Compute the effective address and put it in 'ea'.
- * Also compute the register and put a pointer to it in 'rapc.'
- * This routine only called for byte operands.
- */
-
-    register	word	t;
-
-    t = *pcx++ & mask;
+    word t = *pcx++ & mask;
 
     switch (t)
     {
@@ -636,24 +627,22 @@ void by(void)
 	case 0xFE: ea = DH; ra = BH; break;
 	case 0xFF: ea = BH; ra = BH; break;
     }
-    if (t <= 0xBF)
-    {
-	/*
-	 * At this point, 'ea' and 'ra' have been set to the index into
-	 * memory of the effective address and register address,
-	 * respectively.  Compute pointers to them and fetch the operands
-	 * into 'eoplo' and 'roplo' respectively.
-	 */
-	MEM(eapc, xs, ea);
-    }
-    else {
-	/*
-	 * At this point, 'ea' and 'ra' have been set to the index into
-	 * memory of the effective address and register address,
-	 * respectively.  Compute pointers to them and fetch the operands
-	 * into 'eoplo' and 'roplo' respectively.
-	 */
-	eapc = (char *) &r.rc[ea];
+    if (t <= 0xBF) {
+      /*
+       * At this point, 'ea' and 'ra' have been set to the index into memory of
+       * the effective address and register address, respectively.  Compute
+       * pointers to them and fetch the operands into 'eoplo' and 'roplo'
+       * respectively.
+       */
+      MEM(eapc, xs, ea);
+    } else {
+      /*
+       * At this point, 'ea' and 'ra' have been set to the index into memory of
+       * the effective address and register address, respectively.  Compute
+       * pointers to them and fetch the operands into 'eoplo' and 'roplo'
+       * respectively.
+       */
+      eapc = (char *)&r.rc[ea];
     }
     eoplo = *eapc;
     rapc = (char *) &r.rc[ra];

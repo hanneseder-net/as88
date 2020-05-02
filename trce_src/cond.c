@@ -11,8 +11,8 @@ void cc(void)
  * improve overall performance considerably.
  */
 
-  register short r;
-  register unsigned short u, u1;
+  short r;
+  unsigned short u, u1;
   char c;
 
   switch(operator) {

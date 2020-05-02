@@ -23,7 +23,7 @@ static int infbsym(char *p);
 
 int yylex(void)
 {
-	register int c;
+	int c;
 
 	if (pass == PASS_1) {
 		/* scan the input file */
@@ -79,9 +79,9 @@ int yylex(void)
 
 void putval(int c)
 {
-	register valu_t v;
-	register int n = 0;
-	register char *p = 0;
+	valu_t v;
+	int n = 0;
+	char *p = 0;
 
 	assert(c >= 256 && c < 256+128);
 	switch (c) {
@@ -151,9 +151,9 @@ void putval(int c)
 }
 
 static int getval(int c) {
-	register int n = 0;
-	register valu_t v;
-	register char *p = 0;
+	int n = 0;
+	valu_t v;
+	char *p = 0;
 
 	switch (c) {
 	case CODE1:
@@ -216,7 +216,7 @@ static int getval(int c) {
 
 int nextchar(void)
 {
-	register int c;
+	int c;
 
 	if (peekc != -1) {
 		c = peekc;
@@ -239,7 +239,7 @@ int nextchar(void)
 }
 
 static void readcode(int n) {
-	register int c;
+	int c;
 
 	yylval.y_valu = 0;
 	do {
@@ -267,7 +267,7 @@ static int induo(int c) {
 		('|'<<8) | '|', OP_OO,
 		('&'<<8) | '&', OP_AA,
 	};
-	register short *p;
+	short *p;
 
 	c = (c<<8) | nextchar();
 	for (p = duo; *p; p++)
@@ -280,9 +280,9 @@ static int induo(int c) {
 static char name[NAMEMAX+1];
 
 static int inident(int c) {
-	register char *p = name;
-	register item_t *ip;
-	register int n = NAMEMAX;
+	char *p = name;
+	item_t *ip;
+	int n = NAMEMAX;
 
 	do {
 		if (--n >= 0)
@@ -308,12 +308,9 @@ static int inident(int c) {
 }
 
 #ifdef ASLD
-char *
-readident(c)
-register c;
-{
-	register n = NAMEMAX;
-	register char *p = name;
+char * readident(int c) {
+	n = NAMEMAX;
+	char *p = name;
 
 	do {
 		if (--n >= 0)
@@ -327,8 +324,8 @@ register c;
 #endif
 
 static int innumber(int c) {
-	register char *p;
-	register int radix;
+	char *p;
+	int radix;
 	static char num[20+1];
 
 	p = num;
@@ -372,8 +369,8 @@ static int innumber(int c) {
 }
 
 static int instring(int termc) {
-	register char *p;
-	register int c;
+	char *p;
+	int c;
 	static int maxstring = 0;
 
 	if (! maxstring) {
@@ -410,7 +407,7 @@ static int instring(int termc) {
 }
 
 static int inescape(void) {
-	register int c, j, r;
+	int c, j, r;
 
 	c = nextchar();
 	if (c >= '0' && c <= '7') {
@@ -439,8 +436,8 @@ static int inescape(void) {
 }
 
 static int infbsym(char *p) {
-	register int lab;
-	register item_t *ip;
+	int lab;
+	item_t *ip;
 
 	lab = *p++ - '0';
 	if ((unsigned)lab < 10) {
@@ -464,8 +461,8 @@ ok:
 }
 
 int hash(char *p) {
-	register unsigned short h;
-	register int c;
+	unsigned short h;
+	int c;
 
 	h = 0;
 	while ((c = *p++)) {
@@ -476,8 +473,8 @@ int hash(char *p) {
 }
 
 item_t* item_search(char *p) {
-	register int h;
-	register item_t *ip;
+	int h;
+	item_t *ip;
 
 	for (h = hash(p); h < H_TOTAL; h += H_SIZE) {
 		ip = hashtab[h];
@@ -498,7 +495,7 @@ void item_insert(item_t *ip, int h) {
 }
 
 item_t* item_alloc(int typ) {
-	register item_t *ip;
+	item_t *ip;
 	static int nleft = 0;
 	static item_t *next;
 
@@ -517,7 +514,7 @@ item_t* item_alloc(int typ) {
 }
 
 item_t* fb_alloc(int lab) {
-	register item_t *ip, *p;
+	item_t *ip, *p;
 
 	ip = item_alloc(S_UND);
 	p = fb_ptr[FB_TAIL+lab];
@@ -530,7 +527,7 @@ item_t* fb_alloc(int lab) {
 }
 
 item_t * fb_shift(int lab) {
-	register item_t *ip;
+	item_t *ip;
 
 	ip = fb_ptr[FB_FORW+lab];
 	if (ip == 0) {

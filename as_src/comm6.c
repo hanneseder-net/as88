@@ -33,7 +33,7 @@ void newequate(item_t *ip, int typ) {
 }
 
 void newident(item_t *ip, short typ) {
-	register int flag;
+	int flag;
 #ifdef GENLAB
 	static char genlab[] = GENLAB;
 #endif /* GENLAB */
@@ -73,7 +73,7 @@ void newident(item_t *ip, short typ) {
 void newlabel(item_t *ip) {
 #if DEBUG != 0
 #ifdef THREE_PASS
-	register ADDR_T oldval = ip->i_valu;
+	ADDR_T oldval = ip->i_valu;
 #endif
 #endif
 
@@ -89,8 +89,8 @@ void newlabel(item_t *ip) {
 }
 
 void newsect(item_t *ip) {
-	register int typ;
-	register sect_t *sp = NULL;
+	int typ;
+	sect_t *sp = NULL;
 
 	typ = ip->i_type & S_TYP;
 	if (typ == S_UND) {
@@ -125,7 +125,7 @@ void newsect(item_t *ip) {
 
 void newbase(valu_t base) {
 #ifdef ASLD
-	register sect_t *sp;
+	sect_t *sp;
 	
 	if ((sp = DOTSCT) == NULL)
 		nosect();
@@ -150,7 +150,7 @@ void newbase(valu_t base) {
  *   -	i_valu is used for relocation info during PASS_3
  */
 static void new_common(item_t *ip) {
-	register struct common_t *cp;
+	struct common_t *cp;
 	static int nleft = 0;
 	static struct common_t *next;
 
@@ -188,7 +188,7 @@ void newcomm(item_t *ip, valu_t val) {
 }
 
 void switchsect(int newtyp) {
-	register sect_t *sp;
+	sect_t *sp;
 	
 	if ((sp = DOTSCT))
 		sp->s_size = DOTVAL - sp->s_base;
@@ -205,8 +205,8 @@ void switchsect(int newtyp) {
 }
 
 void align(valu_t bytes) {
-	register valu_t gap;
-	register sect_t *sp;
+	valu_t gap;
+	sect_t *sp;
 
 	if ((sp = DOTSCT) == NULL)
 		nosect();

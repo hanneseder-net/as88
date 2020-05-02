@@ -65,7 +65,7 @@ void ea_2(int param) {
 }
 
 static void reverse(void) {
-	register int m, r; expr_t e;
+	int m, r; expr_t e;
 
 	m = mrg_1; mrg_1 = mrg_2; mrg_2 = m;
 	e = exp_1; exp_1 = exp_2; exp_2 = e;
@@ -79,7 +79,7 @@ static void badsyntax(void) {
 }
 
 void regsize(int sz) {
-	register int bit;
+	int bit;
 
 	sz <<= 3;
 	bit = 010;
@@ -113,7 +113,7 @@ void indexed(void) {
   }
 
 void branch(int opc, expr_t exp) {
-	register int sm, dist;
+	int sm, dist;
 	int saving = opc == 0353 ? 1 : 3;
 
 	dist = exp.val - (DOTVAL + 2);
@@ -211,7 +211,7 @@ void addop(int opc) {
 }
 
 void rolop(int opc) {
-	register int cmrg;
+	int cmrg;
 
 	cmrg = mrg_2;
 	mrg_2 = mrg_1;

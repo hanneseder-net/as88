@@ -20,7 +20,7 @@
 int linmr=0;
 valu_t load(item_t *ip) {
 #ifdef ASLD
-	register typ;
+	int typ;
 
 	typ = ip->i_type & S_TYP;
 	if ((typ -= S_MIN) < 0)		/* S_UND or S_ABS */
@@ -41,7 +41,7 @@ valu_t load(item_t *ip) {
 
 int store(item_t *ip, valu_t val) {
 #ifdef ASLD
-	register typ;
+	int typ;
 
 	typ = ip->i_type & S_TYP;
 	if ((typ -= S_MIN) >= 0)
@@ -56,8 +56,8 @@ int store(item_t *ip, valu_t val) {
 }
 
 char* remember(char *s) {
-	register char *p;
-	register int n;
+	char *p;
+	int n;
 	static int nleft = 0;
 	static char *next;
 
@@ -118,8 +118,8 @@ int combine(int typ1, int typ2, int op) {
 #ifdef LISTING
 int printx(int ndig, valu_t val) {
 	static char buf[8];
-	register char *p;
-	register int c, n;
+	char *p;
+	int c, n;
 
 	p = buf; n = ndig;
 	do {
@@ -136,7 +136,7 @@ int printx(int ndig, valu_t val) {
 
 #ifdef LISTING
 void listline(int textline) {
-	register int c;
+	int c;
 
 	if ((listflag & 4) && (c = getc(listfile)) != '\n' && textline) {
 		if (listcolm >= 24)
@@ -168,8 +168,8 @@ void listline(int textline) {
 static char *pbittab[PBITTABSZ];
 
 int small(int fitsmall, int gain) {
-	register int bit;
-	register char *p;
+	int bit;
+	char *p;
 
 	if (DOTSCT == NULL)
 		nosect();
@@ -321,8 +321,8 @@ void emitx(valu_t val, int n) {
 }
 
 void emitstr(int zero) {
-	register int i;
-	register char *p;
+	int i;
+	char *p;
 
 	p = stringbuf;
 	i = stringlen;
@@ -353,7 +353,7 @@ FILE* ffcreat(char *s) {
 char *tmp_dir = TMPDIR;
 
 FILE* fftemp(char *path, char *tail) {
-	register char *dir;
+	char *dir;
 
 	if ((dir = getenv("TMPDIR")) == NULL)
 		dir = tmp_dir;

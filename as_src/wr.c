@@ -72,15 +72,13 @@ void __wr_flush(struct fil *ptr) {
 	ptr->pbegin = ptr->pbuf;
 }
 
-static void
-OUTWRITE(p, b, n)
-	int		p;	/* part number */
-	register char	*b;	/* buffer pointer */
-	long		n;	/* write count */
-{
-	register struct fil *ptr = &__parts[p];
-	register char *pn = ptr->pnow;
-	register int i;
+static void OUTWRITE(
+	int p, /* part number */
+	char *b, /* buffer pointer */ 
+	long n /* write count */) {
+	struct fil *ptr = &__parts[p];
+	char *pn = ptr->pnow;
+	int i;
 	long m;
 
 	i = ptr->cnt;
@@ -138,12 +136,10 @@ OUTWRITE(p, b, n)
 	}
 }
 
-static void
-BEGINSEEK(p, o)
-	int		p;	/* part number */
-	long		o;	/* offset in file */
-{
-	register struct fil *ptr = &__parts[p];
+static void BEGINSEEK(
+	int p,  /* part number */
+	long o /* offset in file */) {
+	struct fil *ptr = &__parts[p];
 
 #ifdef OUTSEEK
 	ptr->fd = outfile;
@@ -163,7 +159,7 @@ BEGINSEEK(p, o)
  * Open the output file according to the chosen strategy.
  */
 int wr_open(char *f) {
-	register struct fil	*fdp;
+	struct fil	*fdp;
 
 	close(creat(f, 0666));
 #ifdef OUTSEEK
@@ -180,7 +176,7 @@ int wr_open(char *f) {
 }
 
 void wr_close(void) {
-	register struct fil *ptr;
+	struct fil *ptr;
 
 	for (ptr = &__parts[PARTEMIT]; ptr < &__parts[NPARTS]; ptr++) {
 		__wr_flush(ptr);
@@ -197,7 +193,7 @@ void wr_close(void) {
 
 void wr_ohead(struct outhead *head) {
 	{
-		register long off = OFF_RELO(*head);
+		long off = OFF_RELO(*head);
 
 		BEGINSEEK(PARTEMIT, 0L);
 		BEGINSEEK(PARTRELO, off);
@@ -214,7 +210,7 @@ void wr_ohead(struct outhead *head) {
 	{
 		char buf[SZ_HEAD];
 
-		register char *c = &buf[0];
+		char *c = &buf[0];
 
 		put2(head->oh_magic, c);	c += 2;
 		put2(head->oh_stamp, c);	c += 2;
@@ -230,7 +226,7 @@ void wr_ohead(struct outhead *head) {
 }
 
 void wr_sect(struct outsect	*sect, unsigned int	cnt) {
-	{	register unsigned int i = cnt;
+	{	unsigned int i = cnt;
 
 		while (i--) {
 			if (offcnt >= 1 && offcnt < SECTCNT) {
@@ -246,8 +242,8 @@ void wr_sect(struct outsect	*sect, unsigned int	cnt) {
 #endif
 	while (cnt)
 	{
-		register char *c;
-		register unsigned int i;
+		char *c;
+		unsigned int i;
 
 		i = __parts[PARTEMIT].cnt/SZ_SECT;
 		c = __parts[PARTEMIT].pnow;
@@ -275,7 +271,7 @@ void wr_sect(struct outsect	*sect, unsigned int	cnt) {
 }
 
 void wr_outsect(int s /* section number */) {
-	register struct fil *ptr = &__parts[PARTEMIT + getsect(sectionnr)];
+	struct fil *ptr = &__parts[PARTEMIT + getsect(sectionnr)];
 
 	if (s != sectionnr && s >= (SECTCNT-1) && sectionnr >= (SECTCNT-1)) {
 #ifdef OUTSEEK
@@ -308,8 +304,8 @@ void wr_relo(struct outrelo	*relo, unsigned int cnt) {
 #endif
 	while (cnt)
 	{
-		register char *c;
-		register unsigned int i;
+		char *c;
+		unsigned int i;
 
 		i = __parts[PARTRELO].cnt/SZ_RELO;
 		c = __parts[PARTRELO].pnow;
@@ -341,8 +337,8 @@ void wr_name(struct outname	*name, unsigned int cnt) {
 #endif
 	while (cnt)
 	{
-		register char *c;
-		register unsigned int i;
+		char *c;
+		unsigned int i;
 
 		i = __parts[PARTNAME].cnt/SZ_NAME;
 		c = __parts[PARTNAME].pnow;

@@ -21,11 +21,11 @@ void inio(word a, int b) {}
 void outio(word a, word b, int c) {}
 
 void interp(void) {
-register word             t;
-register word             t2;
-register char             c;
-register int              mm, n;       /* 1 if dumping on, 0 if off */
-register adr              u, u1, u2;
+  word             t;
+  word             t2;
+  char             c;
+  int              mm, n;       /* 1 if dumping on, 0 if off */
+  adr              u, u1, u2;
 
     mask = 0377;
 /* Here is the main loop of the interpreter. */
