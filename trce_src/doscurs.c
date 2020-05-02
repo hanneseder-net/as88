@@ -15,7 +15,7 @@ void wmv(int a, int b) {
 }
 
 static void wingo(void) {
- int i,j,k,l; char c,*p,*q;
+ int i; char *p,*q;
  p = window[0]; for(i=0;i<1944;i++) *p++ = ' ';
 /*234567890123456789012345678901234567890123456789012345678901234567890*/
  strncpy(window[0],"CS: 00  DS=SS=ES: 000 |=>---- | ",32);
