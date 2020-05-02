@@ -13,7 +13,8 @@
 #include "88.h"
 #include "doscurs.h"
 #include "macro.h"
-#include "var.h"
+
+int traceflag; /* set to 1 if tracing is enabled */
 
 FILE *bituit;
 
