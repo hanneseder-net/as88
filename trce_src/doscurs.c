@@ -12,9 +12,7 @@ void wmv(int a, int b) { printf("\e[%d;%dH", a + 1, b + 1); }
 
 static void wingo(void) {
   int i;
-  char *p, *q;
-  p = window[0];
-  for (i = 0; i < 1944; i++) *p++ = ' ';
+  memset(window, ' ', sizeof(window));
   /*234567890123456789012345678901234567890123456789012345678901234567890*/
   strncpy(window[0], "CS: 00  DS=SS=ES: 000 |=>---- | ", 32);
   strncpy(window[1], "AH:00 AL:00 AX:...... |  ---- | ", 32);
@@ -28,9 +26,7 @@ static void wingo(void) {
   for (i = 0; i < 80; i++) window[16][i] = window[9][i] = '-';
   for (i = 0; i < 20; i++) window[13][i] = '-';
   for (i = 0; i < 6; i++) window[i + 10][20] = '|';
-  p = window[0];
-  q = nwindow[0];
-  for (i = 0; i < 1944; i++) *q++ = *p++;
+  memcpy(nwindow, window, sizeof(nwindow));
   for (i = 0; i < 23; i++) {
     wmv(i, 0);
     printf("%-80.80s", window[i]);
