@@ -2,8 +2,6 @@
 #include "88.h"
 #include "macro.h"
 
-#define	SLOP		(80 * 2)
-
 void wstore(word x) {
 #ifdef LITTLE_ENDIAN
     *eapc++ = x;
@@ -57,7 +55,6 @@ void xstore(char *x) {
 	*(eapc+1) = t.b.hi;
     }
 #endif /*!LITTLE_ENDIAN*/
-
 }
 
 void rapwstore(word w) {
