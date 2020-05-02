@@ -110,7 +110,7 @@ static int hashstring(char *p) {
   return(h);
 }
 
-int load(int argc, char **argv) {
+static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p,*p1,*p2;
   p=inbuf;  for(i=0;i<1024;i++) *p++ = '\0';
@@ -1201,7 +1201,7 @@ static void schrijfmap(int b, int h, int s, char *buf, FILE *uitf) {
   }
 }
 
-int util_main(int argc, char **argv) {
+int main_lib(int argc, char **argv) {
   if(argc<2){ fprintf(stderr,"No .88 load file? Usage t88 loadfile\n"); exit(1);}
   sp=0; ss=0; pcx=m; cs=0; argc--; argv++;
   if(!argc){fprintf(stderr,"No load file? argc %d %s\n",argc,argv[0]); exit(1);}
