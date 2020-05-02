@@ -19,9 +19,9 @@ YFLAGS	= -d
 LDFLAGS	= $(FFLAG) $(LDOPTIONS)
 
 CSRC	= ./comm3.c ./comm4.c ./comm5.c ./bigkeywh.c \
-	  ./comm6.c ./comm7.c ./comm8.c ./wr.c ./wr_bytes.c ./wr_putc.c
+	  ./comm6.c ./comm7.c ./comm8.c ./wr.c
 COBJ	= comm3.$(SUF) comm4.$(SUF) comm5.$(SUF) bigkeywh.$(SUF) \
-	  comm6.$(SUF) comm7.$(SUF) comm8.$(SUF) wr.$(SUF) wr_putc.$(SUF)
+	  comm6.$(SUF) comm7.$(SUF) comm8.$(SUF) wr.$(SUF)
 MACHSRC	= ./mach0.c ./mach1.c ./mach2.c \
 	  ./mach3.c ./mach4.c ./mach5.c
 COMM	= ./comm0.h ./comm1.h ./comm2.y $(CSRC)

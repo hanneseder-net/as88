@@ -16,7 +16,6 @@
 #include "comm4.h"
 #include "y.tab.h"
 #include "wr.h"
-#include "wr_putc.h"
 
 int linmr=0;
 valu_t load(item_t *ip) {
@@ -227,6 +226,15 @@ int small(int fitsmall, int gain) {
 #endif
 
 /* ---------- output ---------- */
+
+extern int __sectionnr;
+
+static void wr_putc(int ch) {
+	struct fil *ptr = &__parts[PARTEMIT+getsect(__sectionnr)];
+
+	if (ptr->cnt == 0) __wr_flush(ptr);
+	ptr->cnt--; *ptr->pnow++ = ch;
+}
 
 void emit1(int arg) {
 	static int olddottyp = -1;

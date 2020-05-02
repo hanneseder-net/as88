@@ -22,8 +22,6 @@ _PROTOTYPE(void wr_close, (void));
 _PROTOTYPE(void wr_ohead, (struct outhead *h));
 _PROTOTYPE(void wr_sect, (struct outsect *s, unsigned int c));
 _PROTOTYPE(void wr_outsect, (int sectno));
-_PROTOTYPE(void wr_putc, (int c));
-_PROTOTYPE(void wr_relo, (struct outrelo *r, unsigned int c));
 
 #endif /* __OBJECT_INCLUDED__ */
 
