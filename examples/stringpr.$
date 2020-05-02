@@ -1,22 +1,30 @@
- 
-! System calls and system subroutines
-_EXIT	   =	  1
+! This program is part of the string routines
+! of section 9.8.5. It handles the printing
+! of a string, and it is used to show how a
+! program which is distributed over more than
+! one file must be assembled.
+
+_EXIT	   =	  1	! seven system call numbers
 _READ	   =	  3
 _WRITE	   =	  4
 _OPEN	   =	  5
 _CLOSE	   =	  6
 _CREAT	   =	  8
 _LSEEK	   =	 19
-_GETCHAR   =	117
+_GETCHAR   =	117	! five system subroutine numbers
 _SPRINTF   =	121
 _PUTCHAR   =	122
-_SSCANF	   =	121
+_SSCANF	   =	125
 _PRINTF	   =	127
-
-! open file pointers
-STDIN	   =	  0
+STDIN	   =	  0	! three initially opened file descriptors
 STDOUT	   =	  1
 STDERR	   =	  2
+
+.SECT .TEXT		! Definition of section header labels
+TxtSecHd:
+.SECT .DATA
+DatSecHd:
+.SECT .TEXT
 .SECT .TEXT
 stpstart:			!  1
 	PUSH msg1		!  2
@@ -38,8 +46,8 @@ stringpr:			! 10
 	MOV  SI,DI		! 18
 	MOV  CX,-1		! 19
 	REPNZ SCASB		! 20
-	! INC  CX			! 21
-	NOT  CX			! 22
+	NOT  CX			! 21
+	DEC  CX			! 22
 	MOV  DI,strpribf	! 23
 	PUSH CX			! 24
 	PUSH DI			! 25
@@ -59,5 +67,5 @@ stringpr:			! 10
 strpribf:			! 39
 	.SPACE 88		! 40
 .SECT .DATA			! 41
-msg1: .ASCIZ "Look here msg1\n"	! 42
-msg2: .ASCIZ "And msg 2\n"	! 43
+msg1: .ASCII "Look here msg1\n"	! 42
+msg2: .ASCIZ "And msg\0762\n"	! 43

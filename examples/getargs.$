@@ -1,5 +1,17 @@
-
+! This file shows how arguments on the command line can be
+! used inside a program.
+! Arguments are expected after the interpreter and the assembled program
+! So the line "t88 getargs first second third fourth"
+! will open the tracer and when the program is run those arguments
+! are loaded in the BSS part of the DATA segment and then printed.
+!
+! The arguments are available in the stack segment and pointers to them are
+! pushed onto the stack at the start of the program, similar to the usual
+! calling conventions for arguments in a stack oriented loading sequence.
+!
 ! max 7 arguments
+
+
 .SECT .TEXT		 !  1
 ARGSIZ	= 32		 !  2
 argstart:		 !  3

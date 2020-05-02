@@ -1,4 +1,7 @@
- 
+! This program is meant to print a line in reverse order.
+! It is one of the string manipulation routines discussed
+! in section 9.8.5.
+
 _EXIT	   =	  1	! seven system call numbers
 _READ	   =	  3
 _WRITE	   =	  4
@@ -14,6 +17,7 @@ _PRINTF	   =	127
 STDIN	   =	  0	! three initially opened file descriptors
 STDOUT	   =	  1
 STDERR	   =	  2
+
 .SECT .TEXT		! Definition of section header labels
 TxtSecHd:
 .SECT .DATA

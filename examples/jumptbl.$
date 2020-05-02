@@ -1,4 +1,9 @@
- 
+! This program shows a "dispatch table"
+! which can be used when the program has
+! to choose from many altenatives like in
+! the "switch" statement of the C language.
+! See text section 9.8.6.
+
 _EXIT	   =	  1	! seven system call numbers
 _READ	   =	  3
 _WRITE	   =	  4
@@ -14,6 +19,7 @@ _PRINTF	   =	127
 STDIN	   =	  0	! three initially opened file descriptors
 STDOUT	   =	  1
 STDERR	   =	  2
+
 .SECT .TEXT		! Definition of section header labels
 TxtSecHd:
 .SECT .DATA

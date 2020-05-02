@@ -1,4 +1,6 @@
- 
+!This program shows some properties of the
+! general registers. See section 9.8.2.
+
 
 	_EXIT	= 1		!  1
 .SECT .TEXT			!  2
@@ -17,3 +19,4 @@ muldat:	.WORD	625,2		! 13
 	PUSH	0		! 15
 	PUSH	_EXIT		! 16
 	SYS			! 17
+.SECT .BSS

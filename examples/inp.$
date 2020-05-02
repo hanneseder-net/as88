@@ -1,4 +1,4 @@
- 
+! A simple program to read from standard input.
 
 	_PRINTF = 127	!  1
 	_GETCHAR = 117	!  2
