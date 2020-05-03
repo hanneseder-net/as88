@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char nwindow[24][81];
+static char nwindow[24][81];
 char window[24][81];
 
 static void clearscreen() { printf("\e[2J"); }
