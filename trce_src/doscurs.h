@@ -7,7 +7,7 @@ extern char window[24][81];
 void winfirst(void);
 void immain(void);
 void wmv(int y, int x);
-void wprint(int y, int x, char* s);
+void wwrite(int y, int x, char* s);
 void refresh(void);
 
 #endif /* TRCE_SRC_DOSCURS_H */

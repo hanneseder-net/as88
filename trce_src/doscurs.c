@@ -10,7 +10,7 @@ static void clearscreen() { printf("\e[2J"); }
 
 void wmv(int y, int x) { printf("\e[%d;%dH", y + 1, x + 1); }
 
-void wprint(int y, int x, char* s) {
+void wwrite(int y, int x, char* s) {
   strncpy(&window[y][x], s, strlen(s));
 }
 
@@ -25,15 +25,15 @@ void wfill(int y, int x, int h, int w, char c) {
 static void wingo(void) {
   memset(window, ' ', sizeof(window));
   /*234567890123456789012345678901234567890123456789012345678901234567890*/
-  wprint(0, 0, "CS: 00  DS=SS=ES: 000 |=>---- | ");
-  wprint(1, 0, "AH:00 AL:00 AX:...... |  ---- | ");
-  wprint(2, 0, "BH:00 BL:00 BX:...... |  ---- | ");
-  wprint(3, 0, "CH:00 CL:00 CX:...... |  ---- | ");
-  wprint(4, 0, "DH:00 DL:00 DX:...... |  ---- | ");
-  wprint(5, 0, "SP: 0000 SF O D S Z C |  ---- | ");
-  wprint(6, 0, "BP: 0000 CC - - - - - |  ---- =>");
-  wprint(7, 0, "SI: 0000  IP:0000:PC  |  ---- | ");
-  wprint(8, 0, "DI: 0000  ........+0  |  ---- | ");
+  wwrite(0, 0, "CS: 00  DS=SS=ES: 000 |=>---- | ");
+  wwrite(1, 0, "AH:00 AL:00 AX:...... |  ---- | ");
+  wwrite(2, 0, "BH:00 BL:00 BX:...... |  ---- | ");
+  wwrite(3, 0, "CH:00 CL:00 CX:...... |  ---- | ");
+  wwrite(4, 0, "DH:00 DL:00 DX:...... |  ---- | ");
+  wwrite(5, 0, "SP: 0000 SF O D S Z C |  ---- | ");
+  wwrite(6, 0, "BP: 0000 CC - - - - - |  ---- =>");
+  wwrite(7, 0, "SI: 0000  IP:0000:PC  |  ---- | ");
+  wwrite(8, 0, "DI: 0000  ........+0  |  ---- | ");
   wfill(9, 0, 1, 80, '-');
   wfill(16, 0, 1, 80, '-');
   wfill(10, 20, 6, 1, '|');
