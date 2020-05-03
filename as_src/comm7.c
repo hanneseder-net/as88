@@ -229,10 +229,11 @@ int small(int fitsmall, int gain) {
 extern int __sectionnr;
 
 static void wr_putc(int ch) {
-	struct fil *ptr = &__parts[PARTEMIT+getsect(__sectionnr)];
+  struct fil *ptr = &__parts[PARTEMIT + getsect(__sectionnr)];
 
-	if (ptr->cnt == 0) __wr_flush(ptr);
-	ptr->cnt--; *ptr->pnow++ = ch;
+  if (ptr->cnt == 0) __wr_flush(ptr);
+  ptr->cnt--;
+  *ptr->pnow++ = ch;
 }
 
 void emit1(int arg) {
