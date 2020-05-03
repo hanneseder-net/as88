@@ -17,7 +17,6 @@
 #include "y.tab.h"
 #include "wr.h"
 
-int linmr=0;
 valu_t load(item_t *ip) {
 #ifdef ASLD
 	int typ;
@@ -237,48 +236,45 @@ static void wr_putc(int ch) {
 }
 
 void emit1(int arg) {
-	static int olddottyp = -1;
-if(pass == PASS_3)
-	if(((int)(DOTSCT-sect) == 0) && ((int)lineno > linmr)){
-		linmr = (int) lineno;
-		fprintf(outFile,"%4d %4d\n",
-			linmr,(int)DOTVAL);
-	}
-	/*fprintf(outFile,"%d %4d %4d ! %6d\n",
-	(int)(DOTSCT-sect),(int)lineno,(int)DOTVAL,ftell(tempfile));*/
+  static int olddottyp = -1;
+  static int linmr = 0;
+  if (pass == PASS_3) {
+    if (((int)(DOTSCT - sect) == 0) && ((int)lineno > linmr)) {
+      linmr = (int)lineno;
+      fprintf(outFile, "%4d %4d\n", linmr, (int)DOTVAL);
+    }
+  }
 #ifdef LISTING
-	if (listeoln) {
-		if (listflag & 1) {
-			listcolm += printx(VALWIDTH, (valu_t)DOTVAL);
-			listcolm++;
-			putchar(' ');
-		}
-		listeoln = 0;
-	}
-	if (listflag & 2)
-		listcolm += printx(2, (valu_t) arg);
+  if (listeoln) {
+    if (listflag & 1) {
+      listcolm += printx(VALWIDTH, (valu_t)DOTVAL);
+      listcolm++;
+      putchar(' ');
+    }
+    listeoln = 0;
+  }
+  if (listflag & 2) listcolm += printx(2, (valu_t)arg);
 #endif
-	switch (pass) {
-	case PASS_1:
-		if (DOTSCT == NULL)
-			nosect();
-		/* no break */
-	case PASS_2:
-		DOTSCT->s_zero = 0;
-		break;
-	case PASS_3:
-		if (DOTTYP != olddottyp) {
-			wr_outsect(DOTTYP-S_MIN);
-			olddottyp = DOTTYP;
-		}
-		while (DOTSCT->s_zero) {
-			wr_putc(0);
-			DOTSCT->s_zero--;
-		}
-		wr_putc(arg);
-		break;
-	}
-	DOTVAL++;
+  switch (pass) {
+    case PASS_1:
+      if (DOTSCT == NULL) nosect();
+      /* no break */
+    case PASS_2:
+      DOTSCT->s_zero = 0;
+      break;
+    case PASS_3:
+      if (DOTTYP != olddottyp) {
+        wr_outsect(DOTTYP - S_MIN);
+        olddottyp = DOTTYP;
+      }
+      while (DOTSCT->s_zero) {
+        wr_putc(0);
+        DOTSCT->s_zero--;
+      }
+      wr_putc(arg);
+      break;
+  }
+  DOTVAL++;
 }
 
 void emit2(int arg) {
