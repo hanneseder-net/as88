@@ -76,7 +76,6 @@
 {0,	NOOP_1,		0374,		"CLD"},
 {0,	NOOP_1,		0375,		"STD"},
 {0,	NOOP_1,		0017,		"SYS"},
-// TODO(heder): Is the opcode for AAM and AAD correct?
 {0,	NOOP_2,		0324+(012<<8),	"AAM"},
 {0,	NOOP_2,		0325+(012<<8),	"AAD"},
 {0,	JOP,		0340,		"LOOPNE"},
