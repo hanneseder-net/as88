@@ -1,5 +1,6 @@
 #include "main_lib.h"
 
+#include <assert.h>
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -110,45 +111,115 @@ static int hashstring(char *p) {
   return(h);
 }
 
+static char* remove_ext(char* dest, char* path) {
+  strcpy(dest, path);
+  char* last_ext = strrchr(dest, '.');
+  char* last_path = strrchr(dest, '/');
+  if (last_ext && (!last_path || last_ext > last_path)) {
+    *last_ext = '\0';
+  }
+  return dest;
+}
+
+// TOOD(heder): Use a proper testing framework.
+static void TEST_remove_ext() {
+  char basename[100];
+  assert(strcmp(remove_ext(basename, "hello.txt"), "hello.txt") == 0);
+  assert(strcmp(remove_ext(basename, "hello"), "hello") == 0);
+  assert(strcmp(remove_ext(basename, "/home/hello.txt"), "/home/hello.txt") == 0);
+  assert(strcmp(remove_ext(basename, "/usr/bin"), "/usr/bin") == 0);
+  assert(strcmp(remove_ext(basename, "../hello"), "../hello") == 0);
+}
+
+static void TEST_ALL(void) {
+  TEST_remove_ext();
+}
+
 static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p,*p1,*p2;
 
+  TEST_ALL();
+
   memset(inbuf, '\0', sizeof(inbuf));
   memset(m, '\0', sizeof(m));
 
-  p = argv[0]; for(i=0;i<100;i++)if ((j = *p++)=='.'||j=='\0') break; *(--p)=0;
-     strcpy(basename,argv[0]);
-     sprintf(fnameS,"%s.s",basename); sprintf(fname88,"%s.88",basename);
-    if((prog = fopen(fname88,"rb")) == NULL) {
-	fprintf(stderr,"Warning: Interpreter 8088 could not find file %s\n",
-		fname88); system ("sleep 5"); }
-     if(stat(fnameS,astat)){ fprintf(stderr,"Warning: Does %s exist?\n",fnameL); 
-	system("sleep 2");} t1 = astat[0].st_mtime;
-     if(stat(fname88,astat)){fprintf(stderr,"Warning Does %s exist?\n",fname88);
-	 system("sleep 5");} else t2 = astat[0].st_mtime;
-     if(t2<t1){fprintf(stderr,"Warning %s is older than %s.\n",
-	fname88,fnameS); system("sleep 5");}
- if(traceflag){sprintf(fnameS,"%s.$",basename);sprintf(fnameL,"%s.#",basename);
-   sprintf(fnamei,"%s.i",basename); sprintf(fnamet,"%s.t",basename); 
+  remove_ext(basename, argv[0]);
+  sprintf(fnameS, "%s.s", basename);
+  sprintf(fname88, "%s.88", basename);
+
+  if ((prog = fopen(fname88, "rb")) == NULL) {
+    fprintf(stderr, "Warning: Interpreter 8088 could not find file %s\n",
+            fname88);
+    system("sleep 5");
+  }
+  if (stat(fnameS, astat)) {
+    fprintf(stderr, "Warning: Does %s exist?\n", fnameL);
+    system("sleep 2");
+  }
+  t1 = astat[0].st_mtime;
+  if (stat(fname88, astat)) {
+    fprintf(stderr, "Warning Does %s exist?\n", fname88);
+    system("sleep 5");
+  } else {
+    t2 = astat[0].st_mtime;
+  }
+  if (t2 < t1) {
+    fprintf(stderr, "Warning %s is older than %s.\n", fname88, fnameS);
+    system("sleep 5");
+  }
+  if (traceflag) {
+    sprintf(fnameS, "%s.$", basename);
+    sprintf(fnameL, "%s.#", basename);
+    sprintf(fnamei, "%s.i", basename);
+    sprintf(fnamet, "%s.t", basename);
+
 #ifdef DEBUG
- fprintf(LOG,"Before open #-file |%s|\n",fnameL);
-fflush(LOG);
+    fprintf(LOG, "Before open #-file |%s|\n", fnameL);
+    fflush(LOG);
 #endif
-  if ((L=fopen(fnameL,"r")) == NULL) {
-    fprintf(stderr,"Cannot open %s\n",fnameL); exit(1);}
-    i = 0; j = 0; while(fscanf(L,"%d %d",&loadl,&strl)>0){
-      while(i<=loadl)lndotarr[i++] = strl;
-      while(j<=strl)dotlnarr[j++] = loadl;
-   }
-   if ((INP=fopen(fnamei,"r")) != NULL)inpfl = 1; else {inpfl = 0; INP = stdin;}
-   if ((CMD=fopen(fnamet,"r")) != NULL)cmdfl = 1; else {cmdfl = 0; CMD = stdin;}
-   fclose(L); if ((L=fopen(fnameS,"rb")) == NULL) {
-    fprintf(stderr,"Cannot open %s\n",fnameS); exit(1);}
-    strl = 0; lnfilarr[1] = lnfilarr[0] = 0; stckprdepth[0] = 1;
-    for(i=2;i<0Xff8;i++){while((j = getc(L)) != EOF){strl++; if(j=='\n') break;}
-      if(j==EOF) break; lnfilarr[i] = strl; } maxln = i; rewind(L);
-    for(i=0;i<7;i++) datadm[i] = NULL; puthp = 0;
+    if ((L = fopen(fnameL, "r")) == NULL) {
+      fprintf(stderr, "Cannot open %s\n", fnameL);
+      exit(1);
+    }
+    i = 0;
+    j = 0;
+    while (fscanf(L, "%d %d", &loadl, &strl) > 0) {
+      while (i <= loadl) lndotarr[i++] = strl;
+      while (j <= strl) dotlnarr[j++] = loadl;
+    }
+    if ((INP = fopen(fnamei, "r")) != NULL)
+      inpfl = 1;
+    else {
+      inpfl = 0;
+      INP = stdin;
+    }
+    if ((CMD = fopen(fnamet, "r")) != NULL)
+      cmdfl = 1;
+    else {
+      cmdfl = 0;
+      CMD = stdin;
+    }
+    fclose(L);
+    if ((L = fopen(fnameS, "rb")) == NULL) {
+      fprintf(stderr, "Cannot open %s\n", fnameS);
+      exit(1);
+    }
+    strl = 0;
+    lnfilarr[1] = lnfilarr[0] = 0;
+    stckprdepth[0] = 1;
+    for (i = 2; i < 0Xff8; i++) {
+      while ((j = getc(L)) != EOF) {
+        strl++;
+        if (j == '\n') break;
+      }
+      if (j == EOF) break;
+      lnfilarr[i] = strl;
+    }
+    maxln = i;
+    rewind(L);
+    for (i = 0; i < 7; i++) datadm[i] = NULL;
+    puthp = 0;
   }
   pcx = p = m; ss = ds = es = 0; CS(0);
   for(i=0;i<7;i++) {for(j=0;j<80;j++) datadarr[i][j] = ' '; datadarr[i][80] = '\0';}
