@@ -124,9 +124,9 @@ static char* remove_ext(char* dest, char* path) {
 // TOOD(heder): Use a proper testing framework.
 static void TEST_remove_ext() {
   char basename[100];
-  assert(strcmp(remove_ext(basename, "hello.txt"), "hello.txt") == 0);
+  assert(strcmp(remove_ext(basename, "hello.txt"), "hello") == 0);
   assert(strcmp(remove_ext(basename, "hello"), "hello") == 0);
-  assert(strcmp(remove_ext(basename, "/home/hello.txt"), "/home/hello.txt") == 0);
+  assert(strcmp(remove_ext(basename, "/home/hello.txt"), "/home/hello") == 0);
   assert(strcmp(remove_ext(basename, "/usr/bin"), "/usr/bin") == 0);
   assert(strcmp(remove_ext(basename, "../hello"), "../hello") == 0);
 }
