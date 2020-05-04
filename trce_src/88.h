@@ -169,6 +169,8 @@ EXTERN char *xapc;
 EXTERN char *eapc, *rapc;
 EXTERN word *rapw;		/* eapw is unusable since it might be odd */
 EXTERN word *stkp;		/* scratch variable used by PUSH and POP */
+// TODO(heder): Wohaa, what are we doing here, are we clipping the memory
+// just to a very small amount?
 EXTERN int mask;
 
 EXTERN adr cs, ds, ss, es;	/* contents of segment registers */
