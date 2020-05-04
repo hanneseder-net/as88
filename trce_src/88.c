@@ -36,18 +36,26 @@ void interp(void) {
   int              mm, n;       /* 1 if dumping on, 0 if off */
   adr              u, u1, u2;
 
-    mask = 0377;
-/* Here is the main loop of the interpreter. */
+  mask = 0377;
+  /* Here is the main loop of the interpreter. */
 loop:
-    t = *pcx++ & mask;
-    if(stopvlag) dump();
-    else if(traceflag && !(--instrcount & 0x3fff)){
-	sprintf(errbuf,"Telstop %3d",((instrcount)>>14)&0Xff); meldroutine();
-		if(instrcount) {/* system("sleep 1"); winupdate();*/}
-		else dump();}
-    if((PC)>codelength) {
-      if (traceflag) dump();
-	  fprintf(stderr,"Code out of rang %ld\n",(PC)); exit(1);}
+  t = *pcx++ & mask;
+  if (stopvlag) {
+    dump();
+  } else if (traceflag && !(--instrcount & 0x3fff)) {
+    sprintf(errbuf, "Telstop %3d", ((instrcount) >> 14) & 0Xff);
+    meldroutine();
+    if (instrcount) {
+      /* system("sleep 1"); winupdate();*/
+    } else {
+      dump();
+    }
+  }
+  if ((PC) > codelength) {
+    if (traceflag) dump();
+    fprintf(stderr, "Code out of rang %ld\n", (PC));
+    exit(1);
+  }
 bloop:
     /* Some compilers balk at 256-case switches */
     switch(t) {
