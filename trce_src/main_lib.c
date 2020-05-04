@@ -18,8 +18,8 @@
 
 int traceflag; /* set to 1 if tracing is enabled */
 int codelength, instrcount;
-char errbuf[292];
 
+static char errbuf[292];
 static FILE *bituit;
 
 static int lfptr; /* load file pointer */
@@ -906,7 +906,7 @@ fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+90
     symp = symtab[symp].nextsym;
   }
   symp = syk;  /*april*/
-  if(symp < 0) {sprintf(errbuf,"No Match"); erroutine(); return(-1);}
+  if(symp < 0) {errprintf("No Match"); erroutine(); return(-1);}
   for(k=0;k<18;k++) tringfield[k+90] = ' '; tringfield[98] = '+';
   for(k=0;k<8;k++) if((cc = symtab[symp].symbol[k])>32) tringfield[k+90] = cc;
 	else break;
@@ -921,8 +921,8 @@ fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+90
     if(*p == '\0' || *p=='!') {cmdchar = '!'; j=0;}
   }
   if(j){
-    if(*p<'0'||*p>'9'){sprintf(errbuf,"cmd constant expected.");erroutine();
-	system("sleep 1");sprintf("%-55.55s","  ");return(-1);}
+    if(*p<'0'||*p>'9'){errprintf("cmd constant expected.");erroutine();
+	system("sleep 1");errprintf("%-55.55s","  ");return(-1);}
     sscanf(p,"%d%1s",&j,&cmdchar);
   }
   if(symtab[symp].symsect == 2){if(cmdchar == '!') cmdchar = 'g'; sprintf(tringfield+99,"%2d",j);}
