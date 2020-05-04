@@ -16,59 +16,76 @@
 #include "macro.h"
 
 int traceflag; /* set to 1 if tracing is enabled */
+int codelength, instrcount;
+char errbuf[292];
 
-FILE *bituit;
+static FILE *bituit;
 
-int lfptr; /* load file pointer */
-int pnr;
-int pfildes[2];
+static int lfptr; /* load file pointer */
+static int pnr;
+static int pfildes[2];
 
-int termbitsize;
-char bmbuf[9000];
+static int termbitsize;
+static char bmbuf[9000];
 
-int errflag;
+static int errflag;
 
 #define CBUF 180
 #define MAGIC 0X0201
 #define MAXSHORT 0XFFFF
 #define MAXSYMTAB 0XFFF
 
-char fnameL[CBUF], fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
-char nulsymbol[]="NULLSYMBOL";
-time_t t1,t2;
-struct stat astat[2], *bf;
+static char fnameL[CBUF], fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
+static char nulsymbol[]="NULLSYMBOL";
+static time_t t1,t2;
+static struct stat astat[2];
  
-char cmdchar, cmdline[30],outveld[4][59];
-unchr prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
-int stckprdepth[20], prstckpos[20], codelength, instrcount, nsymtab, maxsp;
-int puthp; /*horizontale en verticale putpositie*/
+static char cmdchar, cmdline[30],outveld[4][59];
+static unchr prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
+static int stckprdepth[20], prstckpos[20];
+static int nsymtab, maxsp;
+static int puthp; /*horizontale en verticale putpositie*/
 
 typedef struct { short pcp; unchr bprt; } bprveld;
-bprveld bparr[32];  /* break point fields */
+static bprveld bparr[32];  /* break point fields */
 typedef struct {char typ; char sct; short smb; int adrs;} relocveld;
-relocveld relocarr[1024]; /* relocation variables field */
+static relocveld relocarr[1024]; /* relocation variables field */
 
-short lndotarr[0X2000],lnsymarr[0X2000],dotlnarr[0X6000],bssreloc;
-int lnfilarr[0X6000], maxln, symp;/*fileptr in source, max source, last symbol*/
+static short lndotarr[0X2000],lnsymarr[0X2000],dotlnarr[0X6000];
+static int lnfilarr[0X6000], maxln, symp;/*fileptr in source, max source, last symbol*/
 
-int cmdfl,inpfl; /*command or input from file*/
-char *syssp;	/*pointer in stack for conversion in system calls*/
+static int cmdfl,inpfl; /*command or input from file*/
+static char *syssp;  /*pointer in stack for conversion in system calls*/
 
-typedef struct {int symvalue; char *symbol; int nextsym; int lnr; char symsect;}
-	tsymtab; /*symbol table stucture */
-tsymtab symtab[MAXSYMTAB];
+typedef struct {
+  int symvalue;
+  char* symbol;
+  int nextsym;
+  int lnr;
+  char symsect;
+} tsymtab; /*symbol table stucture */
+static tsymtab symtab[MAXSYMTAB];
 
-char tringfield[1600], stringfield[8000], errbuf[292],inbuf[2024],*inbpl,*inbpu;
-char  *datadm[7], datadarr[7][81], basename[CBUF];
-int datadp, /*pointer in datadarr */ symhash[32];  /* pointer in symbol table*/
+static char tringfield[1600], stringfield[8000];
+static char inbuf[2024],*inbpl,*inbpu;
+static char  *datadm[7], datadarr[7][81], basename[CBUF];
+static int datadp, /*pointer in datadarr */ symhash[32];  /* pointer in symbol table*/
 
-typedef struct {int startad; int lengte; int fstart; int flen; int align;}
-	segmenthead;
-segmenthead segmhead[8];
+typedef struct {
+  int startad;
+  int lengte;
+  int fstart;
+  int flen;
+  int align;
+} segmenthead;
+static segmenthead segmhead[8];
 typedef union {int ii; char *cp;} paramfield;
 typedef union {int ii; char cp[140];} sscanfield;
 
-FILE *prog, *L, *CMD, *INP, *LOG;
+static FILE *prog, *L, *CMD, *INP;
+#ifdef DEBUG
+static FILE *LOG;
+#endif
 
 /* forward decls */
 static int lcs(char *p, int s);
