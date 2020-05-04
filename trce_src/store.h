@@ -5,7 +5,7 @@
 typedef short word;
 
 void wstore(word x);
-void xstore(char *x);
+void xstore(char* x);
 void rapwstore(word w);
 
 #endif /* TRCE_SRC_STORE_H */

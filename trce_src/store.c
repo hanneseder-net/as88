@@ -28,14 +28,14 @@ void wstore(word x) {
 #endif
 }
 
-void xstore(char *x) {
+void xstore(char* x) {
 #ifdef LITTLE_ENDIAN
   *eapc = *x;
   *(eapc + 1) = *(x + 1);
 #else
   reg t;
 
-  t.w = *(word *)x;
+  t.w = *(word*)x;
   /*
    * XXX WATCH OUT HERE!!
    *
@@ -57,7 +57,7 @@ void rapwstore(word w) {
   *rapw = w;
 #else
   reg t;
-  char *ptr = (char *)rapw;
+  char* ptr = (char*)rapw;
 
   t.w = w;
   /*
