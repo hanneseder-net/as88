@@ -13,12 +13,12 @@
 #include	"comm0.h"
 #include	"comm1.h"
 
-char includfil[] = "#include", namar[2049], includnam[100];
-int inclutel = 0, includarr[65], includlen[65];
-char *bigdarr[] = { "align", "ascii", "asciz", "assert", "base", "byte", "bss",
+static char includfil[] = "#include", namar[2049];
+static int inclutel = 0, includarr[65], includlen[65];
+static char *bigdarr[] = { "align", "ascii", "asciz", "assert", "base", "byte", "bss",
 "comm", "data", "define", "extern", "file", "line", "list", "long", "nolist",
 "sect", "space", "symb", "symd", "text", "word", ""};
-char *bigaarr[] = { "aaa", "aad", "aam", "aas", "adc", "adcb", "add", "addb",
+static char *bigaarr[] = { "aaa", "aad", "aam", "aas", "adc", "adcb", "add", "addb",
 "ah", "al", "and", "andb", "ax", "bh", "bl", "bp", "bx", "call", "callf", "cbw",
 "ch", "cl", "clc", "cld", "cli", "cmc", "cmp", "cmpb", "cmps", "cmpsb", "cmpsw",
 "cs", "cseg", "cwd", "cx", "daa", "das", "dec", "decb", "dh", "di", "div",
@@ -36,11 +36,11 @@ char *bigaarr[] = { "aaa", "aad", "aam", "aas", "adc", "adcb", "add", "addb",
 "shrb", "si", "sp", "ss", "sseg", "stc", "std", "sti", "stos", "stosb", "stosw",
 "sub", "subb", "sys", "test", "testb", "wait", "xchg", "xchgb", "xlat", "xor",
 "xorb", ""};
-int teld, tela, ltaba[200], ltabd[25], tabnr, nxtabd[25], nxtaba[200];
-int htabd[33], htaba[33];
-char chdarr[128],chaarr[1024],tokenc[10],regel[256],*tptr,aord,*sptr;
+static int teld, tela, ltaba[200], ltabd[25], nxtabd[25], nxtaba[200];
+static int htabd[33], htaba[33];
+static char tokenc[10],regel[256],*tptr,*sptr;
 
-void maaktoken(int m, int n) {
+static void maaktoken(int m, int n) {
   int len,hsh;
   char *p;
   len = hsh = 0;
@@ -50,7 +50,7 @@ void maaktoken(int m, int n) {
   else  {nxtabd[n] = htabd[hsh]; htabd[hsh] = n; ltabd[n] = len;}
 }
 
-int getregel() {
+static int getregel() {
   int i,c;
   i = 0; while ((c=getc(inptr)) != '\n') {if (c==EOF) return(-1);
     if(c=='\r'){c = getc(inptr); if(c=='\n') ungetc(c,inptr); else break;}
@@ -62,7 +62,7 @@ int getregel() {
   return(i-1);
 }
 
-int zoektoken(){
+static int zoektoken(){
   int len, hsh, n;
   char t,*dptr, *tt, bk;
   t = '?'; len = hsh = n = 0; tt=tokenc;
