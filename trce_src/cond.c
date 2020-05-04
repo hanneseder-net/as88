@@ -291,6 +291,6 @@ void cc(void) {
       return;
 
     default:
-      panic("Invalid operator for lazy condition code");
+      panicf("Invalid operator for lazy condition code");
   }
 }

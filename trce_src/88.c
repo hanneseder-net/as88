@@ -43,7 +43,7 @@ loop:
   if (stopvlag) {
     dump();
   } else if (traceflag && !(--instrcount & 0x3fff)) {
-    sprintf(errbuf, "Telstop %3d", ((instrcount) >> 14) & 0Xff);
+    errprintf("Telstop %3d", ((instrcount) >> 14) & 0Xff);
     meldroutine();
     if (instrcount) {
       /* system("sleep 1"); winupdate();*/
@@ -380,7 +380,7 @@ bloop:
 		CS(t2); CSMEM(pcx,t); sp+=eop; LOOP;
     case 0xCB: if(traceflag) procdepth(-1); POP(t); POP(t2); CS(t2);
 		CSMEM(pcx,t); LOOP;
-    case 0xCC: if(traceflag) procdepth(1); panic("int 3 executed.");
+    case 0xCC: if(traceflag) procdepth(1); panicf("int 3 executed.");
 		interrupt(3); LOOP;
     case 0xCD: if(traceflag) procdepth(1); IMMED8Z; interrupt(eop); LOOP;
     case 0xCE: if(traceflag) procdepth(1); CC; if (ovf) interrupt(4); CC; LOOP;
@@ -524,7 +524,7 @@ bloop:
 	    case 0xAC:
 	    case 0xAD: while(cx) {rep(t); (cx)--;} LOOP;
 	    case 0xAF: while( (cx)-- ) {rep(t); CC; if (zerof != 0) LOOP;} LOOP;
-	    default: panic("REP followed by nonstring operator.");
+	    default: panicf("REP followed by nonstring operator.");
 	}
 
     case 0xF3: t = *pcx++ & mask;
@@ -548,7 +548,7 @@ bloop:
 	    case 0xAB:
 	    case 0xAC:
 	    case 0xAD: while( (cx)-- ) {rep(t);} LOOP;
-	    default: panic("REP followed by nonstring operator.");
+	    default: panicf("REP followed by nonstring operator.");
 	}
 
     case 0xF4: printf("Halt instruction executed.  End of run.\n"); 
@@ -585,7 +585,7 @@ bloop:
 		    dx= (l1>>16)&0177777;
 		    cf=(l1<65536 ? 0 : 1); ovf=cf; ccvalid=1; LOOP;
 	    case W06: if (dx<0)
-			panic("simulator can't handle dividends >=2**31");
+			panicf("simulator can't handle dividends >=2**31");
 			/* {printf("simulator can't handle dividends >=2**31\n");
 			    abort();}*/
 		    l1=(adr)dx; l1=(l1<<16)+(adr)ax; l2=(adr)eop;
@@ -625,9 +625,8 @@ bloop:
 	    case W07: spare(t);
 	}
 
-    default: 
-		sprintf(errbuf, "Error.  bad opcode %x \n", --*pcx);
-		panic(errbuf);
+    default:
+      panicf("Error.  bad opcode %x \n", --*pcx);
     }
 }
 

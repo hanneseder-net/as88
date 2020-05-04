@@ -1,7 +1,8 @@
 #ifndef TRCE_SRC_UTIL_H
 #define TRCE_SRC_UTIL_H
 
-extern char errbuf[];
+void errprintf(const char* format, ...);
+void panicf(const char* s, ...);
 
 int main_lib(int argc, char **argv);
 
@@ -12,7 +13,6 @@ void meldroutine(void);
 void spare(int t);
 void notim(int t);
 void interrupt(int t);
-void panic(char *s);
 void syscal(void);
 
 #endif /* TRCE_SRC_UTIL_H */

@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <fcntl.h>
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -467,14 +468,14 @@ static int getchbp(void) {
   int i;
   char *p;
   if(inbpl==inbpu) {wmv(11,24);inbpl = inbpu = inbuf;
-    if(traceflag && !(inpfl)){sprintf(errbuf,"Input expected"); erroutine();
+    if(traceflag && !(inpfl)){errprintf("Input expected"); erroutine();
 	p = inbuf; *p++ = '\n'; *p++ = '\0';
 	winupdate();wmv(11,24);}
     while((i= getc(INP)) !=EOF) { if(i=='\r') continue;
 	*inbpl++ =i; if(i=='\n') break;}
     if(i==EOF) {
 	if(inpfl>0) {fclose(INP); inpfl = 0; INP=stdin; return(getchbp());}
-	else if(inpfl) {sprintf(errbuf,"Second time end of input so exit");
+	else if(inpfl) {errprintf("Second time end of input so exit");
 		erroutine(); exit(0);}
 	else {fclose(stdin); fopen("/dev/tty","rb"); inpfl--; return(i);}
     }
@@ -518,7 +519,7 @@ void syscal(void) {
 		  /*winupdate();*/
 		}
 		else {if(traceflag && (pram[0].ii==2)){ retval = pram[2].ii;
-		  p = pram[1].cp; sprintf(errbuf,"%.55s",p); erroutine();
+		  p = pram[1].cp; errprintf("%.55s",p); erroutine();
 		  /*winupdate();*/
 		}
 		else retval = write(pram[0].ii,pram[1].cp,pram[2].ii);}
@@ -531,7 +532,7 @@ void syscal(void) {
    	case 0x06: /*close*/
 		pram[0].ii = spint();
 		if(traceflag && (pram[0].ii)==1) {
-		  sprintf(errbuf,"close call standard output cannot be traced");
+		  errprintf("close call standard output cannot be traced");
 		  erroutine(); retval = 1;
 		} else retval = close(pram[0].ii);
 		 returnax(retval); break;
@@ -548,8 +549,8 @@ void syscal(void) {
    	case 0x0b: /*exec*/
 		pram[0].cp = spadr();
   		if((prog = fopen(pram[0].cp,"rb")) == NULL) {
-		  sprintf(errbuf,"Interpreter 8088 cannot open %s",
-			pram[0].cp);erroutine();
+		  errprintf("Interpreter 8088 cannot open %s", pram[0].cp);
+      erroutine();
 		  returnax(-1);
 		} else {
 		  if(load(0, NULL)) returnax(-1);
@@ -602,14 +603,14 @@ void syscal(void) {
 				j++; i=0; break;
 			case 's': pram[j].cp = spadr(); i=0;j++;break;
 			case 'e': case 'E': case 'f': case 'F': case 'g':
-			  sprintf(errbuf,"Floats not implemented");erroutine();
+			  errprintf("Floats not implemented");erroutine();
 			default: i = 0; break;
 			}
 		      }
 		    }
 
 		}
- if(j>8) { sprintf(errbuf,"not more than 6 conversions in printf");erroutine();}
+ if(j>8) { errprintf("not more than 6 conversions in printf");erroutine();}
 	retval = (int) (sprintf(pram[0].cp,pram[1].cp,pram[2].ii,
 	    pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii));
 		returnax(retval); break;
@@ -648,7 +649,7 @@ void syscal(void) {
 			case '[': pram[j].cp = spadr(); j++; i=0;
 			  while((c=*p++) != ']') if(c < ' ') break; break;
 			case 'e': case 'E': case 'f': case 'F': case 'g':
-			  sprintf(errbuf,"Floats not implemented");erroutine();
+			  errprintf("Floats not implemented");erroutine();
 			default: i = 0; break;
 			}
 #ifdef DEBUG
@@ -658,7 +659,7 @@ fprintf(LOG,"%c c  %d j  %d i  %d ar[j]  %s pram %d string: %s\n",
 		      }
 		    } 
 		}
- if(j>8) { sprintf(errbuf,"not more than 6 conversions in sscanf");erroutine();}
+ if(j>8) { errprintf("not more than 6 conversions in sscanf");erroutine();}
 #ifdef DEBUG
 fprintf(LOG,"voor sscanf\n");
 #endif
@@ -709,14 +710,13 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
 				j++; i=0; break;
 			case 's': pram[j].cp = spadr(); i=0;j++;break;
 			case 'e': case 'E': case 'f': case 'F': case 'g':
-			  sprintf(errbuf,"Floats not implemented");erroutine();
+			  errprintf("Floats not implemented");erroutine();
 			default: i = 0; break;
 			}
 		      }
 		    }
 		}
- if(j>8) { sprintf(errbuf,"not more than 7 conversions in printf");erroutine();}
-	/*sprintf(errbuf,"pram %x in printf\n",pram[0].cp-m); erroutine();*/
+ if(j>8) { errprintf("not more than 7 conversions in printf");erroutine();}
 	if(traceflag) {retval = j; sprintf(tringfield+200,pram[0].cp,pram[1].ii,
 	    pram[2].ii,pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii);
 	  p = tringfield+200; while((j = *p++)) nextput(j); /*winupdate();*/}
@@ -724,7 +724,7 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
 	    pram[3].ii,pram[4].ii,pram[5].ii,pram[6].ii,pram[7].ii);
 	  fflush(stdout);}
 		returnax(retval); break;
-	default: sprintf(errbuf,"Unimplemented sys call %d",calnr);erroutine(); exit(1); break;
+	default: panicf("Unimplemented sys call %d", calnr); break;
   // case 0x07: /* wait */ break;
   // case 0x0c: /* cdir */ break;
   // case 0x0d: /* time */ break;
@@ -822,9 +822,11 @@ fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m
 }
 
 static void checkret(void) {
-  if(sp != prstckpos[prdepth]) {
-    sprintf(errbuf,"Return on suspicious stack pointer prdepth %d",
-		prdepth);erroutine(); if(traceflag) dump(); exit(1);
+  if (sp != prstckpos[prdepth]) {
+    errprintf("Return on suspicious stack pointer prdepth %d", prdepth);
+    erroutine();
+    if (traceflag) dump();
+    exit(1);
   }
 }
 
@@ -838,7 +840,7 @@ void procdepth(int s) {
 static void zetbp(short textdot) {
   int i;
   for (i=1;i<32;i++) if(!bparr[i].pcp) break;
-	if(i==32) {sprintf(errbuf,"break point table full");erroutine(); return;}
+	if(i==32) {errprintf("break point table full");erroutine(); return;}
   bparr[i].pcp = textdot; bparr[i].bprt = m[cs16+textdot];
   m[cs16+textdot] = 0xF0; return;
 }
@@ -846,7 +848,7 @@ static void zetbp(short textdot) {
 static void clearbp(short textdot) {
   int i;
   for (i=1;i<32;i++) if(bparr[i].pcp == textdot) break;
-	if(i==32) {sprintf(errbuf,"break point not found");erroutine(); return;}
+	if(i==32) {errprintf("break point not found");erroutine(); return;}
   bparr[i].pcp = 0; m[cs16+textdot] = bparr[i].bprt;
   bparr[i].bprt = m[0]; return;
 }
@@ -865,7 +867,7 @@ void breakpt(void) {
   int i,j;
   i = ((int)(PC))&0xffff; i--;
   for(j=0;j<32;j++) if(bparr[j].pcp == i) break;
-  if(j==32) {sprintf(errbuf,"Wrong breakpoint");erroutine(); exit(1);}
+  if(j==32) {errprintf("Wrong breakpoint");erroutine(); exit(1);}
   dumpt = bparr[j].bprt;
   dump();
 }
@@ -953,9 +955,11 @@ static void rdcmd(void) {
   stopvlag = 0;
   rdcline(c);
   if(d){adre=rdstrg(); if(adre==-1) {
-     /*sprintf(errbuf,"No match"); erroutine();*/ rdcmd(); return;}
+    rdcmd(); return;
+  }
 	if (symp == -1){
-     /*sprintf(errbuf,"No match"); erroutine();*/ rdcmd(); return;}
+    rdcmd(); return;
+  }
   } else if((c>='0')&&(c<='9')){ adre=rdadr();
             if(cmdchar == '!') cmdchar = (symtab[symp].symsect <3) ? 'x' : 'd';}
 	 else { adre=dotlnarr[(PC)-1]; cmdchar = c; if(c=='\n') c = '?'; }
@@ -971,13 +975,19 @@ static void rdcmd(void) {
 	case '+' : bprdepth = prdepth+1; break;
 	case '=' : bprdepth = prdepth; stopvlag = 1; break;
 	case '!' : nulbp(adre); break;
-	case 'g' : /*sprintf(errbuf,"g %d",adre); erroutine();*/nulbp(adre); break;
+	case 'g' : /* errprintf("g %d",adre); erroutine(); */ nulbp(adre); break;
 	case 0xc : 
 	case 'R' : refresh(); rdcmd();break;
-	case 'd' : if(symtab[symp].symsect > 2) dmpadr(adre); 
-			else {sprintf(errbuf,"Cannot dump this label");
-				erroutine();} dump(); break;
-	case 'b' : zetbp(lndotarr[adre]); rdcmd() ; break;
+  case 'd':
+    if (symtab[symp].symsect > 2) {
+      dmpadr(adre);
+     } else {
+      errprintf("Cannot dump this label");
+      erroutine();
+     }
+     dump();
+     break;
+  case 'b' : zetbp(lndotarr[adre]); rdcmd() ; break;
 	case 'c' : clearbp(lndotarr[adre]); rdcmd(); break;
 	case 'n' : nulbp(dotlnarr[lndotarr[dotlnarr[(PC-1)]+1]]); break;
 	case 'x' : case 'X': case '*': instrcount = adre; break;
@@ -1112,11 +1122,12 @@ static int getchcmd(void) {
 }
 
 void meldroutine(void) {
-  if(traceflag){
-   errbuf[11] = ' '; errbuf[12] = ' '; errbuf[13] = ' ';
-   wmv(10,24); printf("%s",errbuf); system("sleep 1");
-   wmv(10,78);printf("\n");fprintf(stderr,"\n");
-   sprintf(window[10]+22,"M %-55.55s",errbuf); winupdate();}
+  if(traceflag) {
+    errbuf[11] = ' '; errbuf[12] = ' '; errbuf[13] = ' ';
+    wmv(10,24); printf("%s",errbuf); system("sleep 1");
+    wmv(10,78);printf("\n"); fprintf(stderr,"\n");
+    sprintf(window[10]+22,"M %-55.55s",errbuf); winupdate();
+  }
   else fprintf(stderr,"%s\n",errbuf);
 }
 
@@ -1150,25 +1161,35 @@ static void erroutine(void) {
 }
 
 void spare(int t) {
-  sprintf(errbuf, "8086 undefined instruction %0X", t & 0xff);
+  errprintf("8086 undefined instruction %0X", t & 0xff);
   erroutine();
 }
 
 void notim(int t) {
-  sprintf(errbuf, "Instruction %0X not implemented", t & 0xff);
+  errprintf("Instruction %0X not implemented", t & 0xff);
   erroutine();
 }
 
 void interrupt(int t) {
-  sprintf(errbuf, "Interrupt %0X. Bad division?", t & 0xff);
+  errprintf("Interrupt %0X. Bad division?", t & 0xff);
   erroutine();
 }
 
-void panic(char *s) {
-  sprintf(errbuf, "%s", s);
+void panicf(const char* s, ...) {
+  va_list argp;
+  va_start(argp, s);
+  vsprintf(errbuf, s, argp);
+  va_end(argp);
   erroutine();
   system("sleep 5");
   exit(1);
+}
+
+void errprintf(const char* format, ...) {
+  va_list argp;
+  va_start(argp, format);
+  vsprintf(errbuf, format, argp);
+  va_end(argp);
 }
 
 static void bitmapdump(int b, int h, char *buff) {
