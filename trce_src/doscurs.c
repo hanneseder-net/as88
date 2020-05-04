@@ -10,9 +10,7 @@ static void clearscreen() { printf("\e[2J"); }
 
 void wmv(int y, int x) { printf("\e[%d;%dH", y + 1, x + 1); }
 
-void wwrite(int y, int x, char* s) {
-  strncpy(&window[y][x], s, strlen(s));
-}
+void wwrite(int y, int x, char* s) { strncpy(&window[y][x], s, strlen(s)); }
 
 void wfill(int y, int x, int h, int w, char c) {
   for (int j = y; j < y + h; ++j) {
@@ -53,8 +51,8 @@ void winfirst(void) {
 
 void immain(void) {
   int b = 1;
-  char *p = window[0] - 1;
-  char *q = nwindow[0] - 1;
+  char* p = window[0] - 1;
+  char* q = nwindow[0] - 1;
   for (int i = 0; i < 24; i++) {
     for (int j = 0; j < 81; j++)
       if ((*(++p) != *(++q)) ||
