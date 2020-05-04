@@ -2,6 +2,7 @@
 #define TRCE_SRC_UTIL_H
 
 void errprintf(const char* format, ...);
+void errprintf_report(const char* format, ...);
 void panicf(const char* s, ...);
 
 int main_lib(int argc, char **argv);
