@@ -204,7 +204,6 @@ extern char m[MEMBYTES];
 typedef	union { unchr rc[16]; word rw[8];} REG;
 extern REG r;
 extern int traceflag, instrcount, codelength;
-extern char errbuf[];
 
 void interp(void);
 

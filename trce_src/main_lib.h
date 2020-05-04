@@ -1,6 +1,8 @@
 #ifndef TRCE_SRC_UTIL_H
 #define TRCE_SRC_UTIL_H
 
+extern char errbuf[];
+
 int main_lib(int argc, char **argv);
 
 void dump(void);
