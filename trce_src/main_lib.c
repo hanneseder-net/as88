@@ -114,15 +114,14 @@ static int getint(FILE *f) {
   return(k);
 }
 
-static int getsh(FILE *f) {
-  int i,j,k;
-  i = getc(f);
-  j = getc(f); k = 0;
+static int getsh(FILE* f) {
+  int i = getc(f);
+  int j = getc(f);
   lfptr += 2;
-  k |= (i&255); k |= ((j&255)<<8);
-  return(k);
+  return ((i & 255) | ((j & 255) << 8));
 }
 
+// TODO(heder): This is an rather poor hash fuction for strings. Fix it.
 static int hashstring(char *p) {
   int h;
   h = *p - 'A'; h &= 31;
