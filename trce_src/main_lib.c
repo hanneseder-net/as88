@@ -1181,10 +1181,10 @@ void interrupt(int t) {
   errprintf_report("Interrupt %0X. Bad division?", t & 0xff);
 }
 
-void panicf(const char* s, ...) {
+void panicf(const char* format, ...) {
   va_list argp;
-  va_start(argp, s);
-  vsprintf(errbuf, s, argp);
+  va_start(argp, format);
+  vsnprintf(errbuf, sizeof(errbuf), format, argp);
   va_end(argp);
   erroutine();
   system("sleep 5");
@@ -1194,14 +1194,14 @@ void panicf(const char* s, ...) {
 void errprintf(const char* format, ...) {
   va_list argp;
   va_start(argp, format);
-  vsprintf(errbuf, format, argp);
+  vsnprintf(errbuf, sizeof(errbuf), format, argp);
   va_end(argp);
 }
 
 void errprintf_report(const char* format, ...) {
   va_list argp;
   va_start(argp, format);
-  vsprintf(errbuf, format, argp);
+  vsnprintf(errbuf, sizeof(errbuf), format, argp);
   va_end(argp);
 
   erroutine();

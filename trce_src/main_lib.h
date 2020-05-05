@@ -3,7 +3,7 @@
 
 void errprintf(const char* format, ...);
 void errprintf_report(const char* format, ...);
-void panicf(const char* s, ...);
+void panicf(const char* format, ...);
 
 int main_lib(int argc, char **argv);
 
