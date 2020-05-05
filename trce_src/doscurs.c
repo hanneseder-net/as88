@@ -10,7 +10,15 @@ static void clearscreen() { printf("\e[2J"); }
 
 void wmv(int y, int x) { printf("\e[%d;%dH", y + 1, x + 1); }
 
-void wwrite(int y, int x, char* s) { strncpy(&window[y][x], s, strlen(s)); }
+void wnwrite(int y, int x, const char* s, size_t n) {
+  // TODO(heder): Add clipping, i.e. don't write outside of the window.
+  strncpy(&window[y][x], s, n);
+}
+
+void wwrite(int y, int x, const char* s) {
+  wnwrite(y, x, s, strlen(s));
+}
+
 
 void wfill(int y, int x, int h, int w, char c) {
   for (int j = y; j < y + h; ++j) {

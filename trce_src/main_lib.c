@@ -40,12 +40,15 @@ static char fnameL[CBUF], fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF
 static char nulsymbol[]="NULLSYMBOL";
 static time_t t1,t2;
 static struct stat astat[2];
- 
-static char cmdchar, cmdline[30],outveld[4][59];
+
+#define OUTBUFFER_SIZE 4
+#define OUTBUFFER_LEN 58
+static char outbuffer[OUTBUFFER_SIZE][OUTBUFFER_LEN];
+
+static char cmdchar, cmdline[30];
 static unchr prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
 static int stckprdepth[20], prstckpos[20];
 static int nsymtab, maxsp;
-static int puthp; /*horizontale en verticale putpositie*/
 
 typedef struct { short pcp; unchr bprt; } bprveld;
 static bprveld bparr[32];  /* break point fields */
@@ -236,7 +239,6 @@ static int load(int argc, char **argv) {
     maxln = i;
     rewind(L);
     for (i = 0; i < 7; i++) datadm[i] = NULL;
-    puthp = 0;
   }
   pcx = p = m; ss = ds = es = 0; CS(0);
   for(i=0;i<7;i++) {for(j=0;j<80;j++) datadarr[i][j] = ' '; datadarr[i][80] = '\0';}
@@ -1039,8 +1041,13 @@ fprintf(LOG,"Tot hier dotlinarr %d PC %d\n",dotlnarr[(PC)-1],(PC)-1);
  window[6][18] = (zerof) ? 'z' : '-';
  window[6][20] = (cf) ? 'c' : '-';
  for(j=0;j<9;j++){
-	fseek(L,(int)lnfilarr[i+j-6],0); p=window[j]+32;gtabstr(48,p,L);}
- for(i=0;i<4;i++) for(j=0;j<58;j++) window[15-i][j+22] = outveld[i][j];
+	 fseek(L,(int)lnfilarr[i+j-6],0);
+   p=window[j]+32;
+   gtabstr(48,p,L);
+ }
+ for (i = 0; i < OUTBUFFER_SIZE; i++) {
+   wnwrite(15 - i, 22, outbuffer[i], sizeof(outbuffer[i]));
+ }
  for(i=0;i<7;i++) sprintf(window[17+i],"%s",datadarr[i]);
   l = prdepth; j= (maxsp-sp > 18) ? sp : maxsp-18; j &= 0xffff; p = m+j+(ss<<4);
 #ifdef DEBUG
@@ -1088,19 +1095,35 @@ static void gtabstr(int i, char *a, FILE *f) {
   
 }
 
-static void newgpfield(void) {
-  int i,j;
-  for(i=3;i>0;i--) for(j=0;j<58;j++) outveld[i][j] = outveld[i-1][j];
-  for(j=0;j<58;j++) outveld[0][j] = ' '; 
+static void outbuffer_scroll(void) {
+  for (int i = OUTBUFFER_SIZE - 1; i > 0; i--) {
+    memcpy(outbuffer[i], outbuffer[i - 1], sizeof(outbuffer[i]));
+  }
+  memset(outbuffer[0], ' ', sizeof(outbuffer[0]));
 }
 
 static void nextput(int c) {
-  if(c=='\n') {nextput('\\'); nextput('n'); puthp = -1; return;}
-  if(puthp>57) puthp = -1; 
-    if(puthp < 0) { newgpfield(); puthp = 0;
-	nextput('>'); nextput(' ');}
-  if(c<' ') {outveld[0][puthp++] = '^'; c += 64;}
-  if(c!='\n') outveld[0][puthp++] = c;
+  static int puthp = 0; /*horizontale en verticale putpositie*/
+
+  if (c == '\n') {
+    nextput('\\');
+    nextput('n');
+    puthp = -1;
+    return;
+  }
+  if (puthp > (int)sizeof(outbuffer[0]) - 1) puthp = -1;
+  if (puthp < 0) {
+    outbuffer_scroll();
+    puthp = 0;
+    nextput('>');
+    nextput(' ');
+  }
+  if (c < ' ') {
+    outbuffer[0][puthp++] = '^';
+    nextput(c + 64);
+    return;
+  }
+  outbuffer[0][puthp++] = c;
 }
 
 static int getchcmd(void) {
