@@ -979,7 +979,7 @@ static void rdcmd(void) {
 	case '+' : bprdepth = prdepth+1; break;
 	case '=' : bprdepth = prdepth; stopvlag = 1; break;
 	case '!' : nulbp(adre); break;
-	case 'g' : /* errprintf("g %d",adre); erroutine(); */ nulbp(adre); break;
+	case 'g' : /* errprintf_report("g %d",adre); */ nulbp(adre); break;
 	case 0xc : 
 	case 'R' : refresh(); rdcmd();break;
   case 'd':
