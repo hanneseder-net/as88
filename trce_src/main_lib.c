@@ -1212,15 +1212,16 @@ void errprintf_report(const char* format, ...) {
 int main_lib(int argc, char **argv) {
   if (argc < 2) {
     fprintf(stderr, "No .88 load file? Usage t88 loadfile\n");
-    exit(1);
+    return 1;
   }
   sp = 0; ss = 0; pcx = m; cs = 0;
   argc--; argv++;
   if (!argc) {
     fprintf(stderr, "No load file? argc %d %s\n", argc, argv[0]);
-    exit(1);
+    return 1;
   }
-  if (load(argc, argv)) exit(1);
+  int load_res = load(argc, argv);
+  if (load_res) return load_res;
   fclose(prog);
   interp();
   return 0;
