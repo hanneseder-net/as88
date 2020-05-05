@@ -1132,7 +1132,6 @@ static int getchcmd(void) {
 
 void meldroutine(void) {
   if(traceflag) {
-    errbuf[11] = ' '; errbuf[12] = ' '; errbuf[13] = ' ';
     wmv(10,24); printf("%s",errbuf); system("sleep 1");
     wmv(10,78);printf("\n"); fprintf(stderr,"\n");
     sprintf(window[10]+22,"M %-55.55s",errbuf); winupdate();
