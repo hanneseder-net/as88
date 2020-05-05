@@ -434,20 +434,16 @@ fprintf(LOG, "lcs symbool %d buffer %.15s\n",s,p); fflush(LOG);
   } return(-1);
 }
 
-static char* spadr(void) {
-  int i;
-  i = 0;
+static int spint(void) {
+  int i = 0;
   i |= (*syssp++) & 0xff;
-  i |= ((*syssp++)<<8) & 0xffff;
-  return(m+i+(ds<<4));
+  i |= ((*syssp++) << 8) & 0xffff;
+  return (i);
 }
 
-static int spint(void) {
-  int i;
-  i = 0;
-  i |= (*syssp++) & 255;
-  i |= (*syssp++)<<8;
-  return(i & 0xffff);
+static char* spadr(void) {
+  int i = spint();
+  return (m + i + (ds << 4));
 }
 
 static void returnax(int retval) {
