@@ -1145,21 +1145,25 @@ void meldroutine(void) {
   }
 }
 
+static void sanitize_errbuf() {
+  int aa = 0;
+  char *p = errbuf;
+  for (int i = 0; i < (int)sizeof(errbuf) - 1; i++) {
+    if (*p <= '\n') {
+      *p = ' ';
+    } else if (*p == '\0' || *p == '\n') {
+      aa = 1;
+    } else if (aa) {
+      *p = ' ';
+    }
+    ++p;
+  }
+  *p = '\0';
+}
+
 static void erroutine(void) {
-  char *p;
-  int i, aa;
   if (traceflag) {
-    p = errbuf;
-    aa = 0;
-    for (i = 0; i < 55; i++)
-      if (*p++ <= '\n') {
-        p--;
-        *p++ = ' ';
-      } else if (*p == '\0' || *p == '\n')
-        aa++;
-      else if (aa)
-        *p++ = ' ';
-    *p = '\0';
+    sanitize_errbuf();
     if (errflag) system("sleep 1");
     wmv(10, 24);
     printf("%s", errbuf);
