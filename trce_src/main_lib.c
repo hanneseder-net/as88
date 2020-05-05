@@ -1131,12 +1131,18 @@ static int getchcmd(void) {
 }
 
 void meldroutine(void) {
-  if(traceflag) {
-    wmv(10,24); printf("%s",errbuf); system("sleep 1");
-    wmv(10,78);printf("\n"); fprintf(stderr,"\n");
-    sprintf(window[10]+22,"M %-55.55s",errbuf); winupdate();
+  if (traceflag) {
+    wmv(10, 24);
+    printf("%s", errbuf);
+    system("sleep 1");
+    wmv(10, 78);
+    printf("\n");
+    fprintf(stderr, "\n");
+    wprintf(10, 22, "M %-55.55s", errbuf);
+    winupdate();
+  } else {
+    fprintf(stderr, "%s\n", errbuf);
   }
-  else fprintf(stderr,"%s\n",errbuf);
 }
 
 static void erroutine(void) {
@@ -1157,10 +1163,10 @@ static void erroutine(void) {
     if (errflag) system("sleep 1");
     wmv(10, 24);
     printf("%s", errbuf);
-      wmv(10, 78);
+    wmv(10, 78);
     printf("\n");
     fprintf(stderr, "");
-    sprintf(window[10] + 22, "E %-55.55s", errbuf);
+    wprintf(10, 22, "M %-55.55s", errbuf);
     winupdate();
     errflag = 1;
   } else {
