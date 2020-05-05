@@ -986,55 +986,53 @@ static void rdcmd(void) {
 }
 
 static void winupdate(void) {
- int i,j,k,l; char *p,*q;
- sprintf(window[0]+4,"%02x",cs&0Xffff);
- sprintf(window[0]+18,"%03x",ds&0Xffff);
- sprintf(window[1]+3,"%02x",ah);
- sprintf(window[1]+9,"%02x",al);
- sprintf(window[1]+15,"%6d",ax);
- sprintf(window[2]+3,"%02x",bh);
- sprintf(window[2]+9,"%02x",bl);
- sprintf(window[2]+15,"%6d",bx);
- sprintf(window[3]+3,"%02x",ch);
- sprintf(window[3]+9,"%02x",cl);
- sprintf(window[3]+15,"%6d",cx);
- sprintf(window[4]+3,"%02x",dh);
- sprintf(window[4]+9,"%02x",dl);
- sprintf(window[4]+15,"%6d",dx);
- sprintf(window[5]+4,"%04x",sp&0Xffff);
- sprintf(window[6]+4,"%04x",bp&0Xffff);
- sprintf(window[7]+4,"%04x",si&0Xffff);
- sprintf(window[8]+4,"%04x",di&0Xffff);
- sprintf(window[7]+13,"%04lx:PC",(PC)-1);
-/* Note: (PC)-1. The next instruction initial byte is fetched before the dump*/
- sprintf(window[8]+10,"           ");
-#ifdef DEBUG
-/*fprintf(stderr,"Tot hier dotlinarr %d PC %d\n",dotlnarr[(PC)-1],(PC)-1);*/
-fprintf(LOG,"Tot hier dotlinarr %d PC %d\n",dotlnarr[(PC)-1],(PC)-1);
-#endif
-  i = dotlnarr[(PC)-1]; j = lnsymarr[i];
-  if(j>nsymtab-3) {
-	fprintf(stderr,"\nNo BSS or no head label?\n");
-#ifdef DEBUG
-	fprintf(LOG,"Warning lnsymarr %d nsymtab %d entry %d\nNo BSS or no head label?\n",j,nsymtab-3,i);
-#endif
-	system("sleep 2"); refresh(); /*exit(1);*/
+  int i,j,k,l; char *p,*q;
+  wprintf(0, 4, "%02x", cs & 0Xffff);
+  wprintf(0, 18, "%03x", ds & 0Xffff);
+  wprintf(1, 3, "%02x", ah);
+  wprintf(1, 9, "%02x", al);
+  wprintf(1, 15, "%6d", ax);
+  wprintf(2, 3, "%02x", bh);
+  wprintf(2, 9, "%02x", bl);
+  wprintf(2, 15, "%6d", bx);
+  wprintf(3, 3, "%02x", ch);
+  wprintf(3, 9, "%02x", cl);
+  wprintf(3, 15, "%6d", cx);
+  wprintf(4, 3, "%02x", dh);
+  wprintf(4, 9, "%02x", dl);
+  wprintf(4, 15, "%6d", dx);
+  wprintf(5, 4, "%04x", sp & 0Xffff);
+  wprintf(6, 4, "%04x", bp & 0Xffff);
+  wprintf(7, 4, "%04x", si & 0Xffff);
+  wprintf(8, 4, "%04x", di & 0Xffff);
+  wprintf(7, 13, "%04lx:PC", (PC)-1);
+  /* Note: (PC)-1. The next instruction initial byte is fetched before the
+   * dump*/
+  wprintf(8, 10,"           ");
+  i = dotlnarr[(PC)-1];
+  j = lnsymarr[i];
+  if (j > nsymtab - 3) {
+    fprintf(stderr, "\nNo BSS or no head label?\n");
+    system("sleep 2");
+    refresh(); /*exit(1);*/
   }
- sprintf(window[8]+10,"%s+%1d",symtab[j].symbol,i-symtab[j].lnr);
- window[6][12] = (ovf) ? 'v' : '-';
- window[6][14] = (dirf) ? '<' : '>';
- window[6][16] = (signf) ? 'n' : 'p';
- window[6][18] = (zerof) ? 'z' : '-';
- window[6][20] = (cf) ? 'c' : '-';
- for(j=0;j<9;j++){
-	 fseek(L,(int)lnfilarr[i+j-6],0);
-   p=window[j]+32;
-   gtabstr(48,p,L);
- }
- for (i = 0; i < OUTBUFFER_SIZE; i++) {
-   wnwrite(15 - i, 22, outbuffer[i], sizeof(outbuffer[i]));
- }
- for(i=0;i<7;i++) sprintf(window[17+i],"%s",datadarr[i]);
+  wprintf(8, 10, "%s+%1d", symtab[j].symbol, i - symtab[j].lnr);
+  window[6][12] = (ovf) ? 'v' : '-';
+  window[6][14] = (dirf) ? '<' : '>';
+  window[6][16] = (signf) ? 'n' : 'p';
+  window[6][18] = (zerof) ? 'z' : '-';
+  window[6][20] = (cf) ? 'c' : '-';
+  for (j = 0; j < 9; j++) {
+    fseek(L, (int)lnfilarr[i + j - 6], 0);
+    p = window[j] + 32;
+    gtabstr(48, p, L);
+  }
+  for (i = 0; i < OUTBUFFER_SIZE; i++) {
+    wnwrite(15 - i, 22, outbuffer[i], sizeof(outbuffer[i]));
+  }
+  for (i = 0; i < 7; i++) {
+    wprintf(17 + i, 0, "%s", datadarr[i]);
+  }
   l = prdepth; j= (maxsp-sp > 18) ? sp : maxsp-18; j &= 0xffff; p = m+j+(ss<<4);
 #ifdef DEBUG
   fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x j %d\n",maxsp,sp,bp,sp,bp,j);fflush (LOG);

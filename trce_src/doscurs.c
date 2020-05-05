@@ -1,5 +1,6 @@
 #include "doscurs.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -19,6 +20,13 @@ void wwrite(int y, int x, const char* s) {
   wnwrite(y, x, s, strlen(s));
 }
 
+void wprintf(int y, int x, const char* format, ...) {
+  va_list argp;
+  va_start(argp, format);
+  // TODO(heder): Add clipping.
+  vsprintf(&window[y][x], format, argp);
+  va_end(argp);
+}
 
 void wfill(int y, int x, int h, int w, char c) {
   for (int j = y; j < y + h; ++j) {
