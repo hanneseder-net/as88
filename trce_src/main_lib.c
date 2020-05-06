@@ -96,6 +96,7 @@ static void nextput(int c);
 static void rdcmd(void);
 static void relocate(int n);
 static void winupdate(void);
+static char* remove_ext(char* dest, char* path);
 static void copy_args_onto_stack(int argc, char** argv);
 
 static int getint(FILE *f) {
@@ -122,35 +123,9 @@ static int hashstring(char *p) {
   return(h);
 }
 
-static char* remove_ext(char* dest, char* path) {
-  strcpy(dest, path);
-  char* last_ext = strrchr(dest, '.');
-  char* last_path = strrchr(dest, '/');
-  if (last_ext && (!last_path || last_ext > last_path)) {
-    *last_ext = '\0';
-  }
-  return dest;
-}
-
-// TOOD(heder): Use a proper testing framework.
-static void TEST_remove_ext() {
-  char basename[100];
-  assert(strcmp(remove_ext(basename, "hello.txt"), "hello") == 0);
-  assert(strcmp(remove_ext(basename, "hello"), "hello") == 0);
-  assert(strcmp(remove_ext(basename, "/home/hello.txt"), "/home/hello") == 0);
-  assert(strcmp(remove_ext(basename, "/usr/bin"), "/usr/bin") == 0);
-  assert(strcmp(remove_ext(basename, "../hello"), "../hello") == 0);
-}
-
-static void TEST_ALL(void) {
-  TEST_remove_ext();
-}
-
 static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p;
-
-  TEST_ALL();
 
   memset(inbuf, '\0', sizeof(inbuf));
   memset(m, '\0', sizeof(m));
@@ -1245,7 +1220,33 @@ void errprintf_report(const char* format, ...) {
   erroutine();
 }
 
+static char* remove_ext(char* dest, char* path) {
+  strcpy(dest, path);
+  char* last_ext = strrchr(dest, '.');
+  char* last_path = strrchr(dest, '/');
+  if (last_ext && (!last_path || last_ext > last_path)) {
+    *last_ext = '\0';
+  }
+  return dest;
+}
+
+// TOOD(heder): Use a proper testing framework.
+static void TEST_remove_ext() {
+  char basename[100];
+  assert(strcmp(remove_ext(basename, "hello.txt"), "hello") == 0);
+  assert(strcmp(remove_ext(basename, "hello"), "hello") == 0);
+  assert(strcmp(remove_ext(basename, "/home/hello.txt"), "/home/hello") == 0);
+  assert(strcmp(remove_ext(basename, "/usr/bin"), "/usr/bin") == 0);
+  assert(strcmp(remove_ext(basename, "../hello"), "../hello") == 0);
+}
+
+static void TEST_ALL(void) {
+  TEST_remove_ext();
+}
+
 int main_lib(int argc, char **argv) {
+  TEST_ALL();
+
   if (argc < 2) {
     fprintf(stderr, "No .88 load file? Usage t88 loadfile\n");
     return 1;
