@@ -321,9 +321,16 @@ fprintf(LOG,"i %d j %d nextsym %d symval %d symsect %o\n",i,j,
 	  if((symtab[ii].symsect==2) && (symtab[ii].lnr == i))lnsymarr[i] = ii;}
     }
   for(i=0;i<outrelo;i++) relocate(i);
-  if (traceflag) { p = inbuf;
-    for(i=0;i<1024;i++) *p++ = '\0'; for(i=1;i<27;i++) fprintf(stderr,"\n");
-    winfirst(); inbpl=inbpu=inbuf; nextput('>'); nextput(' ');} else INP=stdin;
+  if (traceflag) {
+    memset(inbuf, '\0', sizeof(inbuf));
+    for (i = 1; i < 27; i++) fprintf(stderr, "\n");
+    winfirst();
+    inbpl = inbpu = inbuf;
+    nextput('>');
+    nextput(' ');
+  } else {
+    INP = stdin;
+  }
 #ifdef DEBUG
   logprint(); 
 	fprintf(LOG,"argc %d  ",argc); for(i=0; i<argc;i++) fprintf(LOG,"%s ",
