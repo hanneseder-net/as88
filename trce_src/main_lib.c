@@ -1064,17 +1064,23 @@ static void winupdate(void) {
     j += 2;
   }
 
-  l = (prdepth>2)? prdepth-2 : 1;
-  for(i=12;i>9;i--) {
-  if(l>(int)prdepth) sprintf(window[i],"                   ");
-  else { j = stckprdepth[l]; k = lnsymarr[j]; 
-	sprintf(window[i],"%1d <= %-8s + %3d",l,symtab[k].symbol,
-		j - symtab[k].lnr);
-	} l++;
+  l = (prdepth > 2) ? prdepth - 2 : 1;
+  for (i = 12; i > 9; i--) {
+    if (l > (int)prdepth) {
+      wprintf(i, 0, "                   ");
+    } else {
+      j = stckprdepth[l];
+      k = lnsymarr[j];
+      wprintf(i, 0, "%1d <= %-8s + %3d", l, symtab[k].symbol,
+              j - symtab[k].lnr);
     }
-    p = inbuf; q = window[11]+22; *q++ = 'I'; *q++ = ' ';
-    while (p<inbpu-85) p += 55;
-    while((j = (int)(*p)) != '\n'){ if(*p =='\0') break;
+    l++;
+  }
+
+  wprintf(11, 22, "I ");
+  p = inbuf; q = window[11]+24;
+  while (p<inbpu-85) p += 55;
+  while((j = (int)(*p)) != '\n'){ if(*p =='\0') break;
 	if((q >= window[11]+75) && (q<window[12])) {*q++ = ' '; *q++ = ' ';
 		*q++ = ' '; q = window[12]+24; window[12][22] = 'I';}
 	if(p == inbpu) { *q++ = '-'; *q++ = '>';}
