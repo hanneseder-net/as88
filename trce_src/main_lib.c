@@ -96,6 +96,7 @@ static void nextput(int c);
 static void rdcmd(void);
 static void relocate(int n);
 static void winupdate(void);
+static void copy_args_onto_stack(int argc, char** argv);
 
 static int getint(FILE *f) {
   int i,j,k;
@@ -147,7 +148,7 @@ static void TEST_ALL(void) {
 
 static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
-  char *p,*p1,*p2;
+  char *p;
 
   TEST_ALL();
 
@@ -331,6 +332,11 @@ fprintf(LOG,"i %d j %d nextsym %d symval %d symsect %o\n",i,j,
   } else {
     INP = stdin;
   }
+  copy_args_onto_stack(argc, argv);
+  return(0);
+}
+
+static void copy_args_onto_stack(int argc, char** argv) {
 #ifdef DEBUG
   logprint(); 
 	fprintf(LOG,"argc %d  ",argc); for(i=0; i<argc;i++) fprintf(LOG,"%s ",
@@ -338,16 +344,32 @@ fprintf(LOG,"i %d j %d nextsym %d symval %d symsect %o\n",i,j,
   fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x\n",maxsp,sp,bp,sp,bp); fflush (LOG);
   fflush (LOG);
 #endif
-  argv++; argc--; if(argc){ii=argc+4; for(i=0;i<argc;i++) ii += strlen(argv[i]);
-    ii &= 0Xffe; maxsp -= ii; k = maxsp+2; p2 = m+k+(ss<<4);p1 = p2-4-(argc<<1);
-    bp = sp = maxsp - 2 - (argc<<1); *p1++ = argc&255; *p1++ = (argc>>8)&255;
-    for(i=0;i<argc;i++) {*p1++ = k&255; *p1++ = (k>>8)&255; j=strlen(argv[i])+1;
-      strcpy(p2,argv[i]); p2 += j; k += j;}
+  argv++;
+  argc--;
+  if (argc) {
+    int ii = argc + 4;
+    for (int i = 0; i < argc; i++) ii += strlen(argv[i]);
+    ii &= 0Xffe;
+    maxsp -= ii;
+    int k = maxsp + 2;
+    char* p2 = m + k + (ss << 4);
+    char* p1 = p2 - 4 - (argc << 1);
+    bp = sp = maxsp - 2 - (argc << 1);
+    *p1++ = argc & 255;
+    *p1++ = (argc >> 8) & 255;
+    for (int i = 0; i < argc; i++) {
+      *p1++ = k & 255;
+      *p1++ = (k >> 8) & 255;
+      int j = strlen(argv[i]) + 1;
+      strcpy(p2, argv[i]);
+      p2 += j;
+      k += j;
+    }
+  }
 #ifdef DEBUG
   fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x\n",maxsp,sp,bp,sp,bp); fflush (LOG);
 #endif
-  } return(0);
-} 
+}
 
 #ifdef DEBUG
 logprint(){
