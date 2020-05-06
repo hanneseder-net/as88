@@ -1037,16 +1037,32 @@ static void winupdate(void) {
   for (i = 0; i < 7; i++) {
     wprintf(17 + i, 0, "%s", datadarr[i]);
   }
+
+  // Print stack.
   l = prdepth; j= (maxsp-sp > 18) ? sp : maxsp-18; j &= 0xffff; p = m+j+(ss<<4);
 #ifdef DEBUG
   fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x j %d\n",maxsp,sp,bp,sp,bp,j);fflush (LOG);
 #endif
- for(i=0;i<9;i++) { if(j < sp) {p += 2; sprintf(window[i]+23,"      ");}
-    else {k = *p++ & 255; k |= ((*p++ & 255) << 8); 
-	if(j==sp) sprintf(window[i]+23,"=>%04x",k);
-	else sprintf(window[i]+23,"  %04x",k); 
-	if(j==prstckpos[l]) {window[i][23] = (char)(l+48); l--;}}
-    j+= 2;}
+  for (i = 0; i < 9; i++) {
+    if (j < sp) {
+      p += 2;
+      wprintf(i, 23, "      ");
+    } else {
+      // TODO(heder): Use a function to read a short from the VM.
+      k = *p++ & 255;
+      k |= ((*p++ & 255) << 8);
+      if (j == sp) {
+        wprintf(i, 23, "=>%04x", k);
+      } else {
+        wprintf(i, 23, "  %04x", k);
+      }
+      if (j == prstckpos[l]) {
+        wprintf(i, 23, "%c", (char)(l + 48));
+        l--;
+      }
+    }
+    j += 2;
+  }
 
   l = (prdepth>2)? prdepth-2 : 1;
   for(i=12;i>9;i--) {
