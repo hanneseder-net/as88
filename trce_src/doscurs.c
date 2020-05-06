@@ -67,12 +67,11 @@ void winfirst(void) {
 
 void immain(void) {
   int b = 1;
-  char* p = window[0] - 1;
-  char* q = nwindow[0] - 1;
+  char* p = window[0];
+  char* q = nwindow[0];
   for (int i = 0; i < 24; i++) {
     for (int j = 0; j < 81; j++)
-      if ((*(++p) != *(++q)) ||
-          (j != 80 && p < window[13] && p > window[10] + 22)) {
+      if ((*p != *q) || (j != 80 && p < window[13] && p > window[10] + 22)) {
         *q = *p;
         if (b) wmv(i, j);
         putchar(*p);
@@ -80,6 +79,8 @@ void immain(void) {
       } else {
         b = 1;
       }
+    ++p;
+    ++q;
   }
 }
 
