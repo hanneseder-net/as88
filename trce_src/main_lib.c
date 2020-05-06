@@ -1078,22 +1078,39 @@ static void winupdate(void) {
   }
 
   wprintf(11, 22, "I ");
-  p = inbuf; q = window[11]+24;
-  while (p<inbpu-85) p += 55;
-  while((j = (int)(*p)) != '\n'){ if(*p =='\0') break;
-	if((q >= window[11]+75) && (q<window[12])) {*q++ = ' '; *q++ = ' ';
-		*q++ = ' '; q = window[12]+24; window[12][22] = 'I';}
-	if(p == inbpu) { *q++ = '-'; *q++ = '>';}
-	if(j==0 || q>window[12]+75) break; if(j<' ') {*q++ = '^'; j += 64;} *q++ = j;
-        p++;
+  p = inbuf;
+  q = window[11] + 24;
+  while (p < inbpu - 85) p += 55;
+  while ((j = (int)(*p)) != '\n') {
+    if(*p =='\0') break;
+    if ((q >= window[11] + 75) && (q < window[12])) {
+      *q++ = ' '; *q++ = ' ';
+		  *q++ = ' '; q = window[12]+24; window[12][22] = 'I';
     }
-    if(p == inbpu && *p == '\n' ) { *q++ = '-'; *q++ = '>';}
-    if((inbpu != inbpl) && (*p == '\n')) {*q++ = '\\'; *q++ = 'n';}
-    if(*(inbpu-1)== '\n') {*q++ = '\\'; *q++ = 'n'; *q++ = '-'; *q++ = '>';}
-    while(q<window[12]-1) *q++ = ' ';
-    if(q>window[12]) while(q<window[13]-1) *q++ = ' ';
- p = window[0]-1; for(i=0;i<1944;i++) if(!(*(++p))) *p = ' ';
- immain(); wmv(15,0);
+    if (p == inbpu) {
+      *q++ = '-'; *q++ = '>';
+    }
+    if (j == 0 || q > window[12] + 75) break;
+    if (j < ' ') {
+      *q++ = '^'; j += 64;
+    }
+    *q++ = j;
+    p++;
+  }
+  if (p == inbpu && *p == '\n') {
+    *q++ = '-'; *q++ = '>';
+  }
+  if ((inbpu != inbpl) && (*p == '\n')) {
+    *q++ = '\\'; *q++ = 'n';
+  }
+  if (*(inbpu - 1) == '\n') {
+    *q++ = '\\'; *q++ = 'n'; *q++ = '-'; *q++ = '>';
+  }
+  while (q < window[12] - 1) *q++ = ' ';
+  if (q > window[12]) {
+    while (q < window[13] - 1) *q++ = ' ';
+  }
+  immain(); wmv(15,0);
 }
 
 static void gtabstr(int i, char *a, FILE *f) {
