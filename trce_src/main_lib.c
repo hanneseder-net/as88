@@ -311,13 +311,31 @@ fprintf(LOG,"i %d j %d nextsym %d symval %d symsect %o\n",i,j,
   return(0);
 }
 
+#ifdef DEBUG
+static void logprint(void) {
+  for (int i = 0; i < 32; i++) {
+    int j = symhash[i];
+    fprintf(LOG, "%2d %3d\n", i, j);
+    while (j >= 0) {
+      fprintf(LOG, "%4d val %8s sym %3d nxt %4d lnr %1d sect\n",
+              symtab[j].symvalue, symtab[j].symbol, symtab[j].nextsym,
+              symtab[j].lnr, symtab[j].symsect);
+      j = symtab[j].nextsym;
+    }
+  }
+  fprintf(LOG, "EIND SYMBOL TABLE\n\n");
+}
+#endif
+
 static void copy_args_onto_stack(int argc, char** argv) {
 #ifdef DEBUG
-  logprint(); 
-	fprintf(LOG,"argc %d  ",argc); for(i=0; i<argc;i++) fprintf(LOG,"%s ",
-		argv[i]); putc('\n',LOG);
-  fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x\n",maxsp,sp,bp,sp,bp); fflush (LOG);
-  fflush (LOG);
+  logprint();
+  fprintf(LOG, "argc %d  ", argc);
+  for (i = 0; i < argc; i++) fprintf(LOG, "%s ", argv[i]);
+  putc('\n', LOG);
+  fprintf(LOG, "maxsp %d sp %d bp %d sp %x bp %x\n", maxsp, sp, bp, sp, bp);
+  fflush(LOG);
+  fflush(LOG);
 #endif
   argv++;
   argc--;
@@ -345,17 +363,6 @@ static void copy_args_onto_stack(int argc, char** argv) {
   fprintf(LOG,"maxsp %d sp %d bp %d sp %x bp %x\n",maxsp,sp,bp,sp,bp); fflush (LOG);
 #endif
 }
-
-#ifdef DEBUG
-logprint(){
-  int i,j;
-  for(i=0;i<32;i++) { j = symhash[i]; fprintf(LOG,"%2d %3d\n",i,j);
-    while(j>=0) {fprintf(LOG,"%4d val %8s sym %3d nxt %4d lnr %1d sect\n",
-	symtab[j].symvalue, symtab[j].symbol, symtab[j].nextsym, symtab[j].lnr,
-	symtab[j].symsect);j = symtab[j].nextsym;}
-  } fprintf(LOG,"EIND SYMBOL TABLE\n\n");
-}
-#endif
 
 static void relocate(int n) {
   int tp, sc, st, sa, ss, i, j;
@@ -844,43 +851,70 @@ static void checkret(void) {
 }
 
 void procdepth(int s) {
-  if(s>0){prdepth++;stckprdepth[prdepth] = dotlnarr[(((int)(PC)) & 0Xffff) -s];
-	prstckpos[prdepth] = sp-2;}
-  if(s==-1) { checkret(); prdepth --;}
-  if(prdepth == bprdepth) stopvlag |= 1; else stopvlag &= 254;
+  if (s > 0) {
+    prdepth++;
+    stckprdepth[prdepth] = dotlnarr[(((int)(PC)) & 0Xffff) - s];
+    prstckpos[prdepth] = sp - 2;
+  }
+  if (s == -1) {
+    checkret();
+    prdepth--;
+  }
+  if (prdepth == bprdepth) {
+    stopvlag |= 1;
+  } else {
+    stopvlag &= 254;
+  }
 }
 
 static void zetbp(short textdot) {
   int i;
-  for (i=1;i<32;i++) if(!bparr[i].pcp) break;
-	if(i==32) { errprintf_report("break point table full"); return;}
-  bparr[i].pcp = textdot; bparr[i].bprt = m[cs16+textdot];
-  m[cs16+textdot] = 0xF0; return;
+  for (i = 1; i < 32; i++)
+    if (!bparr[i].pcp) break;
+  if (i == 32) {
+    errprintf_report("break point table full");
+    return;
+  }
+  bparr[i].pcp = textdot;
+  bparr[i].bprt = m[cs16 + textdot];
+  m[cs16 + textdot] = 0xF0;
+  return;
 }
 
 static void clearbp(short textdot) {
   int i;
-  for (i=1;i<32;i++) if(bparr[i].pcp == textdot) break;
-	if(i==32) { errprintf_report("break point not found"); return;}
-  bparr[i].pcp = 0; m[cs16+textdot] = bparr[i].bprt;
-  bparr[i].bprt = m[0]; return;
+  for (i = 1; i < 32; i++)
+    if (bparr[i].pcp == textdot) break;
+  if (i == 32) {
+    errprintf_report("break point not found");
+    return;
+  }
+  bparr[i].pcp = 0;
+  m[cs16 + textdot] = bparr[i].bprt;
+  bparr[i].bprt = m[0];
+  return;
 }
 
 static void nulbp(int ln) {
-  char *p;
-  int dott;
-  p = m + cs16+bparr[0].pcp;
-  if(*p == '\360') *p = bparr[0].bprt;
-  dott = lndotarr[ln]; p = m+cs16+dott;
-  bparr[0].pcp = dott; bparr[0].bprt = *p;
+  char*p = m + cs16 + bparr[0].pcp;
+  if (*p == '\360') *p = bparr[0].bprt;
+  int dott = lndotarr[ln];
+  p = m + cs16 + dott;
+  bparr[0].pcp = dott;
+  bparr[0].bprt = *p;
   *p = 0XF0;
 }
 
 void breakpt(void) {
-  int i,j;
-  i = ((int)(PC))&0xffff; i--;
-  for(j=0;j<32;j++) if(bparr[j].pcp == i) break;
-  if(j==32) { errprintf_report("Wrong breakpoint"); exit(1);}
+  int j;
+  int i = ((int)(PC)) & 0xffff;
+  i--;
+  for (j = 0; j < 32; j++)
+    if (bparr[j].pcp == i) break;
+  if (j == 32) {
+    errprintf_report("Wrong breakpoint");
+    exit(1);
+  }
   dumpt = bparr[j].bprt;
   dump();
 }
@@ -903,14 +937,15 @@ static int rdstrg(void) {
   if((c=='/') && (*p != '+')) *(--p) = '0';
   *q = '\0';
 #ifdef DEBUG
-logprint();
- fprintf(LOG,"gelezen: string |%s|\n",tringfield+90);
+  logprint();
+  fprintf(LOG, "gelezen: string |%s|\n", tringfield + 90);
 #endif
   stradr = hashstring(tringfield+90); symp = symhash[stradr];
   if(i>8) i=8; syk = -1;
   while(symp != -1) {
 #ifdef DEBUG
-fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+900,symtab[symp].symbol,symp,i);
+    fprintf(LOG, "Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",
+            tringfield + 900, symtab[symp].symbol, symp, i);
 #endif
     /*if(!strncmp(tringfield+90, symtab[symp].symbol,i)) { syk = symp; break;}
     else {symp = symtab[symp].nextsym;}*/
@@ -924,7 +959,8 @@ fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+90
   for(k=0;k<8;k++) if((cc = symtab[symp].symbol[k])>32) tringfield[k+90] = cc;
 	else break;
 #ifdef DEBUG
- fprintf(LOG,"tringfield: |%s|\n",tringfield+90); logprint();
+  fprintf(LOG, "tringfield: |%s|\n", tringfield + 90);
+  logprint();
 #endif
   if(symtab[symp].symsect > 2) stradr = symtab[symp].symvalue;
   else if(symtab[symp].symsect == 2) stradr = symtab[symp].lnr;
@@ -945,6 +981,7 @@ fprintf(LOG,"Vergeleken: string |%s| symtab |%s| symp %2d i %2d\n",tringfield+90
   else  {if(cmdchar == '!')cmdchar = 'd'; sprintf(tringfield+99,"%-4d=%04x:",j,(stradr+j));}
   return(stradr+j);
 }
+
 static int rdadr(void) {
   int i;
   sscanf(cmdline,"%d%1s",&i,&cmdchar);
