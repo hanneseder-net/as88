@@ -358,39 +358,67 @@ logprint(){
 #endif
 
 static void relocate(int n) {
-  int tp,sc,st,sa,ss,i,j,k;
+  int tp, sc, st, sa, ss, i, j;
   char *p, octs[4];
 #ifdef DEBUG
-for(i=0;i<3;i++)
-   fprintf(LOG,"%6d %4x startad | %6d %4x lengte | %6d %4x fstart | %6d %4x flen | %6d %4x align\n",
-segmhead[i].startad,segmhead[i].startad,segmhead[i].lengte,segmhead[i].lengte,
-segmhead[i].fstart,segmhead[i].fstart,segmhead[i].flen,segmhead[i].flen,
-segmhead[i].align,segmhead[i].align);
-  fprintf(LOG,"Erin\n"); fflush(LOG);
+  for (i = 0; i < 3; i++)
+    fprintf(LOG,
+            "%6d %4x startad | %6d %4x lengte | %6d %4x fstart | %6d %4x flen "
+            "| %6d %4x align\n",
+            segmhead[i].startad, segmhead[i].startad, segmhead[i].lengte,
+            segmhead[i].lengte, segmhead[i].fstart, segmhead[i].fstart,
+            segmhead[i].flen, segmhead[i].flen, segmhead[i].align,
+            segmhead[i].align);
+  fprintf(LOG, "Erin\n");
+  fflush(LOG);
 #endif
-  tp = relocarr[n].typ; sc = relocarr[n].sct; tp &= 0X3f; sc &= 0Xffff;
-  st = relocarr[n].smb; st &= 0Xffff; sa = relocarr[n].adrs; sa &= 0Xffff;
+  tp = relocarr[n].typ;
+  sc = relocarr[n].sct;
+  tp &= 0X3f;
+  sc &= 0Xffff;
+  st = relocarr[n].smb;
+  st &= 0Xffff;
+  sa = relocarr[n].adrs;
+  sa &= 0Xffff;
 #ifdef DEBUG
-  fprintf(LOG,"n %d typ %d sect %d symbol %d %s adres %d <--> ",n,tp,sc,st,
-	symtab[st].symbol,sa); fflush(LOG);
+  fprintf(LOG, "n %d typ %d sect %d symbol %d %s adres %d <--> ", n, tp, sc, st,
+          symtab[st].symbol, sa);
+  fflush(LOG);
 #endif
-  sa += segmhead[sc-2].startad; if(sc>2) sa += ds<<4; /*bodem data segment */
+  sa += segmhead[sc - 2].startad;
+  if (sc > 2) sa += ds << 4; /*bodem data segment */
 #ifdef DEBUG
- fprintf(LOG,"sa %d %x symval %d \n",sa,sa,symtab[st].symvalue); fflush(LOG);
+  fprintf(LOG, "sa %d %x symval %d \n", sa, sa, symtab[st].symvalue);
+  fflush(LOG);
 #endif
- p=m+sa; ss = i=0; /* zoek de unsigned waarde op de positie mem+sa gaat in ss*/
- for(k=0;k<(tp&3);k++) {j= *p++; j &= 255; octs[k] = j; j <<= i; i += 8; ss += j;}
+  p = m + sa;
+  ss = i = 0; /* zoek de unsigned waarde op de positie mem+sa gaat in ss*/
+  for (int k = 0; k < (tp & 3); k++) {
+    j = *p++;
+    j &= 255;
+    octs[k] = j;
+    j <<= i;
+    i += 8;
+    ss += j;
+  }
 #ifdef DEBUG
- fprintf(LOG,"ss %d %x symval %d ",ss,ss,symtab[st].symvalue); fflush(LOG);
+  fprintf(LOG, "ss %d %x symval %d ", ss, ss, symtab[st].symvalue);
+  fflush(LOG);
 #endif
- ss += symtab[st].symvalue;
+  ss += symtab[st].symvalue;
 #ifdef DEBUG
- fprintf(LOG,"ss %d %x symval %d \n",ss,ss,symtab[st].symvalue); fflush(LOG);
+  fprintf(LOG, "ss %d %x symval %d \n", ss, ss, symtab[st].symvalue);
+  fflush(LOG);
 #endif
- p=m+sa; /* De nieuwe waarde terugzetten */
- for(k=0;k<(tp&3);k++) {*p++ =  octs[k+2] =  ss & 255; ss >>= 8;}
+  p = m + sa; /* De nieuwe waarde terugzetten */
+  for (int k = 0; k < (tp & 3); k++) {
+    *p++ = octs[k + 2] = ss & 255;
+    ss >>= 8;
+  }
 #ifdef DEBUG
- fprintf(LOG,"octs %d %d %d %d \n",(int)octs[0],(int)octs[1],(int)octs[2],(int)octs[3]); fflush(LOG);
+  fprintf(LOG, "octs %d %d %d %d \n", (int)octs[0], (int)octs[1], (int)octs[2],
+          (int)octs[3]);
+  fflush(LOG);
 #endif
 }
 
