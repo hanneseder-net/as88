@@ -802,19 +802,31 @@ fprintf(LOG,"\nna sscanf |%s|%s| %d %d %d %d %d %d pram\n", pram[0].cp,pram[1].c
 }
 
 static void pdmpadr(void) {
-  char *o, *p,*q,*r,c;
-  unsigned long ii, i,j;
-  for(i=0;i<7;i++){ 
-    o = q = p = datadm[i]; 
-   if(p!=NULL){
-    for(j=0;j<8;j++){r = datadarr[i]; r += 19+3*j;sprintf(r,"%3x",*p++ & 0xff);}
-    datadarr[i][43] = ' ';
-    for(j=0;j<12;j++){ c = *q++; if(c<32||c>126) c = '.';
-	datadarr[i][44+j] = c;}
-    for(j=0;j<4;j++){r = datadarr[i]; r += 55+6*j;
-	ii = *o++ & 255;  if(*o&128) ii |= 0Xffff0000; ii |= (*o++ & 255)<<8;
-	sprintf(r,"%6lu",ii);}
-   }
+  char *o, *p, *q, *r, c;
+  unsigned long ii, i, j;
+  for (i = 0; i < 7; i++) {
+    o = q = p = datadm[i];
+    if (p != NULL) {
+      for (j = 0; j < 8; j++) {
+        r = datadarr[i];
+        r += 19 + 3 * j;
+        sprintf(r, "%3x", *p++ & 0xff);
+      }
+      datadarr[i][43] = ' ';
+      for (j = 0; j < 12; j++) {
+        c = *q++;
+        if (c < 32 || c > 126) c = '.';
+        datadarr[i][44 + j] = c;
+      }
+      for (j = 0; j < 4; j++) {
+        r = datadarr[i];
+        r += 55 + 6 * j;
+        ii = *o++ & 255;
+        if (*o & 128) ii |= 0Xffff0000;
+        ii |= (*o++ & 255) << 8;
+        sprintf(r, "%6lu", ii);
+      }
+    }
   }
 }
 
