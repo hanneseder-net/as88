@@ -1106,13 +1106,19 @@ static void winupdate(void) {
   immain(); wmv(15,0);
 }
 
-static void gtabstr(int i, char *a, FILE *f) {
-  int j,c;
-  j = 0; while(j<i){c = getc(f); if(c==EOF || c == '\r' || c == '\n') break;
-    if(c=='\t') { if (j%8 != 7) ungetc(c,f); c=' ';}
-    j++; *a++=c;
-  } while(j++ <i) *a++ = ' ';
-  
+static void gtabstr(int i, char* a, FILE* f) {
+  int j = 0;
+  while (j < i) {
+    int c = getc(f);
+    if (c == EOF || c == '\r' || c == '\n') break;
+    if (c == '\t') {
+      if (j % 8 != 7) ungetc(c, f);
+      c = ' ';
+    }
+    j++;
+    *a++ = c;
+  }
+  while (j++ < i) *a++ = ' ';
 }
 
 static void outbuffer_scroll(void) {
