@@ -793,25 +793,18 @@ static void cnulbp(void) {
 }
 
 void dump(void) {
-  int i;
-#ifdef DEBUG
-  int j;
-#endif
-  char *p;
-#ifdef DEBUG
-fprintf(LOG,"\npc %4o %4o %6d %4x\n",(pcx-m)&255,((pcx-m)<<8)&255,(pcx-m),(pcx-m));
- p = m; for(i=0;i<256;i++) {j=(*p++ & 255); if(i%16==0) fprintf(LOG,
-	"\n%6o\t",i); fprintf(LOG," %03o",(m[i]&255));} fprintf(LOG,"\n"); fflush(LOG);
-#endif
   cnulbp();
-  pdmpadr(); 
+  pdmpadr();
 
-  if (errflag) system("sleep 1");rdcmd();
-  if (errflag) { sprintf(window[10]+22,"E Last message: %-37.37s",errbuf);
-  errflag = 0;}
-   else if (window[10][22] == 'M')
-	 {sprintf(window[10]+22,"  %-55.55s",window[10]+37);}
-  p = errbuf; for(i=0;i<56;i++) *p++ = ' ';
+  if (errflag) system("sleep 1");
+  rdcmd();
+  if (errflag) {
+    wprintf(10, 22, "E Last message: %-37.37s", errbuf);
+    errflag = 0;
+  } else if (window[10][22] == 'M') {
+    wprintf(10, 22, "  %-55.55s", window[10] + 37);
+  }
+  memset(errbuf, ' ', sizeof(errbuf) -1);
 }
 
 static void checkret(void) {
