@@ -928,7 +928,7 @@ static void rdcline(int c) {
   char *p = cmdline;
   while(c != '\n') {if (c==EOF) break; *p++ = c; c = getchcmd();}
   *p++ = '\0'; *p = '\0';
-  sprintf(window[14],"%-18.18s",cmdline);
+  wprintf(14, 0, "%-18.18s", cmdline);
   p--; *p = '!';
 }
 
@@ -937,7 +937,7 @@ static void rdcmd(void) {
   wmv(15,0);
   for(c=0;c<20;c++) putchar(' ');
   wmv(15,0);
-  sprintf(window[15],"                 ");
+  wprintf(15, 0, "                 ");
   winupdate();
   symp = -1; c = getchcmd(); if(c=='/') { c=getchcmd(); d=1;} else d = 0;
   stopvlag = 0;
@@ -1014,11 +1014,11 @@ static void winupdate(void) {
     refresh(); /*exit(1);*/
   }
   wprintf(8, 10, "%s+%1d", symtab[j].symbol, i - symtab[j].lnr);
-  window[6][12] = (ovf) ? 'v' : '-';
-  window[6][14] = (dirf) ? '<' : '>';
-  window[6][16] = (signf) ? 'n' : 'p';
-  window[6][18] = (zerof) ? 'z' : '-';
-  window[6][20] = (cf) ? 'c' : '-';
+  wprintf(6, 12, "%c", (ovf) ? 'v' : '-');
+  wprintf(6, 14, "%c", (dirf) ? '<' : '>');
+  wprintf(6, 16, "%c", (signf) ? 'n' : 'p');
+  wprintf(6, 18, "%c", (zerof) ? 'z' : '-');
+  wprintf(6, 20, "%c", (cf) ? 'c' : '-');
   for (j = 0; j < 9; j++) {
     fseek(L, (int)lnfilarr[i + j - 6], 0);
     p = window[j] + 32;
