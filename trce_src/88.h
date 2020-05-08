@@ -190,9 +190,6 @@ EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
 EXTERN short x,y,z;		/* used in lazy condition code evaluation */
 EXTERN uint8_t xc,yc,zc;		/* ditto */
 EXTERN int operator, ccvalid;	/* ditto */
-EXTERN int anything;		/* nonzero if any dumping or tracing on */
-EXTERN int whendump;		/* controls dumping */
-EXTERN int whatdump;		/* controls dumping */
 EXTERN long xx;			/* scratch variable used for mem checking */
 EXTERN uint8_t stopvlag, dumpt;	/* ew dumping vlag and saved t */
 
