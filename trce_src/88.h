@@ -60,7 +60,6 @@ typedef union {
 #define BP 6
 #define SP 7
 
-
 #define ax r.rw[AX]
 #define bx r.rw[BX]
 #define cx r.rw[CX]
@@ -168,9 +167,10 @@ EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
 EXTERN short x,y,z;		/* used in lazy condition code evaluation */
 EXTERN uint8_t xc,yc,zc;		/* ditto */
 EXTERN int operator, ccvalid;	/* ditto */
+#if CHECK
 EXTERN long xx;			/* scratch variable used for mem checking */
+#endif
 EXTERN uint8_t stopvlag, dumpt;	/* ew dumping vlag and saved t */
-
 
 /* The 8088 memory array is declared below. */
 extern char m[MEMBYTES];
