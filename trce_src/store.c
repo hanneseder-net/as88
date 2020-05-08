@@ -1,7 +1,7 @@
 #define EXTERN extern
 #include "88.h"
 
-void wstore(word x) {
+void wstore(int16_t x) {
 #ifdef LITTLE_ENDIAN
   *eapc++ = x;
   *eapc = x >> 8;
@@ -52,7 +52,7 @@ void xstore(char* x) {
 #endif
 }
 
-void rapwstore(word w) {
+void rapwstore(int16_t w) {
 #ifdef LITTLE_ENDIAN
   *rapw = w;
 #else

@@ -8,7 +8,6 @@
 #define EXTERN
 #endif
 #define CHECK 0			/* To turn on runtime checking, set CHECK 1 */
-typedef short word;		/* type word must be 16 bits */
 
 #ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
@@ -16,32 +15,41 @@ typedef short word;		/* type word must be 16 bits */
 #undef	BIG_ENDIAN	/* sun and the like */
 
 #ifdef LITTLE_ENDIAN
-typedef struct {uint8_t lo; uint8_t hi; } pair;
-# define AL 0
-# define AH 1
-# define BL 2
-# define BH 3
-# define CL 4
-# define CH 5
-# define DL 6
-# define DH 7
+typedef struct {
+  uint8_t lo;
+  uint8_t hi;
+} pair;
+
+#define AL 0
+#define AH 1
+#define BL 2
+#define BH 3
+#define CL 4
+#define CH 5
+#define DL 6
+#define DH 7
 #endif
 
 #ifdef BIG_ENDIAN
-typedef struct {uint8_t hi; uint8_t lo; } pair;
-# define AL 1
-# define AH 0
-# define BL 3
-# define BH 2
-# define CL 5
-# define CH 4
-# define DL 7
-# define DH 6
+typedef struct {
+  uint8_t hi;
+  uint8_t lo;
+} pair;
+
+#define AL 1
+#define AH 0
+#define BL 3
+#define BH 2
+#define CL 5
+#define CH 4
+#define DL 7
+#define DH 6
 #endif
 
-
-typedef union {pair b; word w;} reg;
-
+typedef union {
+  pair b;
+  int16_t w;
+} reg;
 
 #define AX 0
 #define BX 1
@@ -165,8 +173,8 @@ EXTERN int ovf, dirf, intf, signf, zerof, cf;	/* flag bits */
 EXTERN char *pcx;		/* pcx = &m[ (cs<<4) + pc] */
 EXTERN char *xapc;
 EXTERN char *eapc, *rapc;
-EXTERN word *rapw;		/* eapw is unusable since it might be odd */
-EXTERN word *stkp;		/* scratch variable used by PUSH and POP */
+EXTERN int16_t *rapw;		/* eapw is unusable since it might be odd */
+EXTERN int16_t *stkp;		/* scratch variable used by PUSH and POP */
 // TODO(heder): Wohaa, what are we doing here, are we clipping the memory
 // just to a very small amount?
 EXTERN int mask;
@@ -195,7 +203,10 @@ EXTERN uint8_t stopvlag, dumpt;	/* ew dumping vlag and saved t */
 
 /* The 8088 memory array is declared below. */
 extern char m[MEMBYTES];
-typedef	union { uint8_t rc[16]; word rw[8];} REG;
+typedef union {
+  uint8_t rc[16];
+  int16_t rw[8];
+} REG;
 extern REG r;
 extern int traceflag, instrcount, codelength;
 
