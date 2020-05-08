@@ -172,7 +172,7 @@ EXTERN word *stkp;		/* scratch variable used by PUSH and POP */
 EXTERN int mask;
 
 EXTERN uint16_t cs, ds, ss, es;	/* contents of segment registers */
-EXTERN uint16_t xs, dsx, ssx;
+EXTERN uint16_t xs;
 EXTERN long cs16;		/* cs16 = 16*cs  (= cs<<4) */
 
 EXTERN unsigned timer, ticks, nextint, ints_pending;

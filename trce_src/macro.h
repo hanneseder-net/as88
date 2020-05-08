@@ -173,8 +173,6 @@
 
 /* Miscellaneous macros. */
 #define OVERRIDE(seg)\
-	dsx=ds; \
-	ssx=ss; \
 	ds=seg; \
 	ss=seg; \
 	realtime += ticks - timer; \
