@@ -175,7 +175,6 @@
 #define OVERRIDE(seg)\
 	ds=seg; \
 	ss=seg; \
-	realtime += ticks - timer; \
 	ticks = 2; \
 	timer = 2; \
 	nextint=SEGOVER
