@@ -178,7 +178,6 @@ EXTERN long cs16;		/* cs16 = 16*cs  (= cs<<4) */
 EXTERN unsigned timer, ticks, nextint, ints_pending;
 EXTERN long realtime;		/* measured in mach instr (5 microsec each) */
 EXTERN struct intstruct{
-
   long int_time;		/* time of next interrupt (in mach instrs) */
   int int_status;		/* status information */
   int int_vector;
