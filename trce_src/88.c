@@ -18,20 +18,20 @@ static void rep(int op);
 
 static void checkint(void) {}
 
-void inio(word a, int b) {
+void inio(int16_t a, int b) {
   UNUSED(a);
   UNUSED(b);
 }
 
-void outio(word a, word b, int c) {
+void outio(int16_t a, int16_t b, int c) {
   UNUSED(a);
   UNUSED(b);
   UNUSED(c);
 }
 
 void interp(void) {
-  word t;
-  word t2;
+  int16_t t;
+  int16_t t2;
   char c;
   int mm, n; /* 1 if dumping on, 0 if off */
   uint16_t u, u1, u2;

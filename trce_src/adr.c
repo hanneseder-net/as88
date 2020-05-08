@@ -11,7 +11,7 @@ void wd(void)
    * and put a pointer to it in 'rapc.' This routine only called for word
    * operands.
    */
-  word t = *pcx++ & mask;
+  int16_t t = *pcx++ & mask;
 
   /* clang-format: off */
   switch (t) {
@@ -335,7 +335,7 @@ void by(void) {
    * and put a pointer to it in 'rapc.' This routine only called for byte
    * operands.
    */
-  word t = *pcx++ & mask;
+  int16_t t = *pcx++ & mask;
 
   /* clang-format: off */
   switch (t) {

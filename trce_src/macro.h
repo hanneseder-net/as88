@@ -20,7 +20,7 @@
 
 #define STACKPTR(t)\
 	xx = ( (long)ss << 4) + (unsigned short)sp;\
-	t = (word *) (M + xx);\
+	t = (int16_t *) (M + xx);\
 	stackck()
 
 #define BSTORE(x)\
@@ -58,7 +58,7 @@
 
 #define STACKPTR(t)\
 	xx = ( (long)ss << 4) + (unsigned short)sp;\
-	t = (word *) (M + xx);
+	t = (int16_t *) (M + xx);
 
 #define BSTORE(x)\
 	*eapc = x
