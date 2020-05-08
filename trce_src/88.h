@@ -163,7 +163,6 @@ typedef union {pair b; word w;} reg;
 EXTERN reg EA, RA, EOP, ROP;
 EXTERN int ovf, dirf, intf, signf, zerof, cf;	/* flag bits */
 EXTERN char *pcx;		/* pcx = &m[ (cs<<4) + pc] */
-EXTERN char *pcx_save;		/* pcx saved here at instruction start */
 EXTERN char *xapc;
 EXTERN char *eapc, *rapc;
 EXTERN word *rapw;		/* eapw is unusable since it might be odd */
