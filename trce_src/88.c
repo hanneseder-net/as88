@@ -560,7 +560,7 @@ bloop:
 	    case B01: spare(t);
 	    case B02: BSTORE(~eoplo); LOOP;
 	    case B03: c= 0-eoplo; BSTORE(c); BLAZYCC(0,eoplo,SUBB); LOOP;
-	    case B04: u1=(unchr)al; u2=(unchr)eoplo; u=u1*u2;ax=u;
+	    case B04: u1=al; u2=eoplo; u=u1*u2;ax=u;
 		    cf=(u<256 ? 0 : 1); ovf=cf; ccvalid=1; LOOP;
 	    case B05: t=(short)al; n=(short)eoplo; ax=t*n;
 		    cf=(((!(al&0X80))&&ah==0)||((al&0X80)&&ah==0xFF)?0:1);

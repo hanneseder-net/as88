@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 /*
  * LOOK IN table.c for declarations of all of this stuff
  */
@@ -9,15 +11,13 @@
 typedef short word;		/* type word must be 16 bits */
 typedef unsigned short adr;	/* unsigned 16-bit quantity */
 
-typedef unsigned char unchr;
-
 #ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
 #endif /* LITTLE_ENDIAN */
 #undef	BIG_ENDIAN	/* sun and the like */
 
 #ifdef LITTLE_ENDIAN
-typedef struct {unchr lo; unchr hi; } pair;
+typedef struct {uint8_t lo; uint8_t hi; } pair;
 # define AL 0
 # define AH 1
 # define BL 2
@@ -29,7 +29,7 @@ typedef struct {unchr lo; unchr hi; } pair;
 #endif
 
 #ifdef BIG_ENDIAN
-typedef struct {unchr hi; unchr lo; } pair;
+typedef struct {uint8_t hi; uint8_t lo; } pair;
 # define AL 1
 # define AH 0
 # define BL 3
@@ -190,18 +190,18 @@ EXTERN struct intstruct{
 
 EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
 EXTERN short x,y,z;		/* used in lazy condition code evaluation */
-EXTERN unchr xc,yc,zc;		/* ditto */
+EXTERN uint8_t xc,yc,zc;		/* ditto */
 EXTERN int operator, ccvalid;	/* ditto */
 EXTERN int anything;		/* nonzero if any dumping or tracing on */
 EXTERN int whendump;		/* controls dumping */
 EXTERN int whatdump;		/* controls dumping */
 EXTERN long xx;			/* scratch variable used for mem checking */
-EXTERN unchr stopvlag, dumpt;	/* ew dumping vlag and saved t */
+EXTERN uint8_t stopvlag, dumpt;	/* ew dumping vlag and saved t */
 
 
 /* The 8088 memory array is declared below. */
 extern char m[MEMBYTES];
-typedef	union { unchr rc[16]; word rw[8];} REG;
+typedef	union { uint8_t rc[16]; word rw[8];} REG;
 extern REG r;
 extern int traceflag, instrcount, codelength;
 

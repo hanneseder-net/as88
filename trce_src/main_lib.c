@@ -41,11 +41,11 @@ static struct stat astat[2];
 static char outbuffer[OUTBUFFER_SIZE][OUTBUFFER_LEN];
 
 static char cmdchar, cmdline[30];
-static unchr prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
+static uint8_t prdepth, bprdepth; /*prdepth altijd bijhouden; bprdepth zetten bij +-= */
 static int stckprdepth[20], prstckpos[20];
 static int nsymtab, maxsp;
 
-typedef struct { short pcp; unchr bprt; } bprveld;
+typedef struct { short pcp; uint8_t bprt; } bprveld;
 static bprveld bparr[32];  /* break point fields */
 typedef struct {char typ; char sct; short smb; int adrs;} relocveld;
 static relocveld relocarr[1024]; /* relocation variables field */

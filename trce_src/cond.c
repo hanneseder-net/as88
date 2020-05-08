@@ -35,8 +35,8 @@ void cc(void) {
       return;
 
     case ADDB:
-      u = (unchr)xc;
-      u1 = (unchr)yc;
+      u = xc;
+      u1 = yc;
       u += u1;
       if ((r = u & 0377) == 0) {
         zerof = 1;
@@ -76,8 +76,8 @@ void cc(void) {
       return;
 
     case ADCB:
-      u = (unchr)xc;
-      u1 = (unchr)yc;
+      u = xc;
+      u1 = yc;
       u += u1;
       r = ((char)zc < 0 ? -1 : zc);
       u += r;
@@ -119,7 +119,7 @@ void cc(void) {
       return;
 
     case INCB:
-      u = (unchr)xc;
+      u = xc;
       u += 1;
       if ((r = u & 0377) == 0) {
         zerof = 1;
@@ -157,8 +157,8 @@ void cc(void) {
       return;
 
     case SUBB:
-      u = (unchr)xc;
-      u1 = (unchr)yc;
+      u = xc;
+      u1 = yc;
       u -= u1;
       if ((r = u & 0377) == 0) {
         zerof = 1;
@@ -198,8 +198,8 @@ void cc(void) {
       return;
 
     case SBBB:
-      u = (unchr)xc;
-      u1 = (unchr)yc;
+      u = xc;
+      u1 = yc;
       u -= u1;
       u -= (unsigned short)zc;
       if ((r = u & 0377) == 0) {
@@ -240,7 +240,7 @@ void cc(void) {
       return;
 
     case DECB:
-      u = (unchr)xc;
+      u = xc;
       u -= 1;
       if ((r = u & 0377) == 0) {
         zerof = 1;
