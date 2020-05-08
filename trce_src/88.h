@@ -165,8 +165,6 @@ typedef union {
 
 #define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
 // #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
-#define MAXLONG 2000000000L
-#define INTERVAL 50000
 
 EXTERN reg EA, RA, EOP, ROP;
 EXTERN int ovf, dirf, intf, signf, zerof, cf;	/* flag bits */
