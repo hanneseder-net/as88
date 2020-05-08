@@ -137,32 +137,6 @@ typedef union {
 #define	KBD	6
 #define NDEV    8			/* number of I/O devices */
 
-#define	DIVIDEVEC	 0
-#define CLOCKVEC	 8
-#define	KBDVEC		 9
-#define	XT_WINI		13
-#define DISKVEC		14	/* floppy */
-#define	SYS_VEC		32
-#define TTYINVEC	35
-#define TTYOUTVEC	36
-
-
-/* I/O ports and related constants. */
-#define PIT_C 0x00D6		/* output port to enable clock */
-#define SIO_C 0x00DA		/* tty control port */
-#define SIO_D 0x00D8		/* tty data port */
-#define	TIMER_2	0x0042		/* timer port 2 */
-#define TIMER_3	0x0043		/* timer port 3 */
-#define SIO_M 0x0043		/* tty port for enabling/disabling interrupt */
-#define	KEYBD 0x0060		/* keyboard data port */
-#define PORT_B 0x0061		/* keyboard strobe port */
-
-#define TXRDY 01
-#define RXRDY 02
-#define DXRDY 01
-#define FROM_DISK 0
-#define TO_DISK 1
-
 #define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
 // #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
 
