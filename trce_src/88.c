@@ -30,11 +30,11 @@ void outio(word a, word b, int c) {
 }
 
 void interp(void) {
-  word             t;
-  word             t2;
-  char             c;
-  int              mm, n;       /* 1 if dumping on, 0 if off */
-  adr              u, u1, u2;
+  word t;
+  word t2;
+  char c;
+  int mm, n; /* 1 if dumping on, 0 if off */
+  uint16_t u, u1, u2;
 
   mask = 0377;
   /* Here is the main loop of the interpreter. */
@@ -565,7 +565,7 @@ bloop:
 	    case B05: t=(short)al; n=(short)eoplo; ax=t*n;
 		    cf=(((!(al&0X80))&&ah==0)||((al&0X80)&&ah==0xFF)?0:1);
 			 ovf=cf; ccvalid=1;LOOP;
-	    case B06: u1=(adr)ax; u2=(adr)eoplo; u=u1/u2; al=(char)u;
+	    case B06: u1=(uint16_t)ax; u2=(uint16_t)eoplo; u=u1/u2; al=(char)u;
 		    if(u>255)interrupt(0); else ah=(char)(u1%u2); LOOP;
 	    case B07: t=ax; n=(short)eoplo; mm=t/n; al=(char)mm;
 		    if(mm>127||mm<-128)interrupt(0); 
@@ -578,7 +578,7 @@ bloop:
 	    case W01: spare(t);
 	    case W02: WSTORE((~eop)); LOOP;
 	    case W03: t= 0-eop; WSTORE(t); LAZYCC(0,eop,SUBW); LOOP;
-	    case W04: l1=(adr)ax; l2=(adr)eop; l1=l1*l2; ax=(short)l1;
+	    case W04: l1=(uint16_t)ax; l2=(uint16_t)eop; l1=l1*l2; ax=(short)l1;
 		    dx= (l1>>16)&0177777;
 		    cf=(l1<65536 ? 0 : 1); ovf=cf; ccvalid=1; LOOP;
 	    case W05: l1= ax; l2= eop; l1=l1*l2; ax=(short)l1;
@@ -588,10 +588,10 @@ bloop:
 			panicf("simulator can't handle dividends >=2**31");
 			/* {printf("simulator can't handle dividends >=2**31\n");
 			    abort();}*/
-		    l1=(adr)dx; l1=(l1<<16)+(adr)ax; l2=(adr)eop;
+		    l1=(uint16_t)dx; l1=(l1<<16)+(uint16_t)ax; l2=(uint16_t)eop;
 		    l=l1/l2; ax=(short)l;
 		    if (l>65535||l<-65535)interrupt(0); else dx=l1%l2; LOOP;
-	    case W07: l1=(adr)dx; l1=(l1<<16)+(adr)ax; l2=eop; l=l1/l2;
+	    case W07: l1=(uint16_t)dx; l1=(l1<<16)+(uint16_t)ax; l2=eop; l=l1/l2;
 		    /*ax=(short)l;if (l>65535||l<-65535)interrupt(0);*/
 		    ax=(short)l;if (l>32767||l<-32767)interrupt(0);
 		    else dx=l1%l2; LOOP;

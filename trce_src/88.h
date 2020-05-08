@@ -9,7 +9,6 @@
 #endif
 #define CHECK 0			/* To turn on runtime checking, set CHECK 1 */
 typedef short word;		/* type word must be 16 bits */
-typedef unsigned short adr;	/* unsigned 16-bit quantity */
 
 #ifndef LITTLE_ENDIAN
 #define	LITTLE_ENDIAN	/* vax and the like */
@@ -173,8 +172,8 @@ EXTERN word *stkp;		/* scratch variable used by PUSH and POP */
 // just to a very small amount?
 EXTERN int mask;
 
-EXTERN adr cs, ds, ss, es;	/* contents of segment registers */
-EXTERN adr xs, dsx, ssx;
+EXTERN uint16_t cs, ds, ss, es;	/* contents of segment registers */
+EXTERN uint16_t xs, dsx, ssx;
 EXTERN long cs16;		/* cs16 = 16*cs  (= cs<<4) */
 
 EXTERN unsigned timer, ticks, nextint, ints_pending;
