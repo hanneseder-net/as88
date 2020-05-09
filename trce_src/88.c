@@ -22,6 +22,15 @@
 #define BRMCONST  roplo = *pcx++;  
 #define XRMCONST  rophi = ((char)(roplo = *pcx++) < 0) ? 0xFF : 0
 
+/* Macros for setting condition codes. */
+#define CC if (ccvalid == 0) cc()
+#define SZONLY(a)          x= a; ccop= BOOLW; cc()
+#define BSZONLY(a)         xc= a; ccop= BOOLC; cc()
+#define LAZYCC(a,b,op)     x= a; y= b; ccop= op; cc()
+#define BLAZYCC(a,b,op)    xc= a; yc= b; ccop= op; cc()
+#define LAZYCC3(a,b,c,op)  x= a; y= b; z= c; ccop= op; cc()
+#define BLAZYCC3(a,b,c,op) xc= a; yc= b; zc= c; ccop= op; cc()
+
 /* forward decls */
 static void rep(int op);
 
