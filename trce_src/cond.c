@@ -14,7 +14,7 @@ void cc(void) {
   unsigned short u, u1;
   char c;
 
-  switch (operator) {
+  switch (ccop) {
     case ADDW:
       l = X;
       l += Y;

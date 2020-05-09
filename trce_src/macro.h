@@ -115,19 +115,19 @@
 #define XRMCONST	rophi = ((char)(roplo = *pcx++) < 0) ? 0xFF : 0
 
 /* Macros for setting condition codes. * /
-#define SZONLY(a)          ccvalid= 0; x= a; operator= BOOLW
-#define BSZONLY(a)         ccvalid= 0; xc= a; operator= BOOLC
-#define LAZYCC(a,b,op)     ccvalid= 0; x= a; y= b; operator= op
-#define BLAZYCC(a,b,op)    ccvalid= 0; xc= a; yc= b; operator= op
-#define LAZYCC3(a,b,c,op)  ccvalid= 0; x= a; y= b; z= c; operator= op
-#define BLAZYCC3(a,b,c,op) ccvalid= 0; xc= a; yc= b; zc= c; operator= op;*/
+#define SZONLY(a)          ccvalid= 0; x= a; ccop= BOOLW
+#define BSZONLY(a)         ccvalid= 0; xc= a; ccop= BOOLC
+#define LAZYCC(a,b,op)     ccvalid= 0; x= a; y= b; ccop= op
+#define BLAZYCC(a,b,op)    ccvalid= 0; xc= a; yc= b; ccop= op
+#define LAZYCC3(a,b,c,op)  ccvalid= 0; x= a; y= b; z= c; ccop= op
+#define BLAZYCC3(a,b,c,op) ccvalid= 0; xc= a; yc= b; zc= c; ccop= op;*/
 #define CC if (ccvalid == 0) cc()
-#define SZONLY(a)          x= a; operator= BOOLW; cc()
-#define BSZONLY(a)         xc= a; operator= BOOLC; cc()
-#define LAZYCC(a,b,op)     x= a; y= b; operator= op; cc()
-#define BLAZYCC(a,b,op)    xc= a; yc= b; operator= op; cc()
-#define LAZYCC3(a,b,c,op)  x= a; y= b; z= c; operator= op; cc()
-#define BLAZYCC3(a,b,c,op) xc= a; yc= b; zc= c; operator= op; cc()
+#define SZONLY(a)          x= a; ccop= BOOLW; cc()
+#define BSZONLY(a)         xc= a; ccop= BOOLC; cc()
+#define LAZYCC(a,b,op)     x= a; y= b; ccop= op; cc()
+#define BLAZYCC(a,b,op)    xc= a; yc= b; ccop= op; cc()
+#define LAZYCC3(a,b,c,op)  x= a; y= b; z= c; ccop= op; cc()
+#define BLAZYCC3(a,b,c,op) xc= a; yc= b; zc= c; ccop= op; cc()
 
 /* Macros for stack operations. */
 #ifdef LITTLE_ENDIAN

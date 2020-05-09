@@ -166,7 +166,7 @@ EXTERN struct intstruct{
 EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
 EXTERN short x,y,z;		/* used in lazy condition code evaluation */
 EXTERN uint8_t xc,yc,zc;		/* ditto */
-EXTERN int operator, ccvalid;	/* ditto */
+EXTERN int ccop, ccvalid;	/* ditto */
 #if CHECK
 EXTERN long xx;			/* scratch variable used for mem checking */
 #endif
