@@ -166,7 +166,7 @@ static int load(int argc, char **argv) {
 #endif
     if ((L = fopen(fnameL, "r")) == NULL) {
       fprintf(stderr, "Cannot open %s\n", fnameL);
-      exit(1);
+      return 1;
     }
     i = 0;
     j = 0;
@@ -189,7 +189,7 @@ static int load(int argc, char **argv) {
     fclose(L);
     if ((L = fopen(fnameS, "rb")) == NULL) {
       fprintf(stderr, "Cannot open %s\n", fnameS);
-      exit(1);
+      return 1;
     }
     strl = 0;
     lnfilarr[1] = lnfilarr[0] = 0;
