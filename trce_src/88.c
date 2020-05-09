@@ -18,6 +18,68 @@
 #define RAPWSTORE(x) rapwstore(x)
 #define XSTORE(x) xstore(x)
 
+#if CHECK
+#define CSMEM(x, t)                                             \
+  if ((xx = cs16 + (unsigned short)t) >= MEMBYTES) merr(cs, t); \
+  x = M + xx
+
+#define STACKPTR(t)                          \
+  xx = ((long)ss << 4) + (unsigned short)sp; \
+  t = (int16_t*)(M + xx);                    \
+  stackck()
+
+#define BSTORE(x) \
+  progck1();      \
+  *eapc = x
+
+#ifdef LITTLE_ENDIAN
+#define MOV16       \
+  progck2();        \
+  *eapc++ = *pcx++; \
+  *eapc++ = *pcx++
+#else
+/*
+ * XXX watch for memory layout here
+ */
+#define MOV16                 \
+  progck2();                  \
+  if (eapc <= M + MEMBYTES) { \
+    *eapc++ = *pcx++;         \
+    *eapc++ = *pcx++;         \
+  } else {                    \
+    *(eapc + 1) = *pcx++;     \
+    *eapc++ = *pcx++;         \
+    eapc++;                   \
+  }
+#endif
+
+#else	/* not check */
+
+#define CSMEM(x, t) x = M + cs16 + (unsigned short)t
+#define STACKPTR(t) t = (int16_t*)(M + ((long)ss << 4) + (unsigned short)sp);
+#define BSTORE(x) *eapc = x
+
+#ifdef LITTLE_ENDIAN
+#define MOV16       \
+  *eapc++ = *pcx++; \
+  *eapc++ = *pcx++
+#else
+/*
+ * XXX watch for memory layout here
+ */
+#define MOV16                 \
+  if (eapc <= M + MEMBYTES) { \
+    *eapc++ = *pcx++;         \
+    *eapc++ = *pcx++;         \
+  } else {                    \
+    *(eapc + 1) = *pcx++;     \
+    *eapc++ = *pcx++;         \
+    eapc++;                   \
+  }
+#endif
+
+#endif	/* check */
+
 /* Macros for handling operands. */
 #define IMMED     eoplo = *pcx++; eophi = *pcx++
 #define IMMED8    eoplo = *pcx++
