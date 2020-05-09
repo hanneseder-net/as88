@@ -146,9 +146,6 @@ EXTERN char *xapc;
 EXTERN char *eapc, *rapc;
 EXTERN int16_t *rapw;		/* eapw is unusable since it might be odd */
 EXTERN int16_t *stkp;		/* scratch variable used by PUSH and POP */
-// TODO(heder): Wohaa, what are we doing here, are we clipping the memory
-// just to a very small amount?
-EXTERN int mask;
 
 EXTERN uint16_t cs, ds, ss, es;	/* contents of segment registers */
 EXTERN uint16_t xs;

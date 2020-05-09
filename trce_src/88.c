@@ -36,10 +36,9 @@ void interp(void) {
   int mm, n; /* 1 if dumping on, 0 if off */
   uint16_t u, u1, u2;
 
-  mask = 0377;
   /* Here is the main loop of the interpreter. */
 loop:
-  t = *pcx++ & mask;
+  t = *pcx++ & 0xFF;
   if (stopvlag) {
     dump();
   } else if (traceflag && !(--instrcount & 0x3fff)) {
@@ -502,7 +501,7 @@ bloop:
 
     case 0xF0: breakpt(); t = dumpt; goto bloop; /* ew break point trap */
     case 0xF1: spare(t);
-    case 0xF2: t = *pcx++ & mask;
+    case 0xF2: t = *pcx++ & 0xFF;
 	switch(t) {
 	    case 0xA4:
 		    /* No interrupt during this instruction */
@@ -527,7 +526,7 @@ bloop:
 	    default: panicf("REP followed by nonstring operator.");
 	}
 
-    case 0xF3: t = *pcx++ & mask;
+    case 0xF3: t = *pcx++ & 0xFF;
 	switch(t) {
 	    case 0xA4:
 	        STRING; t=1-dirf-dirf; n= cx;
