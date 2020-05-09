@@ -31,6 +31,21 @@
 #define LAZYCC3(a,b,c,op)  x= a; y= b; z= c; ccop= op; cc()
 #define BLAZYCC3(a,b,c,op) xc= a; yc= b; zc= c; ccop= op; cc()
 
+/* Macros for interrupt and PSW operations. */
+#define FLAGWD(t)                                                \
+  CC;                                                            \
+  t = ((ovf << 11) + (dirf << 10) + (intf << 9) + (signf << 7) + \
+       (zerof << 6) + cf)
+
+#define LOADFLAGS(t)    \
+  ovf = (t >> 11) & 1;  \
+  dirf = (t >> 10) & 1; \
+  intf = (t >> 9) & 1;  \
+  signf = (t >> 7) & 1; \
+  zerof = (t >> 6) & 1; \
+  cf = t & 1;           \
+  ccvalid = 1
+
 /* forward decls */
 static void rep(int op);
 

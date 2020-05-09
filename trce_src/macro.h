@@ -125,18 +125,6 @@
 
 #endif /*LITTLE_ENDIAN*/
 
-/* Macros for interrupt and PSW operations. */
-#define FLAGWD(t)	CC;\
-		t=((ovf<<11)+(dirf<<10)+(intf<<9)+(signf<<7)+(zerof<<6)+cf)
-
-#define LOADFLAGS(t)	ovf     = (t>>11)&1;\
-			dirf    = (t>>10)&1;\
-			intf    = (t>>9)&1;\
-			signf   = (t>>7)&1;\
-			zerof   = (t>>6)&1;\
-			cf      = t&1;\
-			ccvalid = 1
-
 /* Macros for string operations. */
 #define STRING   MEM(xapc, ds, si); MEM(eapc, es, di)
 #define WDIRF(t) t += (dirf == 0) ? 2 : -2;
