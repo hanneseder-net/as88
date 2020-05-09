@@ -1,11 +1,5 @@
-#include "store.h"
-
 /* Macros for memory references. */
 #define M m
-
-#define WSTORE(x)	wstore(x)
-#define	RAPWSTORE(x)	rapwstore(x)
-#define XSTORE(x)	xstore(x)
 
 #if CHECK
 #define MEM(x,b,t)\

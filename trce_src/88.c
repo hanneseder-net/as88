@@ -8,10 +8,15 @@
 #include "cond.h"
 #include "macro.h"
 #include "main_lib.h"
+#include "store.h"
 
 #ifdef INPUT
 #include <signal.h>
 #endif
+
+#define WSTORE(x) wstore(x)
+#define RAPWSTORE(x) rapwstore(x)
+#define XSTORE(x) xstore(x)
 
 /* Macros for handling operands. */
 #define IMMED     eoplo = *pcx++; eophi = *pcx++
