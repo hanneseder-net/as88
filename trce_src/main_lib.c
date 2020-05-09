@@ -831,10 +831,10 @@ static void pdmpadr(void) {
 }
 
 static void cnulbp(void) {
-  char *p;
-  if(bparr[0].pcp != -1){
-    p = m + cs16+bparr[0].pcp;
-    if(*p == '\360') *p = bparr[0].bprt;
+  char* p;
+  if (bparr[0].pcp != -1) {
+    p = m + cs16 + bparr[0].pcp;
+    if (*p == '\360') *p = bparr[0].bprt;
     bparr[0].pcp = 0Xffff;
   }
 }
@@ -873,9 +873,9 @@ void procdepth(int s) {
     prdepth--;
   }
   if (prdepth == bprdepth) {
-    stopvlag |= 1;
+    stopvlag = 1;
   } else {
-    stopvlag &= 254;
+    stopvlag = 0;
   }
 }
 
@@ -1055,7 +1055,7 @@ static void rdcmd(void) {
 	case 'c' : clearbp(lndotarr[adre]); rdcmd(); break;
 	case 'n' : nulbp(dotlnarr[lndotarr[dotlnarr[(PC-1)]+1]]); break;
 	case 'x' : case 'X': case '*': instrcount = adre; break;
-	default : stopvlag = 255;
+	default : stopvlag = 1;
     } 
 }
 
