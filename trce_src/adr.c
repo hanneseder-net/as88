@@ -2,13 +2,12 @@
 #include "88.h"
 #include "macro.h"
 
-static uint16_t xs;
-
 #define DS xs=ds  /* indicates that ds segment used */
 #define SS xs=ss  /* indicates that ss segment used */
 
 void wd(void)
 {
+  uint16_t xs;
   /* Compute the effective address and put it in 'ea'. Also compute the register
    * and put a pointer to it in 'rapc.' This routine only called for word
    * operands.
@@ -333,6 +332,7 @@ void wd(void)
 }
 
 void by(void) {
+  uint16_t xs;
   /* Compute the effective address and put it in 'ea'. Also compute the register
    * and put a pointer to it in 'rapc.' This routine only called for byte
    * operands.
