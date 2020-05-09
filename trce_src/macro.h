@@ -57,8 +57,7 @@
 	x = M + cs16 + (unsigned short)t
 
 #define STACKPTR(t)\
-	xx = ( (long)ss << 4) + (unsigned short)sp;\
-	t = (int16_t *) (M + xx);
+	t = (int16_t *) (M + ((long)ss << 4) + (unsigned short)sp);
 
 #define BSTORE(x)\
 	*eapc = x
