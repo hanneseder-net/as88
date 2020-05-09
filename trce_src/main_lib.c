@@ -206,8 +206,13 @@ static int load(int argc, char **argv) {
     rewind(L);
     for (i = 0; i < 7; i++) datadm[i] = NULL;
   }
-  pcx = p = m; ss = ds = es = 0; CS(0);
-  for(i=0;i<7;i++) {for(j=0;j<80;j++) datadarr[i][j] = ' '; datadarr[i][80] = '\0';}
+  for (int i = 0; i < ARRAYSIZE(datadarr); i++) {
+    memset(&datadarr[i][0], ' ', sizeof(datadarr[i]));
+    datadarr[i][sizeof(datadarr[i]) - 1] = '\0';
+  }
+  pcx = p = m;
+  ss = ds = es = 0;
+  CS(0);
   datadp = 0; lfptr = 0;
   if((i=getsh(prog)) != MAGIC) {fprintf(stderr,"wrong magic load file\n"); return(1);}
   i = getsh(prog); /*stamps unimportant */
