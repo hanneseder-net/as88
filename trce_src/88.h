@@ -148,7 +148,6 @@ EXTERN int16_t *rapw;		/* eapw is unusable since it might be odd */
 EXTERN int16_t *stkp;		/* scratch variable used by PUSH and POP */
 
 EXTERN uint16_t cs, ds, ss, es;	/* contents of segment registers */
-EXTERN uint16_t xs;
 EXTERN long cs16;		/* cs16 = 16*cs  (= cs<<4) */
 
 EXTERN unsigned timer, ticks, nextint;

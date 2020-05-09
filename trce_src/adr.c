@@ -2,6 +2,8 @@
 #include "88.h"
 #include "macro.h"
 
+static uint16_t xs;
+
 #define DS xs=ds  /* indicates that ds segment used */
 #define SS xs=ss  /* indicates that ss segment used */
 
