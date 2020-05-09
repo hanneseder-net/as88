@@ -53,6 +53,47 @@
 #define WSIDI    if (dirf == 0) {si +=2; di +=2;} else {si -=2; di -=2;}
 #define BSIDI    if (dirf == 0) {si +=1; di +=1;} else {si -=1; di -=1;}
 
+/* Macros for stack operations. */
+#ifdef LITTLE_ENDIAN
+# define PUSH(x) sp -= 2; STACKPTR(stkp); *stkp = x
+# define POP(x)  STACKPTR(stkp); x = *stkp; sp += 2
+#else
+# define PUSH(x)\
+	sp -= 2;\
+	STACKPTR(stkp);{\
+	reg _t; char *ptr = (char *)stkp;\
+	_t.w = x; *ptr = _t.b.lo; *(ptr+1) = _t.b.hi; }
+
+# define POP(x)\
+	STACKPTR(stkp);\
+	{ reg _t;\
+	char *ptr = (char *)stkp;\
+	_t.b.lo = *ptr;\
+	_t.b.hi = *(ptr+1);\
+	x = _t.w;\
+	} sp += 2
+#endif /*LITTLE_ENDIAN*/
+
+#ifdef LITTLE_ENDIAN
+#define WFETCH     \
+  eoplo = *eapc++; \
+  eophi = *eapc++
+#else
+/*
+ * XXX watch for memory layout here
+ */
+#define WFETCH                \
+  if (eapc <= M + MEMBYTES) { \
+    eoplo = *eapc++;          \
+    eophi = *eapc++;          \
+  } else {                    \
+    eophi = *eapc++;          \
+    eoplo = *eapc++;          \
+  }
+#endif
+
+#define BFETCH eoplo= *eapc
+
 /* Miscellaneous macros. */
 #define OVERRIDE(seg)\
 	ds=seg; \

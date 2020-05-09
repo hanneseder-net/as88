@@ -86,43 +86,4 @@
 #define PC (pcx - M) - cs16
 #define CS(x) cs = x; cs16 = cs << 4;
 
-#ifdef LITTLE_ENDIAN
-# define WFETCH\
-	eoplo= *eapc++; eophi= *eapc++
-#else
-/*
- * XXX watch for memory layout here
- */
-# define WFETCH\
-    if (eapc <= M + MEMBYTES) {\
-	eoplo = *eapc++; eophi = *eapc++;\
-    } else {\
-	eophi = *eapc++; eoplo = *eapc++;\
-    }
-#endif
-
-#define BFETCH eoplo= *eapc
-
-/* Macros for stack operations. */
-#ifdef LITTLE_ENDIAN
-# define PUSH(x) sp -= 2; STACKPTR(stkp); *stkp = x
-# define POP(x)  STACKPTR(stkp); x = *stkp; sp += 2
-#else
-# define PUSH(x)\
-	sp -= 2;\
-	STACKPTR(stkp);{\
-	reg _t; char *ptr = (char *)stkp;\
-	_t.w = x; *ptr = _t.b.lo; *(ptr+1) = _t.b.hi; }
-
-# define POP(x)\
-	STACKPTR(stkp);\
-	{ reg _t;\
-	char *ptr = (char *)stkp;\
-	_t.b.lo = *ptr;\
-	_t.b.hi = *(ptr+1);\
-	x = _t.w;\
-	} sp += 2
-
-#endif /*LITTLE_ENDIAN*/
-
 #define ARRAYSIZE(a) (sizeof(a) / sizeof(*(a)))
