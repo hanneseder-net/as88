@@ -181,3 +181,5 @@
 
 #define BITSEL(v1,n1,v2,n2) v1=(eop>>n1)&1;  v2=(eop>>n2)&1
 #define LOOP goto loop
+
+#define ARRAYSIZE(a) (sizeof(a) / sizeof(*(a)))

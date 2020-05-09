@@ -204,9 +204,9 @@ static int load(int argc, char **argv) {
     }
     maxln = i;
     rewind(L);
-    for (i = 0; i < 7; i++) datadm[i] = NULL;
   }
-  for (int i = 0; i < ARRAYSIZE(datadarr); i++) {
+  for (unsigned int i = 0; i < ARRAYSIZE(datadm); i++) datadm[i] = NULL;
+  for (unsigned int i = 0; i < ARRAYSIZE(datadarr); i++) {
     memset(&datadarr[i][0], ' ', sizeof(datadarr[i]));
     datadarr[i][sizeof(datadarr[i]) - 1] = '\0';
   }
