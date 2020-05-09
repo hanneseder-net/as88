@@ -46,6 +46,24 @@
   cf = t & 1;           \
   ccvalid = 1
 
+/* Macros for string operations. */
+#define STRING   MEM(xapc, ds, si); MEM(eapc, es, di)
+#define WDIRF(t) t += (dirf == 0) ? 2 : -2;
+#define BDIRF(t) t += (dirf == 0) ? 1 : -1;
+#define WSIDI    if (dirf == 0) {si +=2; di +=2;} else {si -=2; di -=2;}
+#define BSIDI    if (dirf == 0) {si +=1; di +=1;} else {si -=1; di -=1;}
+
+/* Miscellaneous macros. */
+#define OVERRIDE(seg)\
+	ds=seg; \
+	ss=seg; \
+	ticks = 2; \
+	timer = 2; \
+	nextint=SEGOVER
+
+#define BITSEL(v1,n1,v2,n2) v1=(eop>>n1)&1;  v2=(eop>>n2)&1
+#define LOOP goto loop
+
 /* forward decls */
 static void rep(int op);
 
