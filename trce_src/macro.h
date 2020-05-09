@@ -103,24 +103,7 @@
 
 #define BFETCH eoplo= *eapc
 
-/* Macros for handling operands. */
-#define	DISP8		eahi  = ((char)(ealo = *pcx++) < 0) ? 0xFF : 0;
-#define DISP16		ealo  = *pcx++; eahi = *pcx++;
-#define IMMED		eoplo = *pcx++; eophi = *pcx++
-#define IMMED8		eoplo = *pcx++
-#define IMMED8X		eophi = ((char)(eoplo = *pcx++) < 0) ? 0xFF : 0
-#define IMMED8Z		eoplo = *pcx++; eophi = 0
-#define RMCONST		roplo = *pcx++; rophi = *pcx++
-#define BRMCONST	roplo = *pcx++;  
-#define XRMCONST	rophi = ((char)(roplo = *pcx++) < 0) ? 0xFF : 0
-
-/* Macros for setting condition codes. * /
-#define SZONLY(a)          ccvalid= 0; x= a; ccop= BOOLW
-#define BSZONLY(a)         ccvalid= 0; xc= a; ccop= BOOLC
-#define LAZYCC(a,b,op)     ccvalid= 0; x= a; y= b; ccop= op
-#define BLAZYCC(a,b,op)    ccvalid= 0; xc= a; yc= b; ccop= op
-#define LAZYCC3(a,b,c,op)  ccvalid= 0; x= a; y= b; z= c; ccop= op
-#define BLAZYCC3(a,b,c,op) ccvalid= 0; xc= a; yc= b; zc= c; ccop= op;*/
+/* Macros for setting condition codes. */
 #define CC if (ccvalid == 0) cc()
 #define SZONLY(a)          x= a; ccop= BOOLW; cc()
 #define BSZONLY(a)         xc= a; ccop= BOOLC; cc()

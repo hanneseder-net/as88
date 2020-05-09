@@ -13,6 +13,15 @@
 #include <signal.h>
 #endif
 
+/* Macros for handling operands. */
+#define IMMED     eoplo = *pcx++; eophi = *pcx++
+#define IMMED8    eoplo = *pcx++
+#define IMMED8X   eophi = ((char)(eoplo = *pcx++) < 0) ? 0xFF : 0
+#define IMMED8Z   eoplo = *pcx++; eophi = 0
+#define RMCONST   roplo = *pcx++; rophi = *pcx++
+#define BRMCONST  roplo = *pcx++;  
+#define XRMCONST  rophi = ((char)(roplo = *pcx++) < 0) ? 0xFF : 0
+
 /* forward decls */
 static void rep(int op);
 

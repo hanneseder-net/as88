@@ -2,6 +2,10 @@
 #include "88.h"
 #include "macro.h"
 
+/* Macros for handling operands. */
+#define DISP8     eahi = ((char)(ealo = *pcx++) < 0) ? 0xFF : 0;
+#define DISP16    ealo = *pcx++; eahi = *pcx++;
+
 #define DS xs=ds  /* indicates that ds segment used */
 #define SS xs=ss  /* indicates that ss segment used */
 
