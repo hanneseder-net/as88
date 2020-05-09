@@ -16,3 +16,5 @@
 #define CS(x) cs = x; cs16 = cs << 4;
 
 #define ARRAYSIZE(a) (sizeof(a) / sizeof(*(a)))
+
+#define UNUSED(x) (void)(x)

@@ -178,5 +178,3 @@ extern REG r;
 extern int traceflag, instrcount, codelength;
 
 void interp(void);
-
-#define UNUSED(x) (void)(x)
