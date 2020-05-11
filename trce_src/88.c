@@ -203,6 +203,8 @@
   v2 = (eop >> n2) & 1
 #define LOOP goto loop
 
+#define ENABLED 01
+
 /* forward decls */
 static void rep(int op);
 

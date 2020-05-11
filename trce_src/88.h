@@ -157,8 +157,6 @@ EXTERN struct intstruct{
   int int_vector;
 } intstruct[NDEV];
 
-#define ENABLED 01
-
 EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
 EXTERN short x,y,z;		/* used in lazy condition code evaluation */
 EXTERN uint8_t xc,yc,zc;		/* ditto */
