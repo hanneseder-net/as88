@@ -141,7 +141,7 @@ static int load_hash_file(const char* filename) {
 }
 
 static int load(int argc, char **argv) {
-  int i,ii,j,k,sections, outrelo, *pi;
+  int i,ii,j,k,sections, *pi;
   char *p;
 
   char fnameS[CBUF];
@@ -229,17 +229,19 @@ static int load(int argc, char **argv) {
   ss = ds = es = 0;
   CS(0);
   datadp = 0; lfptr = 0;
-  if ((i = getsh(prog)) != MAGIC) {
-    fprintf(stderr, "wrong magic load file, expected %d found %d\n", MAGIC, i);
+  const int magic = getsh(prog);
+  if (magic != MAGIC) {
+    fprintf(stderr, "wrong magic load file, expected %d found %d\n", MAGIC,
+            magic);
     return (1);
   }
-  i = getsh(prog);                /*stamps unimportant */
-  i = getsh(prog);                /*flags unimportant */
-  sections = getsh(prog);         /*number of load sections*/
-  outrelo = getsh(prog);          /*number of reloactable parts*/
-  nsymtab = getsh(prog);          /*number of entries in symbol table*/
-  const int loadl = getint(prog); /*length of core image in load file*/
-  const int strl = getint(prog); /*length of string section in load file*/
+  (void)getsh(prog);                /* stamps unimportant */
+  (void)getsh(prog);                /* flags unimportant */
+  sections = getsh(prog);           /* number of load sections */
+  const int outrelo = getsh(prog);  /* number of reloactable parts */
+  nsymtab = getsh(prog);            /* number of entries in symbol table */
+  const int loadl = getint(prog);   /* length of core image in load file */
+  const int strl = getint(prog);    /* length of string section in load file */
 #ifdef DEBUG
   fprintf(LOG, "sections %d outrelo %d nsymtab %d loadl %d strl %d\n", sections,
           outrelo, nsymtab, loadl, strl);
@@ -248,82 +250,142 @@ static int load(int argc, char **argv) {
   /* Have to compiler not complain about unused var. */
   (void)loadl;
 #endif
-  j = 0; for(i=0;i<sections;i++) {
-	segmhead[i].startad = getint(prog);
-	 j += ( segmhead[i].lengte = getint(prog));
-	if(i==0) codelength = segmhead[i].lengte;
-	segmhead[i].fstart = getint(prog);
-	segmhead[i].flen = getint(prog);
-	segmhead[i].align = getint(prog);
+  j = 0;
+  for (int i = 0; i < sections; i++) {
+    segmhead[i].startad = getint(prog);
+    j += (segmhead[i].lengte = getint(prog));
+    if (i == 0) codelength = segmhead[i].lengte;
+    segmhead[i].fstart = getint(prog);
+    segmhead[i].flen = getint(prog);
+    segmhead[i].align = getint(prog);
 #ifdef DEBUG
-  fprintf(LOG,"loadlengte %o %d %x na segment %d\n",j,j,j,i+2); fprintf(LOG,
-"%6d%5x startad | %6d%5x lengte | %6d%5x fstart | %6d%5x flen | %6d%5x align\n",
-  segmhead[i].startad,segmhead[i].startad,segmhead[i].lengte,segmhead[i].lengte,
-   segmhead[i].fstart,segmhead[i].fstart,segmhead[i].flen,segmhead[i].flen,
-   segmhead[i].align,segmhead[i].align); fflush (LOG);
+    fprintf(LOG, "loadlengte %o %d %x na segment %d\n", j, j, j, i + 2);
+    fprintf(LOG,
+            "%6d%5x startad | %6d%5x lengte | %6d%5x fstart | %6d%5x flen | "
+            "%6d%5x align\n",
+            segmhead[i].startad, segmhead[i].startad, segmhead[i].lengte,
+            segmhead[i].lengte, segmhead[i].fstart, segmhead[i].fstart,
+            segmhead[i].flen, segmhead[i].flen, segmhead[i].align,
+            segmhead[i].align);
+    fflush(LOG);
 #endif
-  if(j>99000) {fprintf(stderr,"Insufficient amount of memory %x\n",j); exit(1);}
-  } ss = ((j+31)>>4); /* stack segment behind loaded text, data, bss segments */
-  for(i=0;i<sections;i++) {
-    if(lfptr > segmhead[i].fstart) {
-	fprintf(stderr,"misalignment in load file\n"); return(1); }
-    if(i<2) p = m + segmhead[i].startad+(ds<<4);
-    while((p-m)%segmhead[i].align) p++;
-    if(i>1) segmhead[i].startad = (p - (ds<<4)) - m;
-    for(j=0;j<segmhead[i].flen;j++) {*p++ = getc(prog); lfptr++;}
-    if(!i) {es = ds = (segmhead[i].lengte + 15)>>4; bp = sp = maxsp = 0x7ff8;}
+    if (j > 99000) {
+      fprintf(stderr, "Insufficient amount of memory %x\n", j);
+      exit(1);
+    }
+  }
+  /* stack segment behind loaded text, data, bss segments */
+  ss = ((j + 31) >> 4);
+  for (int i = 0; i < sections; i++) {
+    if (lfptr > segmhead[i].fstart) {
+      fprintf(stderr, "misalignment in load file\n");
+      return (1);
+    }
+    if (i < 2) p = m + segmhead[i].startad + (ds << 4);
+    while ((p - m) % segmhead[i].align) p++;
+    if (i > 1) segmhead[i].startad = (p - (ds << 4)) - m;
+    for (int j = 0; j < segmhead[i].flen; j++) {
+      *p++ = getc(prog);
+      lfptr++;
+    }
+    if (!i) {
+      es = ds = (segmhead[i].lengte + 15) >> 4;
+      bp = sp = maxsp = 0x7ff8;
+    }
 #ifdef DEBUG
-    fprintf(LOG,"i %d startad %d\n",i,segmhead[i].startad);
+    fprintf(LOG, "i %d startad %d\n", i, segmhead[i].startad);
 #endif
   }
-    for(i=0;i<outrelo;i++) { /* reads relocation information */
-      relocarr[i].typ = getc(prog); relocarr[i].sct = getc(prog);
-      relocarr[i].smb = getsh(prog); relocarr[i].adrs = getint(prog);
+  for (int i = 0; i < outrelo; i++) { /* reads relocation information */
+    relocarr[i].typ = getc(prog);
+    relocarr[i].sct = getc(prog);
+    relocarr[i].smb = getsh(prog);
+    relocarr[i].adrs = getint(prog);
 #ifdef DEBUG
-    fprintf(LOG,"i %d typ %d sect %d symbol %d adres %d %x\n",i,
-	(int) relocarr[i].typ, (int) relocarr[i].sct, relocarr[i].smb,
-	relocarr[i].adrs,relocarr[i].adrs); fflush(LOG);
+    fprintf(LOG, "i %d typ %d sect %d symbol %d adres %d %x\n", i,
+            (int)relocarr[i].typ, (int)relocarr[i].sct, relocarr[i].smb,
+            relocarr[i].adrs, relocarr[i].adrs);
+    fflush(LOG);
 #endif
+  }
+  if (traceflag) {
+    for (int i = 0; i < 32; i++) {
+      bparr[i].pcp = 0;
+      bparr[i].bprt = *pcx;
     }
-  if(traceflag) { for(i=0;i<32;i++) { bparr[i].pcp = 0; bparr[i].bprt = *pcx;}}
-/*Break point fields initialised on zero field. Next initialise symbol table*/
-    for(i=0;i<MAXSYMTAB;i++){symtab[i].symvalue=0;symtab[i].symbol=nulsymbol;
-    symtab[i].nextsym = -1; symtab[i].lnr = 0; symtab[i].symsect = 0;}
-    for(i=0;i<32;i++) symhash[i] = -1; for(i=0;i<nsymtab;i++) {
-	symtab[i].nextsym = getint(prog); j = getint(prog); j &= 255;
-	symtab[i].symsect = (char)(j); symtab[i].symvalue = getint(prog);
-	if(j==2) symtab[i].lnr = dotlnarr[symtab[i].symvalue];
-	else if(j > 3) symtab[i].symvalue += segmhead[(j&255)-2].startad;
+  }
+  /*Break point fields initialised on zero field. Next initialise symbol table*/
+  for (int i = 0; i < MAXSYMTAB; i++) {
+    symtab[i].symvalue = 0;
+    symtab[i].symbol = nulsymbol;
+    symtab[i].nextsym = -1;
+    symtab[i].lnr = 0;
+    symtab[i].symsect = 0;
+  }
+  for (int i = 0; i < 32; i++) symhash[i] = -1;
+  for (int i = 0; i < nsymtab; i++) {
+    symtab[i].nextsym = getint(prog);
+    j = getint(prog);
+    j &= 255;
+    symtab[i].symsect = (char)(j);
+    symtab[i].symvalue = getint(prog);
+    if (j == 2)
+      symtab[i].lnr = dotlnarr[symtab[i].symvalue];
+    else if (j > 3)
+      symtab[i].symvalue += segmhead[(j & 255) - 2].startad;
 #ifdef DEBUG
-fprintf(LOG,"i %d j %d nextsym %d symval %d symsect %o\n",i,j,
- symtab[i].nextsym,symtab[i].symvalue,(int)(symtab[i].symsect)); fflush(LOG);
+    fprintf(LOG, "i %d j %d nextsym %d symval %d symsect %o\n", i, j,
+            symtab[i].nextsym, symtab[i].symvalue, (int)(symtab[i].symsect));
+    fflush(LOG);
 #endif
+  }
+  j = ftell(prog);
+  for (int i = 0; i < strl; i++) {
+    k = getc(prog);
+    stringfield[i] = (char)(k & 255);
+  }
+  for (int i = 0; i < nsymtab; i++) {
+    symtab[i].nextsym -= j;
+    symtab[i].symbol = stringfield + symtab[i].nextsym;
+    symtab[i].nextsym = -1;
+  }
+
+  p = stringfield; i = 0;
+  while ((i++ < 8190) && ((j = getc(prog)) != EOF)) *p++ = j;
+
+  for (int i = 0; i < nsymtab; i++) {
+    j = hashstring(symtab[i].symbol);
+    pi = &symhash[j];
+    while (*pi >= 0) pi = &(symtab[*pi].nextsym);
+    *pi = i;
+  }
+  prdepth = 0;
+
+  for (int i = 0; i < 0X800; i++) lnsymarr[i] = nsymtab - 2;
+  for (int i = 0; i < nsymtab - 2; i++) {
+    if (symtab[i].symsect == 2) symlcorr(i);
+  }
+  j = 0;
+  for (int i = 0; i <= maxln; i++) {
+    while ((j < nsymtab)) {
+      if ((symtab[j].symsect != 2) || (symtab[j].lnr < i) ||
+          (symtab[j].symbol[0] == '.')) {
+        j++;
+        continue;
+      }
+      if (symtab[j].lnr == i) k = j;
+      break;
     }
-    j = ftell(prog);
-    for(i=0;i<strl;i++){k=getc(prog);stringfield[i]=(char)(k&255);} /*augustus*/
-  for(i=0;i<nsymtab;i++) {
-	symtab[i].nextsym -= j;
-	symtab[i].symbol = stringfield + symtab[i].nextsym;
-	symtab[i].nextsym = -1;
-    }
-    p = stringfield; i = 0;
-    while((i++<8190) && ((j = getc(prog)) != EOF)) *p++ = j;
-    for(i=0;i<nsymtab;i++) {j = hashstring(symtab[i].symbol);
-	pi = &symhash[j]; while (*pi>=0) pi = &(symtab[*pi].nextsym); *pi = i;
-    } prdepth = 0;
-    for(i=0;i<0X800;i++) lnsymarr[i] = nsymtab-2;
-    for(i=0;i<nsymtab-2;i++){
-	if(symtab[i].symsect == 2) symlcorr(i);
-    }
-    j = 0; for(i=0;i<=maxln;i++) {
-      while((j<nsymtab)) {
-        if((symtab[j].symsect!=2) ||
-		(symtab[j].lnr<i) || (symtab[j].symbol[0]=='.')){j++; continue;}
-	if(symtab[j].lnr == i) k = j; break;} lnsymarr[i] = k;
-	if(k>=0) for(ii=k+1;ii<=nsymtab;ii++) {
-	  if((symtab[ii].symsect==2) && (symtab[ii].lnr == i))lnsymarr[i] = ii;}
-    }
-  for(i=0;i<outrelo;i++) relocate(i);
+    lnsymarr[i] = k;
+    if (k >= 0)
+      for (ii = k + 1; ii <= nsymtab; ii++) {
+        if ((symtab[ii].symsect == 2) && (symtab[ii].lnr == i))
+          lnsymarr[i] = ii;
+      }
+  }
+  for (int i = 0; i < outrelo; i++) {
+    relocate(i);
+  }
   if (traceflag) {
     memset(inbuf, '\0', sizeof(inbuf));
     for (i = 1; i < 27; i++) fprintf(stderr, "\n");
