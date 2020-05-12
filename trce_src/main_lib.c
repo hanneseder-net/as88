@@ -174,6 +174,7 @@ static int load(int argc, char **argv) {
       while (i <= loadl) lndotarr[i++] = strl;
       while (j <= strl) dotlnarr[j++] = loadl;
     }
+    fclose(L);
     if ((INP = fopen(fnamei, "r")) != NULL)
       inpfl = 1;
     else {
@@ -186,7 +187,6 @@ static int load(int argc, char **argv) {
       cmdfl = 0;
       CMD = stdin;
     }
-    fclose(L);
     if ((L = fopen(fnameS, "rb")) == NULL) {
       fprintf(stderr, "Cannot open %s\n", fnameS);
       return 1;
