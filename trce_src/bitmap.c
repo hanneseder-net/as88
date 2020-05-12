@@ -12,19 +12,38 @@ static int pfildes[2];
 static int pnr;
 
 static int spiegel(int m, int n) {
-  int i,j,k,l;
-  if(m == 0) {
-    i = 1; j = 128; l = 0;
-    for(k=0;k<8;k++) {if((i&n)>0) l |= j; i <<= 1; j >>= 1;}
+  int l = 0;
+  if (m == 0) {
+    int i = 1;
+    int j = 128;
+    for (int k = 0; k < 8; k++) {
+      if ((i & n) > 0) l |= j;
+      i <<= 1;
+      j >>= 1;
+    }
   } else if (m == 1) {
-    i = 16; j = 128; l = 0; for(k=0;k<4;k++) {
-	 if((i&n)>0) l |= j;j >>= 1; if((i&n)>0) l |= j;j >>= 1; i <<= 1;}
+    int i = 16;
+    int j = 128;
+    for (int k = 0; k < 4; k++) {
+      if ((i & n) > 0) l |= j;
+      j >>= 1;
+      if ((i & n) > 0) l |= j;
+      j >>= 1;
+      i <<= 1;
+    }
   } else {
-    i = 1; j = 128; l = 0; for(k=0;k<4;k++) {
-	 if((i&n)>0) l |= j;j >>= 1; if((i&n)>0) l |= j;j >>= 1; i <<= 1;}
+    int i = 1;
+    int j = 128;
+    for (int k = 0; k < 4; k++) {
+      if ((i & n) > 0) l |= j;
+      j >>= 1;
+      if ((i & n) > 0) l |= j;
+      j >>= 1;
+      i <<= 1;
+    }
   }
-  return(l);
-} 
+  return (l);
+}
 
 static void schrijf(void) {
   write(pfildes[1], bmbuf, strlen(bmbuf));
