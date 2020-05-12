@@ -141,7 +141,7 @@ static int load_hash_file(const char* filename) {
 }
 
 static int load(int argc, char **argv) {
-  int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
+  int i,ii,j,k,sections, outrelo, *pi;
   char *p;
 
   char fnameS[CBUF];
@@ -206,16 +206,16 @@ static int load(int argc, char **argv) {
       fprintf(stderr, "Cannot open %s\n", fnameS);
       return 1;
     }
-    strl = 0;
+    int tstrl = 0;
     lnfilarr[1] = lnfilarr[0] = 0;
     stckprdepth[0] = 1;
     for (i = 2; i < 0Xff8; i++) {
       while ((j = getc(L)) != EOF) {
-        strl++;
+        tstrl++;
         if (j == '\n') break;
       }
       if (j == EOF) break;
-      lnfilarr[i] = strl;
+      lnfilarr[i] = tstrl;
     }
     maxln = i;
     rewind(L);
@@ -229,17 +229,24 @@ static int load(int argc, char **argv) {
   ss = ds = es = 0;
   CS(0);
   datadp = 0; lfptr = 0;
-  if((i=getsh(prog)) != MAGIC) {fprintf(stderr,"wrong magic load file\n"); return(1);}
-  i = getsh(prog); /*stamps unimportant */
-  i = getsh(prog); /*flags unimportant */
-  sections = getsh(prog); /*number of load sections*/
-  outrelo = getsh(prog);  /*number of reloactable parts*/
-  nsymtab = getsh(prog);   /*number of entries in symbol table*/
-  loadl = getint(prog);   /*length of core image in load file*/
-  strl = getint(prog);    /*length of string section in load file*/
+  if ((i = getsh(prog)) != MAGIC) {
+    fprintf(stderr, "wrong magic load file, expected %d found %d\n", MAGIC, i);
+    return (1);
+  }
+  i = getsh(prog);                /*stamps unimportant */
+  i = getsh(prog);                /*flags unimportant */
+  sections = getsh(prog);         /*number of load sections*/
+  outrelo = getsh(prog);          /*number of reloactable parts*/
+  nsymtab = getsh(prog);          /*number of entries in symbol table*/
+  const int loadl = getint(prog); /*length of core image in load file*/
+  const int strl = getint(prog); /*length of string section in load file*/
 #ifdef DEBUG
-	fprintf(LOG,"sections %d outrelo %d nsymtab %d loadl %d strl %d\n",
-		sections,outrelo,nsymtab,loadl,strl); fflush(LOG);
+  fprintf(LOG, "sections %d outrelo %d nsymtab %d loadl %d strl %d\n", sections,
+          outrelo, nsymtab, loadl, strl);
+  fflush(LOG);
+#else
+  /* Have to compiler not complain about unused var. */
+  (void)loadl;
 #endif
   j = 0; for(i=0;i<sections;i++) {
 	segmhead[i].startad = getint(prog);
