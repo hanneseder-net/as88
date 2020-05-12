@@ -123,6 +123,24 @@ static int hashstring(char *p) {
   return(h);
 }
 
+// TODO(heder): This function needs a better name.
+static int load_hash_file(const char* filename) {
+  FILE* FH = NULL;
+  if ((FH = fopen(filename, "r")) == NULL) {
+    fprintf(stderr, "Cannot open %s\n", filename);
+    return 1;
+  }
+  int i = 0;
+  int j = 0;
+  int a, b;
+  while (fscanf(FH, "%d %d", &a, &b) > 0) {
+    while (i <= a) lndotarr[i++] = b;
+    while (j <= b) dotlnarr[j++] = a;
+  }
+  fclose(FH);
+  return 0;
+}
+
 static int load(int argc, char **argv) {
   int i,ii,j,k,sections, outrelo, loadl, strl, *pi;
   char *p;
@@ -164,17 +182,9 @@ static int load(int argc, char **argv) {
     fprintf(LOG, "Before open #-file |%s|\n", fnameL);
     fflush(LOG);
 #endif
-    if ((L = fopen(fnameL, "r")) == NULL) {
-      fprintf(stderr, "Cannot open %s\n", fnameL);
+    if (load_hash_file(fnameL)) {
       return 1;
     }
-    i = 0;
-    j = 0;
-    while (fscanf(L, "%d %d", &loadl, &strl) > 0) {
-      while (i <= loadl) lndotarr[i++] = strl;
-      while (j <= strl) dotlnarr[j++] = loadl;
-    }
-    fclose(L);
     if ((INP = fopen(fnamei, "r")) != NULL)
       inpfl = 1;
     else {
