@@ -31,7 +31,7 @@ static int errflag;
 #define MAXSHORT 0XFFFF
 #define MAXSYMTAB 0XFFF
 
-static char fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
+static char fnameS[CBUF], fname88[CBUF], fnamei[CBUF];
 static char nulsymbol[]="NULLSYMBOL";
 static time_t t1,t2;
 static struct stat astat[2];
@@ -174,6 +174,7 @@ static int load(int argc, char **argv) {
   }
   if (traceflag) {
     char fnameL[CBUF];
+    char fnamet[CBUF];
     sprintf(fnameS, "%s.$", basename);
     sprintf(fnameL, "%s.#", basename);
     sprintf(fnamei, "%s.i", basename);
