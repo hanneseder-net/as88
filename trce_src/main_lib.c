@@ -31,7 +31,7 @@ static int errflag;
 #define MAXSHORT 0XFFFF
 #define MAXSYMTAB 0XFFF
 
-static char fnameL[CBUF], fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
+static char fnameS[CBUF], fname88[CBUF], fnamei[CBUF], fnamet[CBUF];
 static char nulsymbol[]="NULLSYMBOL";
 static time_t t1,t2;
 static struct stat astat[2];
@@ -158,7 +158,7 @@ static int load(int argc, char **argv) {
     system("sleep 5");
   }
   if (stat(fnameS, astat)) {
-    fprintf(stderr, "Warning: Does %s exist?\n", fnameL);
+    fprintf(stderr, "Warning: Does %s exist?\n", fnameS);
     system("sleep 2");
   }
   t1 = astat[0].st_mtime;
@@ -173,6 +173,7 @@ static int load(int argc, char **argv) {
     system("sleep 5");
   }
   if (traceflag) {
+    char fnameL[CBUF];
     sprintf(fnameS, "%s.$", basename);
     sprintf(fnameL, "%s.#", basename);
     sprintf(fnamei, "%s.i", basename);
