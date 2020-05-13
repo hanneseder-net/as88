@@ -309,7 +309,7 @@ static int load(int argc, char **argv) {
 #endif
   }
   if (traceflag) {
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < ARRAYSIZE(bparr); i++) {
       bparr[i].pcp = 0;
       bparr[i].bprt = *pcx;
     }
