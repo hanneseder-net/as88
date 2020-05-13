@@ -32,7 +32,6 @@ static int errflag;
 #define MAXSYMTAB 0XFFF
 
 static char nulsymbol[]="NULLSYMBOL";
-static struct stat astat[2];
 
 #define OUTBUFFER_SIZE 4
 #define OUTBUFFER_LEN 58
@@ -158,16 +157,17 @@ static int load(int argc, char **argv) {
             fname88);
     system("sleep 5");
   }
-  if (stat(fnameS, astat)) {
+  struct stat astat;
+  if (stat(fnameS, &astat)) {
     fprintf(stderr, "Warning: Does %s exist?\n", fnameS);
     system("sleep 2");
   } else {
-    const time_t t1 = astat[0].st_mtime;
-    if (stat(fname88, astat)) {
+    const time_t t1 = astat.st_mtime;
+    if (stat(fname88, &astat)) {
       fprintf(stderr, "Warning: Does %s exist?\n", fname88);
       system("sleep 5");
     } else {
-      const time_t t2 = astat[0].st_mtime;
+      const time_t t2 = astat.st_mtime;
       if (t1 > t2) {
         fprintf(stderr, "Warning: %s is older than %s.\n", fname88, fnameS);
         system("sleep 5");
