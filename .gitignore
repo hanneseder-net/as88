@@ -11,6 +11,9 @@ examples/t88
 exercise/as88
 exercise/s88
 exercise/t88
+regtest/as88
+regtest/s88
+regtest/t88
 trce_src/s88
 trce_src/t88
 .vscode

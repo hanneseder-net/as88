@@ -35,7 +35,7 @@ clean:
 
 as88:	$(COBJ) as.$(SUF)
 	$(CC) $(LDFLAGS) $(COBJ) as.$(SUF) -o as88; \
-	cp as88 ../bin/as88; cp as88 ../exercise/as88; cp as88 ../examples/as88
+	cp as88 ../bin/as88; cp as88 ../exercise/as88; cp as88 ../examples/as88; cp as88 ../regtest/as88
 
 # as.y:	$(CDIR)/comm2.y
 # 	$(CPP) -P -I$(MDIR) -I$h $(DEF) $(CDIR)/comm2.y >as.y
