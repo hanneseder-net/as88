@@ -28,7 +28,6 @@ static int errflag;
 
 #define CBUF 180
 #define MAGIC 0X0201
-#define MAXSHORT 0XFFFF
 #define MAXSYMTAB 0XFFF
 
 static char nulsymbol[]="NULLSYMBOL";
