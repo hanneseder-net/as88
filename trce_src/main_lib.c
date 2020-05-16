@@ -138,7 +138,7 @@ static int load_hash_file(const char* filename) {
 }
 
 static int load(int argc, char **argv) {
-  int i, j, k, sections, *pi;
+  int i, j, k, *pi;
   char *p;
 
   char fnameS[CBUF];
@@ -236,7 +236,7 @@ static int load(int argc, char **argv) {
   }
   (void)getsh(prog);                /* stamps unimportant */
   (void)getsh(prog);                /* flags unimportant */
-  sections = getsh(prog);           /* number of load sections */
+  const int sections = getsh(prog); /* number of load sections */
   const int outrelo = getsh(prog);  /* number of reloactable parts */
   nsymtab = getsh(prog);            /* number of entries in symbol table */
   const int loadl = getint(prog);   /* length of core image in load file */
