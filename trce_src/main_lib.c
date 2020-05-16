@@ -984,9 +984,9 @@ static void zetbp(short textdot) {
 
 static void clearbp(short textdot) {
   int i;
-  for (i = 1; i < 32; i++)
+  for (i = 1; i < ARRAYSIZE(bparr); i++)
     if (bparr[i].pcp == textdot) break;
-  if (i == 32) {
+  if (i == ARRAYSIZE(bparr)) {
     errprintf_report("break point not found");
     return;
   }
@@ -1010,9 +1010,9 @@ void breakpt(void) {
   int j;
   int i = ((int)(PC)) & 0xffff;
   i--;
-  for (j = 0; j < 32; j++)
+  for (j = 0; j < ARRAYSIZE(bparr); j++)
     if (bparr[j].pcp == i) break;
-  if (j == 32) {
+  if (j == ARRAYSIZE(bparr)) {
     errprintf_report("Wrong breakpoint");
     exit(1);
   }
