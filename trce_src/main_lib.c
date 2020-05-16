@@ -112,7 +112,7 @@ static int getsh(FILE* f) {
   return ((i & 255) | ((j & 255) << 8));
 }
 
-// TODO(heder): This is an rather poor hash fuction for strings. Fix it.
+// TODO(heder): This is a rather poor hash fuction for strings. Fix it.
 static int hashstring(char *p) {
   int h;
   h = *p - 'A'; h &= 31;
@@ -138,7 +138,7 @@ static int load_hash_file(const char* filename) {
 }
 
 static int load(int argc, char **argv) {
-  int i,ii,j,k,sections, *pi;
+  int i, j, k, sections, *pi;
   char *p;
 
   char fnameS[CBUF];
@@ -377,7 +377,7 @@ static int load(int argc, char **argv) {
     }
     lnsymarr[i] = k;
     if (k >= 0)
-      for (ii = k + 1; ii <= nsymtab; ii++) {
+      for (int ii = k + 1; ii <= nsymtab; ii++) {
         if ((symtab[ii].symsect == 2) && (symtab[ii].lnr == i))
           lnsymarr[i] = ii;
       }
