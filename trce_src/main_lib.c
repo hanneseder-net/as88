@@ -521,14 +521,16 @@ static void relocate(int n) {
 static void symlcorr(int i) {
   /* corrigeert line number bug voor symbolen uit de text. Zonder correctie
    wordt niet het line number, maar de eerste code doorgegeven */
-  int ln,cd,j;
-  ln = symtab[i].lnr;
-  cd = symtab[i].symvalue;
-  while(ln>0 && lndotarr[ln] == cd) {
-     fseek(L,(int)lnfilarr[ln],0);
-    j = fread(inbuf,1,lnfilarr[ln+1]-lnfilarr[ln],L);
+  int ln = symtab[i].lnr;
+  const int cd = symtab[i].symvalue;
+  while (ln > 0 && lndotarr[ln] == cd) {
+    fseek(L, (int)lnfilarr[ln], 0);
+    const int j = fread(inbuf, 1, lnfilarr[ln + 1] - lnfilarr[ln], L);
     inbuf[j] = '\0';
-    if(!lcs(inbuf,i)) {symtab[i].lnr = ln; return;}
+    if (!lcs(inbuf, i)) {
+      symtab[i].lnr = ln;
+      return;
+    }
     ln--;
   }
 }
