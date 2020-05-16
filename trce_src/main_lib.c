@@ -984,8 +984,9 @@ static void zetbp(short textdot) {
 
 static void clearbp(short textdot) {
   int i;
-  for (i = 1; i < ARRAYSIZE(bparr); i++)
+  for (i = 1; i < ARRAYSIZE(bparr); i++) {
     if (bparr[i].pcp == textdot) break;
+  }
   if (i == ARRAYSIZE(bparr)) {
     errprintf_report("break point not found");
     return;
@@ -1010,8 +1011,9 @@ void breakpt(void) {
   int j;
   int i = ((int)(PC)) & 0xffff;
   i--;
-  for (j = 0; j < ARRAYSIZE(bparr); j++)
+  for (j = 0; j < ARRAYSIZE(bparr); j++) {
     if (bparr[j].pcp == i) break;
+  }
   if (j == ARRAYSIZE(bparr)) {
     errprintf_report("Wrong breakpoint");
     exit(1);
@@ -1021,11 +1023,12 @@ void breakpt(void) {
 }
 
 static void dmpadr(int adre) {
-  datadm[datadp] = m + (ds<<4) + adre; 
-  sprintf(datadarr[datadp],"%.19s",tringfield+90);
+  datadm[datadp] = m + (ds << 4) + adre;
+  sprintf(datadarr[datadp], "%.19s", tringfield + 90);
   datadarr[datadp][19] = ' ';
   datadarr[datadp][18] = ':';
-  datadp++; datadp %= 7;
+  datadp++;
+  datadp %= 7;
 }
 
 static int rdstrg(void) {
