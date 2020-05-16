@@ -7,12 +7,12 @@
 #ifndef EXTERN
 #define EXTERN
 #endif
-#define CHECK 0			/* To turn on runtime checking, set CHECK 1 */
+#define CHECK 0 /* To turn on runtime checking, set CHECK 1 */
 
 #ifndef LITTLE_ENDIAN
-#define	LITTLE_ENDIAN	/* vax and the like */
-#endif /* LITTLE_ENDIAN */
-#undef	BIG_ENDIAN	/* sun and the like */
+#define LITTLE_ENDIAN /* vax and the like */
+#endif                /* LITTLE_ENDIAN */
+#undef BIG_ENDIAN     /* sun and the like */
 
 #ifdef LITTLE_ENDIAN
 typedef struct {
@@ -78,7 +78,7 @@ typedef union {
 #define dl r.rc[DL]
 #define dh r.rc[DH]
 
-#define W00 AX			/* Wxx used for submultiplexing, e.g. op 81 */
+#define W00 AX /* Wxx used for submultiplexing, e.g. op 81 */
 #define W01 CX
 #define W02 DX
 #define W03 BX
@@ -112,7 +112,7 @@ typedef union {
 #define roplo ROP.b.lo
 #define rophi ROP.b.hi
 
-#define ADDW 0			/* codes used for lazy condition code eval */
+#define ADDW 0 /* codes used for lazy condition code eval */
 #define ADDB 1
 #define ADCW 2
 #define ADCB 3
@@ -129,42 +129,42 @@ typedef union {
 
 /* Here are the values used in 'nextint' to tell which kind of interrupt next.*/
 #define SEGOVER 1
-#define CLOCK   2
-#define TTYIN   3
-#define TTYOUT  4
-#define DISK    5
-#define	KBD	6
-#define NDEV    8			/* number of I/O devices */
+#define CLOCK 2
+#define TTYIN 3
+#define TTYOUT 4
+#define DISK 5
+#define KBD 6
+#define NDEV 8 /* number of I/O devices */
 
-#define MEMBYTES 1048576L	/* how many bytes does 8088 have? */
+#define MEMBYTES 1048576L /* how many bytes does 8088 have? */
 // #define MEMBYTES 32768 		/* how many bytes ew small simulator*/
 
 EXTERN reg EA, RA, EOP, ROP;
-EXTERN int ovf, dirf, intf, signf, zerof, cf;	/* flag bits */
-EXTERN char *pcx;		/* pcx = &m[ (cs<<4) + pc] */
-EXTERN char *xapc;
+EXTERN int ovf, dirf, intf, signf, zerof, cf; /* flag bits */
+EXTERN char* pcx;                             /* pcx = &m[ (cs<<4) + pc] */
+EXTERN char* xapc;
 EXTERN char *eapc, *rapc;
-EXTERN int16_t *rapw;		/* eapw is unusable since it might be odd */
-EXTERN int16_t *stkp;		/* scratch variable used by PUSH and POP */
+EXTERN int16_t* rapw; /* eapw is unusable since it might be odd */
+EXTERN int16_t* stkp; /* scratch variable used by PUSH and POP */
 
-EXTERN uint16_t cs, ds, ss, es;	/* contents of segment registers */
-EXTERN long cs16;		/* cs16 = 16*cs  (= cs<<4) */
+EXTERN uint16_t cs, ds, ss, es; /* contents of segment registers */
+EXTERN long cs16;               /* cs16 = 16*cs  (= cs<<4) */
 
 EXTERN unsigned timer, ticks, nextint;
-EXTERN struct intstruct{
-  long int_time;		/* time of next interrupt (in mach instrs) */
-  int int_status;		/* status information */
+EXTERN struct intstruct {
+  long int_time;  /* time of next interrupt (in mach instrs) */
+  int int_status; /* status information */
   int int_vector;
 } intstruct[NDEV];
 
-EXTERN long l, l1, l2;		/* scratch variables used for setting carry */
-EXTERN short x,y,z;		/* used in lazy condition code evaluation */
-EXTERN uint8_t xc,yc,zc;		/* ditto */
-EXTERN int ccop, ccvalid;	/* ditto */
+EXTERN long l, l1, l2;     /* scratch variables used for setting carry */
+EXTERN short x, y, z;      /* used in lazy condition code evaluation */
+EXTERN uint8_t xc, yc, zc; /* ditto */
+EXTERN int ccop, ccvalid;  /* ditto */
 #if CHECK
-EXTERN long xx;			/* scratch variable used for mem checking */
+EXTERN long xx; /* scratch variable used for mem checking */
 #endif
-EXTERN uint8_t stopvlag, dumpt;	/* ew dumping vlag and saved t */
+EXTERN uint8_t stopvlag, dumpt; /* ew dumping vlag and saved t */
 
 /* The 8088 memory array is declared below. */
 extern char m[MEMBYTES];
