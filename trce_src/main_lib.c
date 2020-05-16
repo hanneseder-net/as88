@@ -920,10 +920,9 @@ static void pdmpadr(void) {
 }
 
 static void cnulbp(void) {
-  char* p;
   if (bparr[0].pcp != -1) {
-    p = m + cs16 + bparr[0].pcp;
-    if (*p == '\360') *p = bparr[0].bprt;
+    char* p = m + cs16 + bparr[0].pcp;
+    if (*p == '\xF0') *p = bparr[0].bprt;
     bparr[0].pcp = 0Xffff;
   }
 }
@@ -970,9 +969,10 @@ void procdepth(int s) {
 
 static void zetbp(short textdot) {
   int i;
-  for (i = 1; i < 32; i++)
+  for (i = 1; i < ARRAYSIZE(bparr); i++) {
     if (!bparr[i].pcp) break;
-  if (i == 32) {
+  }
+  if (i == ARRAYSIZE(bparr)) {
     errprintf_report("break point table full");
     return;
   }
@@ -997,13 +997,13 @@ static void clearbp(short textdot) {
 }
 
 static void nulbp(int ln) {
-  char*p = m + cs16 + bparr[0].pcp;
-  if (*p == '\360') *p = bparr[0].bprt;
+  char* p = m + cs16 + bparr[0].pcp;
+  if (*p == '\xF0') *p = bparr[0].bprt;
   int dott = lndotarr[ln];
   p = m + cs16 + dott;
   bparr[0].pcp = dott;
   bparr[0].bprt = *p;
-  *p = 0XF0;
+  *p = 0xF0;
 }
 
 void breakpt(void) {
